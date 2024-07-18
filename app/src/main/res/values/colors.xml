@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#E5342C</color>
+    <color name="colorPrimaryDark">#B82922</color>
+    <color name="colorAccent">#FF0000</color>
+    <color name="colorReminderFill">#E5342C</color>
+    <color name="colorBlue">#0040FF</color>
+    <color name="red">#CA4545</color>
+    <color name="unpressed_color">#fff44336</color>
+    <color name="pressed_color">#ffd32f2f</color>
+    <color name="ripple_color">#ffeeeeee</color>
+    <color name="transparent">#00000000</color>
+    <color name="Black">#000</color>
+    <color name="fbutton_default_color">#EB3E3E</color>
+    <color name="fbutton_default_shadow_color">#C83434</color>
+    <color name="colorDark">#1a1a18</color>
+
+    <color name="progress_default_color">#b1000000</color>
+    <color name="grey">#449E9E9E</color>
+</resources>
