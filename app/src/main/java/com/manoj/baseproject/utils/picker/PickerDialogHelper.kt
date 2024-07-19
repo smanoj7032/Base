@@ -21,8 +21,11 @@ import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
 import com.manoj.baseproject.presentation.common.adapter.RVAdapter
 import com.manoj.baseproject.presentation.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.utils.Drw
 import com.manoj.baseproject.utils.PERMISSION_READ_STORAGE
+import com.manoj.baseproject.utils.Str
 import com.manoj.baseproject.utils.permissionutils.runWithPermissions
+import com.manoj.baseproject.utils.set
 import com.manoj.baseproject.utils.setSingleClickListener
 
 class PickerDialogHelper(
@@ -125,9 +128,7 @@ class PickerDialogHelper(
     private fun openCamera() = context.runWithPermissions(
         Manifest.permission.CAMERA
     ) {
-        uri = MediaUtils.getUriFromFile(
-            context, MediaUtils.getMakeFile(context, ".png")
-        )
+        uri = getMakeFile(context, ".png").getUriFromFile(context,)
         uri?.let { takePhoto.launch(it) }
     }
 

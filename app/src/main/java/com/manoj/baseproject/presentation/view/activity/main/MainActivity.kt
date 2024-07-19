@@ -16,8 +16,7 @@ import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.presentation.common.base.BaseActivity
 import com.manoj.baseproject.presentation.common.base.BaseViewModel
 import com.manoj.baseproject.utils.Logger
-import com.manoj.baseproject.utils.picker.Clr
-import com.manoj.baseproject.utils.picker.Str
+import com.manoj.baseproject.utils.Str
 import dagger.hilt.android.AndroidEntryPoint
 
 

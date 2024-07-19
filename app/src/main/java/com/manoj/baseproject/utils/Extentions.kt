@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
@@ -16,6 +18,9 @@ import android.view.animation.Animation
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.view.inputmethod.InputMethodManager
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -23,6 +28,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -49,6 +55,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+typealias Str = R.string
+typealias Ids = R.id
+typealias Clr = R.color
+typealias Dmn = R.dimen
+typealias Lyt = R.layout
+typealias Drw = R.drawable
+typealias Anm = R.anim
 
 fun SharedPreferences.saveValue(key: String, value: Any?) {
     when (value) {
@@ -306,6 +319,45 @@ fun <T> Spinner.setSpinnerItems(
                 isInitial = false
             }
         }
+
         override fun onNothingSelected(parent: AdapterView<*>?) {}
     }
+}
+
+
+infix fun ImageView.set(@DrawableRes id: Int) {
+    setImageResource(id)
+}
+
+infix fun ImageView.set(bitmap: Bitmap) {
+    setImageBitmap(bitmap)
+}
+
+infix fun ImageView.set(drawable: Drawable) {
+    setImageDrawable(drawable)
+}
+
+infix fun ImageView.set(ic: Icon) {
+    setImageIcon(ic)
+}
+
+infix fun ImageView.set(uri: Uri) {
+    setImageURI(uri)
+}
+
+infix fun TextView.set(@StringRes id: Int) {
+    setText(id)
+}
+
+infix fun TextView.set(text: String) {
+    setText(text)
+}
+
+fun WebView.setup(url: String, configure: (WebSettings.() -> Unit)? = null) {
+    this.webViewClient = WebViewClient()
+    this.settings.javaScriptEnabled = true
+    configure?.let {
+        this.settings.apply(it)
+    }
+    this.loadUrl(url)
 }
