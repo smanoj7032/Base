@@ -1,14 +1,22 @@
 package com.manoj.baseproject.presentation.common.base
 
+import android.animation.AnimatorSet
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.MyApplication
 import com.manoj.baseproject.R
@@ -17,6 +25,7 @@ import com.manoj.baseproject.databinding.CustomDialogBinding
 import com.manoj.baseproject.databinding.ViewProgressSheetBinding
 import com.manoj.baseproject.network.helper.NetworkMonitor
 import com.manoj.baseproject.presentation.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.utils.Logger
 import com.manoj.baseproject.utils.hide
 import com.manoj.baseproject.utils.setSingleClickListener
 import kotlinx.coroutines.flow.collectLatest
@@ -25,6 +34,11 @@ import javax.inject.Inject
 
 
 abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
+    lateinit var splashScreen: SplashScreen
+
+
+
+
     @Inject
     lateinit var sharepref: SharedPrefManager
     val TAG: String = this.javaClass.simpleName
@@ -33,7 +47,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     lateinit var binding: Binding
     val app: MyApplication
         get() = application as MyApplication
-    private val TIMER_ANIMATION: Long = 1200
+    val TIMER_ANIMATION: Long = 400
     private var successDialog: BaseBottomSheetDialog<CustomDialogBinding>? = null
     private var isApiHit = false
 
@@ -42,6 +56,10 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (isMain()) {
+            setSplash()
+            Log.e("Splash---->>", "onCreate: Install")
+        }
         super.onCreate(savedInstanceState)
         val layout: Int = getLayoutResource()
         binding = DataBindingUtil.setContentView(this, layout)
@@ -119,7 +137,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun showErrorDialog(errorMessage: String) {
+    fun showErrorDialog(errorMessage: String) {
         successDialog = BaseBottomSheetDialog(R.layout.custom_dialog, onBind = { binding ->
             with(binding) {
                 tvMessage.text = errorMessage
@@ -134,4 +152,71 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         }, onCancelListener = {})
         successDialog?.show(supportFragmentManager, "")
     }
+
+    private fun setSplash() {
+        splashScreen = installSplashScreen()
+        /**keep splash screen on-screen indefinitely.*/
+        /*keepSplashScreenIndefinitely()*/
+
+        /**if you want to use custom exit animation.*/
+        customSplashAnimator()
+
+        /**keep splash screen when load data viewModel.*/
+        splashScreenWhenViewModel()
+    }
+
+    /**
+     * Use customize exit animation for splash screen.
+     */
+    private fun customSplashAnimator() {
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            val customAnimation = CustomScreenAnimator()
+            val animation = customAnimation.slideLeftAnimation(splashScreenView)
+
+            val animatorSet = AnimatorSet()
+            animatorSet.duration = TIMER_ANIMATION
+            //  animatorSet.interpolator = AnticipateInterpolator()
+            animatorSet.playTogether(animation)
+
+            animatorSet.doOnEnd {
+                splashScreenView.remove()
+            }
+            animatorSet.start()
+        }
+    }
+
+    /**
+     * Keep splash screen on-screen indefinitely. This is useful if you're using a custom Activity
+     * for routing.
+     */
+    private fun keepSplashScreenIndefinitely() {
+        splashScreen.setKeepOnScreenCondition { true }
+    }
+
+    /**
+     * Keep splash screen on-screen for longer period. This is useful if you need to load data when
+     * splash screen is appearing.
+     */
+    private fun splashScreenWhenViewModel() {
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(
+            object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    return if (isDataReady()) {
+                        content.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else false
+                }
+            }
+        )
+    }
+
+    companion object {
+        const val WORK_DURATION = 2000L
+    }
+
+    private val initTime = SystemClock.uptimeMillis()
+    private fun isDataReady() = SystemClock.uptimeMillis() - initTime > WORK_DURATION
+
+    private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"
 }

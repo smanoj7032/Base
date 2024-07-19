@@ -21,29 +21,30 @@ import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
 import com.manoj.baseproject.presentation.common.adapter.RVAdapter
 import com.manoj.baseproject.presentation.common.basedialogs.BaseBottomSheetDialog
-import com.manoj.baseproject.presentation.common.mediapicker.MediaPickerHelper
 import com.manoj.baseproject.utils.PERMISSION_READ_STORAGE
 import com.manoj.baseproject.utils.permissionutils.runWithPermissions
 import com.manoj.baseproject.utils.setSingleClickListener
 
 class PickerDialogHelper(
-    private val context: Context,
-    private val fragmentManager: FragmentManager,
-    private val items: ArrayList<ItemModel>
+    resultCaller: ActivityResultCaller,
+    isMultiple: Boolean? = null,
+    private var context: Context,
+    private var fragmentManager: FragmentManager,
+    private var items: ArrayList<ItemModel>
 ) {
 
     private var pickerDialog: BaseBottomSheetDialog<DialogPickerBinding>? = null
     private var pickerAdapter: RVAdapter<ItemModel, ItemPickerGridBinding>? = null
+
     private val REQUEST_PICK_PHOTO = 1102
     private val REQUEST_VIDEO = 1103
     private val REQUEST_PICK_FILE = 1104
 
 
     private var uri: Uri? = null
-    private var isMultiple: Boolean? = null
     private var fileName = ""
     private var onPickerCloseListener: OnPickerCloseListener? = null
-    private var resultCaller: ActivityResultCaller? = null
+    private var resultCaller: ActivityResultCaller? = resultCaller
 
     /** ACTIVITY RESULT LAUNCHER */
     private lateinit var takePhoto: ActivityResultLauncher<Uri>
@@ -53,9 +54,7 @@ class PickerDialogHelper(
     private lateinit var selectFile: ActivityResultLauncher<Array<String>>
 
 
-    fun initialize(resultCaller: ActivityResultCaller, isMultiple: Boolean? = null) {
-        this.resultCaller = resultCaller
-        this.isMultiple = isMultiple
+    init {
         setupPickerDialog()
         if (isMultiple == false) setLauncher() else setLauncherForMultiple()
     }

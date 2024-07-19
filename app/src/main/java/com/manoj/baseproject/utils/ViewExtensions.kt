@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
@@ -23,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,6 +39,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bumptech.glide.Glide
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -528,4 +531,10 @@ fun AppCompatActivity.requestPermission(
         }
         requestMultiplePermissionsLauncher.launch(notGrantedPermission.toTypedArray())
     }
+}
+
+fun ImageView.loadImage(uri: Uri?) {
+    Glide.with(this.context).load(uri).circleCrop()
+        .placeholder(R.drawable.ic_image).error(R.drawable.ic_image)
+        .into(this)
 }

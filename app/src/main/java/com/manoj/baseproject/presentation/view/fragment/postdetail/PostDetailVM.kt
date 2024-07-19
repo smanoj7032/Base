@@ -1,4 +1,4 @@
-package com.manoj.baseproject.presentation.view.activity.post
+package com.manoj.baseproject.presentation.view.fragment.postdetail
 
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.domain.usecase.GetPostUseCase

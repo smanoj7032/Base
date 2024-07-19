@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/bg_screen</item>
 
         <item name="android:textColorPrimary">@color/black</item>
         <item name="android:textColorSecondary">@color/white</item>
@@ -16,15 +16,11 @@
         <item name="android:textColorHighlight">#80494949</item>
 
     </style>
-    <style name="SplashAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:windowLightStatusBar">@color/colorPrimaryDark</item>
+    <!-- Launcher theme Full Screen -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/kotlin_animated</item>
+        <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
 
     <style name="ButtonSolid" parent="Widget.MaterialComponents.Button">

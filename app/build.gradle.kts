@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.androidx.navigation)
 }
 
 android {
@@ -61,6 +62,10 @@ dependencies {
     implementation(libs.ssp.android)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     kapt(libs.hilt.android.compiler)
 
 

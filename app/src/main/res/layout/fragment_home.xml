@@ -7,23 +7,22 @@
 
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.view.activity.main.MainViewModel" />
+            type="com.manoj.baseproject.presentation.view.fragment.home.HomeVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/_10sdp"
         tools:context=".presentation.view.ArcoreMeasurement">
 
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_graph" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

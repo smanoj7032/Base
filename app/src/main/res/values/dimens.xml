@@ -33,5 +33,10 @@
     <dimen name="popup_height_emoji_dialog">100dp</dimen>
     <dimen name="popup_height_emotion">120dp</dimen>
     <dimen name="popup_width_emotion">350dp</dimen>
+    <dimen name="edit_to_header_spacing">@dimen/_5sdp</dimen>
+    <dimen name="edit_to_edit_spacing">@dimen/_10sdp</dimen>
+    <dimen name="horizontal_margin">@dimen/_15sdp</dimen>
+    <dimen name="small_chip_radius">@dimen/_6sdp</dimen>
+    <dimen name="large_chip_radius">@dimen/_9sdp</dimen>
 
 </resources>

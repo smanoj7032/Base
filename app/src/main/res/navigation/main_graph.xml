@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.manoj.baseproject.presentation.view.fragment.auth.LoginFragment"
+        android:label="Favorites"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/toHomeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@+id/navigation_graph" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.manoj.baseproject.presentation.view.fragment.home.HomeFragment"
+        android:label="Feed"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/toPostDetailFragment"
+            app:destination="@id/postDetailFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/postDetailFragment"
+        android:name="com.manoj.baseproject.presentation.view.fragment.postdetail.PostDetailFragment"
+        android:label="Popular"
+        tools:layout="@layout/fragment_post_detail">
+        <argument
+            android:name="id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+
+
+</navigation>

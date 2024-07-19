@@ -6,26 +6,19 @@
 
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.view.activity.post.PostDetailVM" />
+            type="com.manoj.baseproject.presentation.view.fragment.postdetail.PostDetailVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tvData"
-            android:padding="@dimen/_10sdp"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPosts"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:scrollbars="vertical"
-            android:text="Data"
-            android:textSize="@dimen/_12ssp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <ProgressBar
             android:id="@+id/progress_bar"

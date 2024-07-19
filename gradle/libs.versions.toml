@@ -27,6 +27,10 @@ places = "3.5.0"
 pagingCommonKtx = "3.3.0"
 pagingRuntimeKtx = "3.3.0"
 glide = "5.0.0-rc01"
+coreSplashscreen = "1.2.0-alpha01"
+fragmentKtx = "1.8.1"
+navigationFragmentKtx = "2.7.7"
+navigationUiKtx = "2.7.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,14 +59,17 @@ places = { group = "com.google.android.libraries.places", name = "places", versi
 androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "pagingCommonKtx" }
 androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid"}
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize",  version.ref = "kotlin"  }
-
-
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+androidx-navigation = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationUiKtx" }
 

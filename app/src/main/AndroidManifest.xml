@@ -25,9 +25,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/SplashAppTheme">
+        android:theme="@style/AppTheme">
         <activity
-            android:name=".presentation.view.activity.splash.SplashActivity"
+            android:name=".presentation.view.activity.main.MainActivity"
+            android:theme="@style/Theme.App.Starting"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,17 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-        <activity
-            android:name=".presentation.view.activity.main.MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".presentation.view.activity.post.PostDetailActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".presentation.view.activity.login.LoginActivity"
-            android:theme="@style/AppTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
