@@ -175,7 +175,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
 
             val animatorSet = AnimatorSet()
             animatorSet.duration = TIMER_ANIMATION
-            //  animatorSet.interpolator = AnticipateInterpolator()
+            //animatorSet.interpolator = AnticipateInterpolator()
             animatorSet.playTogether(animation)
 
             animatorSet.doOnEnd {
