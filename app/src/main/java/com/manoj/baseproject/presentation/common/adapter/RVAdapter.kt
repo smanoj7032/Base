@@ -39,9 +39,11 @@ abstract class RVAdapter<M, B : ViewDataBinding>(
     var list: List<M>?
         get() = dataList
         set(newDataList) {
+            val currentSize: Int = dataList.size
             dataList.clear()
+            notifyItemRangeRemoved(0, currentSize)
             if (newDataList != null) dataList.addAll(newDataList)
-            notifyDataSetChanged()
+            notifyItemRangeInserted(0, dataList.size)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder<B> {

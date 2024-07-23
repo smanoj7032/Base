@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -17,6 +19,14 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        val properties = Properties()
+
+        val localPropertiesFile = project.rootProject.file("apikeys.properties")
+       properties.load(localPropertiesFile.inputStream())
+        val apiKey: String = properties.getProperty("APP_ID") ?: ""
+
+
+        this.buildConfigField("String","APP_ID", apiKey)
         this.buildConfigField("String","BASE_URL","\"https://dummyapi.io/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

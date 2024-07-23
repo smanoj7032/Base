@@ -2,6 +2,7 @@ package com.manoj.baseproject.data.repositary
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import com.manoj.baseproject.BuildConfig
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.data.repositary.pagingsource.PostsPagingSource
@@ -23,7 +24,7 @@ class BaseRepoImpl @Inject constructor(
     }
 
     private fun getAppId(): String {
-        return "6679304f8989dcce030c2053"
+        return BuildConfig.APP_ID
     }
 
     override fun getPosts() = Pager(config = PagingConfig(
