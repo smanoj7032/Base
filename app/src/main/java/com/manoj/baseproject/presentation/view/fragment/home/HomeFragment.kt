@@ -5,10 +5,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentHomeBinding
 import com.manoj.baseproject.databinding.ItemPostBinding
+import com.manoj.baseproject.presentation.common.adapter.CallBackModel
 import com.manoj.baseproject.presentation.common.adapter.LoadMoreAdapter
 import com.manoj.baseproject.presentation.common.adapter.RVAdapterWithPaging
 import com.manoj.baseproject.presentation.common.base.BaseFragment
@@ -48,14 +50,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         val footerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val headerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val layoutManager = LinearLayoutManager(baseContext)
-        postsAdapter = RVAdapterWithPaging(diffCallback,
+        postsAdapter = RVAdapterWithPaging(
+            diffCallback,
             R.layout.item_post,
-            onBind = { itemPostBinding, post, i ->
-                itemPostBinding.bean = post
-                itemPostBinding.root.setSingleClickListener {
-                    navigateToPostDetail(post.id)
-                }
+            BR.bean,
+            callbacks = arrayListOf(CallBackModel(R.id.cvPostRoot) { model, position, binding ->
+                navigateToPostDetail(model.id)
             })
+        )
         binding.rvPosts.apply {
             itemAnimator = null
             this.layoutManager = layoutManager

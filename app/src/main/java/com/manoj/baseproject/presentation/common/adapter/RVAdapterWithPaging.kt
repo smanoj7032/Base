@@ -16,42 +16,42 @@ import androidx.recyclerview.widget.RecyclerView
 open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
     diffCallback: DiffUtil.ItemCallback<M>,
     private val layoutResId: Int,
-    private val onBind: (B, M, Int) -> Unit
-) : PagingDataAdapter<M, RVAdapterWithPaging.Holder<B>>(diffCallback)
-{
+    private val variableId: Int,
+    private val callbacks: Callbacks<B, M>? = null,
+) : PagingDataAdapter<M, RecyclerViewHolder<B>>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder<B> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder<B> {
         val binding: B = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             layoutResId,
             parent,
             false
         )
-        return Holder(binding)
-    }
-    private fun setAnimation(viewToAnimate: View) {
-        val anim = ScaleAnimation(
-            0.0f,
-            1.0f,
-            0.0f,
-            1.0f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        )
-        anim.duration = 300
-        viewToAnimate.startAnimation(anim)
-    }
-    override fun onBindViewHolder(holder: Holder<B>, position: Int) {
-        getItem(position)?.let { item ->
-            onBind(holder.binding, item, position)
-            setAnimation(holder.binding.root)
-            holder.binding.executePendingBindings()
-        }
+        return RecyclerViewHolder(binding)
     }
 
-    class Holder<S : ViewDataBinding>(val binding: S) : RecyclerView.ViewHolder(binding.root)
+    private fun setAnimation(viewToAnimate: View) {
+          val anim = ScaleAnimation(
+              0.0f,
+              1.0f,
+              0.0f,
+              1.0f,
+              Animation.RELATIVE_TO_SELF,
+              0.5f,
+              Animation.RELATIVE_TO_SELF,
+              0.5f
+          )
+          anim.duration = 300
+          viewToAnimate.startAnimation(anim)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerViewHolder<B>, position: Int) {
+        getItem(position)?.let { item ->
+            holder.bindTo(variableId, item, onBind = {binding,beab->})
+            holder.bindClickListener(item, callbacks)
+            setAnimation(holder.binding.root)
+        }
+    }
 
     companion object {
         inline fun <reified T : Any> createDiffCallback(

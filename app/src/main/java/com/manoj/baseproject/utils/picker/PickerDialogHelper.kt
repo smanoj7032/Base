@@ -19,14 +19,15 @@ import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
-import com.manoj.baseproject.presentation.common.adapter.RVAdapter
+import com.manoj.baseproject.presentation.common.adapter.CallBackModel
+import com.manoj.baseproject.presentation.common.adapter.Callbacks
+import com.manoj.baseproject.presentation.common.adapter.CustomAdapter
 import com.manoj.baseproject.presentation.common.basedialogs.BaseBottomSheetDialog
 import com.manoj.baseproject.utils.Drw
 import com.manoj.baseproject.utils.PERMISSION_READ_STORAGE
 import com.manoj.baseproject.utils.Str
 import com.manoj.baseproject.utils.permissionutils.runWithPermissions
 import com.manoj.baseproject.utils.set
-import com.manoj.baseproject.utils.setSingleClickListener
 
 class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
@@ -37,7 +38,7 @@ class PickerDialogHelper(
 ) {
 
     private var pickerDialog: BaseBottomSheetDialog<DialogPickerBinding>? = null
-    private var pickerAdapter: RVAdapter<ItemModel, ItemPickerGridBinding>? = null
+    private var pickerAdapter: CustomAdapter<ItemPickerGridBinding, ItemModel>? = null
 
     private val REQUEST_PICK_PHOTO = 1102
     private val REQUEST_VIDEO = 1103
@@ -63,31 +64,31 @@ class PickerDialogHelper(
     }
 
     private fun setupPickerDialog() {
+        val clickListener = Callbacks<ItemPickerGridBinding, ItemModel>()
+        clickListener.add(CallBackModel(R.id.cvItem) { model, position, binding ->
+            when (model.type) {
+                ItemType.ITEM_CAMERA -> openCamera()
+
+                ItemType.ITEM_GALLERY -> openGallery()
+
+                ItemType.ITEM_VIDEO -> openVideoCamera()
+
+                ItemType.ITEM_VIDEO_GALLERY -> openVideoGallery()
+
+                ItemType.ITEM_FILES -> openFilePicker()
+            }
+        })
         pickerDialog = BaseBottomSheetDialog(R.layout.dialog_picker, onBind = { binding ->
             with(binding) {
-                pickerAdapter = object : RVAdapter<ItemModel, ItemPickerGridBinding>(
-                    R.layout.item_picker_grid, BR.bean
-                ) {
-                    override fun onBind(
-                        binding: ItemPickerGridBinding, bean: ItemModel, position: Int
-                    ) {
-                        binding.root.setSingleClickListener {
-                            when (bean.type) {
-                                ItemType.ITEM_CAMERA -> openCamera()
-
-                                ItemType.ITEM_GALLERY -> openGallery()
-
-                                ItemType.ITEM_VIDEO -> openVideoCamera()
-
-                                ItemType.ITEM_VIDEO_GALLERY -> openVideoGallery()
-
-                                ItemType.ITEM_FILES -> openFilePicker()
-                            }
-                        }
+                pickerAdapter = CustomAdapter(
+                    R.layout.item_picker_grid,
+                    BR.bean,
+                    callbacks = clickListener, onBind =  { binding, bean ->
                         initIcon(bean, binding)
                         initLabel(bean, binding)
                     }
-                }
+                )
+
                 val layoutManager = GridLayoutManager(context, 3)
                 pickerItems.layoutManager = layoutManager
                 pickerItems.adapter = pickerAdapter
@@ -128,7 +129,7 @@ class PickerDialogHelper(
     private fun openCamera() = context.runWithPermissions(
         Manifest.permission.CAMERA
     ) {
-        uri = getMakeFile(context, ".png").getUriFromFile(context,)
+        uri = getMakeFile(context, ".png").getUriFromFile(context)
         uri?.let { takePhoto.launch(it) }
     }
 

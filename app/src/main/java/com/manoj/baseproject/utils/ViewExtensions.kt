@@ -538,3 +538,24 @@ fun ImageView.loadImage(uri: Uri?) {
         .placeholder(R.drawable.ic_image).error(R.drawable.ic_image)
         .into(this)
 }
+
+fun Context.displayDialog(
+    title: String?,
+    message: String?,
+    onPositiveClick: () -> Unit
+) {
+
+    val dialogBuilder = android.app.AlertDialog.Builder(this)
+    dialogBuilder.setTitle(title)
+    dialogBuilder.setMessage(message)
+        .setCancelable(false)
+        .setPositiveButton("Yes") { _, _ ->
+            onPositiveClick()
+        }
+        .setNegativeButton("No") { dialog, _ ->
+            dialog.dismiss()
+        }
+    val alert = dialogBuilder.create()
+    alert.show()
+
+}

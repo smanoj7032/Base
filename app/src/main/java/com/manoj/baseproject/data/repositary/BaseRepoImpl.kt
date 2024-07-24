@@ -28,7 +28,7 @@ class BaseRepoImpl @Inject constructor(
     }
 
     override fun getPosts() = Pager(config = PagingConfig(
-        pageSize = 10,
+        pageSize = 30,
         enablePlaceholders = false,
     ),
         pagingSourceFactory = { PostsPagingSource(apiService, getAppId()) }).flow
