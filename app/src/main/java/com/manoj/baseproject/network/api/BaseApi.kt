@@ -2,6 +2,7 @@ package com.manoj.baseproject.network.api
 
 import com.manoj.baseproject.data.bean.Posts
 import io.reactivex.Single
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -17,8 +18,8 @@ interface BaseApi {
     ): Response<Posts>
 
     @GET("data/v1/post")
-     fun getPost(
+   suspend  fun getPost(
         @Header("app-id") token: String,
         @Query("id") id: String?
-    ): Single<Posts>
+    ):Posts
 }

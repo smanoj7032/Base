@@ -3,6 +3,7 @@ package com.manoj.baseproject.presentation.view.fragment.postdetail
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,11 +19,13 @@ import com.manoj.baseproject.presentation.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.presentation.common.base.BaseFragment
 import com.manoj.baseproject.presentation.common.base.BaseViewModel
 import com.manoj.baseproject.utils.Logger
+import com.manoj.baseproject.utils.customCollector
 import com.manoj.baseproject.utils.picker.ItemModel
 import com.manoj.baseproject.utils.picker.ItemType
 import com.manoj.baseproject.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.utils.singleObserver
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
@@ -61,20 +64,21 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     }
 
     override fun setObserver() {
-        viewModel.obrPosts.singleObserver(
-            this,
-            onLoading = ::onLoading,
-            onSuccess = {
-                val arrayList: ArrayList<Post> = it.data as ArrayList
-                arrayList.addAll(it.data)
-                arrayList.addAll(it.data)
-                arrayList.addAll(it.data)
-                arrayList.addAll(it.data)
-                postAdapter.list = arrayList
+       lifecycleScope.launch {
+           viewModel.posts.customCollector(
+               onLoading = ::onLoading,
+               onSuccess = {
+                   val arrayList: ArrayList<Post> = it?.data as ArrayList
+                   arrayList.addAll(it.data)
+                   arrayList.addAll(it.data)
+                   arrayList.addAll(it.data)
+                   arrayList.addAll(it.data)
+                   postAdapter.list = arrayList
 
-            },
-            onError = ::onError
-        )
+               },
+               onError = ::onError
+           )
+       }
     }
 
     private fun setAdapter() {

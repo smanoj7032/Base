@@ -42,13 +42,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
 
-    companion object {
-        fun start(activity: Activity) {
-            val intent = Intent(activity, MainActivity::class.java)
-            activity.startActivity(intent)
-        }
-    }
-
     private val TIME_INTERVAL = 2000
     private var doubleBackToExitPressedOnce: Long = 0
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

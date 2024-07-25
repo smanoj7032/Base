@@ -8,18 +8,23 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.manoj.baseproject.MyApplication
+import com.manoj.baseproject.network.helper.BaseApiResponse
+import com.manoj.baseproject.network.helper.DataResponse
 import com.manoj.baseproject.utils.helper.Resource
 import com.manoj.baseproject.utils.helper.Status
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -39,9 +44,75 @@ fun <T> Flow<Resource<T>>.emitter(
     }.launchIn(scope)
 }
 
+fun <M> Flow<DataResponse<M>>.apiSubscription(
+    stateFlow: MutableStateFlow<Resource<M?>>,
+    coroutineScope: CoroutineScope
+): Job {
+    return coroutineScope.launch {
+        this@apiSubscription
+            .onStart {
+                stateFlow.value = Resource.loading()
+            }
+            .flowOn(Dispatchers.IO)
+            .catch { throwable ->
+                val error = parseException(throwable)
+                stateFlow.value = Resource.error(null, error)
+            }
+            .collect { response ->
+                if (response.isStatusOK) {
+                    stateFlow.value = Resource.success(response.data, response.message.toString())
+                } else {
+                    stateFlow.value = Resource.warn(null, response.message.toString())
+                }
+            }
+    }
+}
+
+fun <M> Flow<BaseApiResponse>.simpleSubscriptionWithTag(
+    tag: M, stateFlow: MutableStateFlow<Resource<M?>>, coroutineScope: CoroutineScope
+): Job {
+    return coroutineScope.launch {
+        this@simpleSubscriptionWithTag
+            .onStart {
+                stateFlow.value = Resource.loading()
+            }
+            .flowOn(Dispatchers.IO)
+            .catch { throwable ->
+                val error = parseException(throwable)
+                stateFlow.value = Resource.error(tag, error)
+            }
+            .collect { response ->
+                if (response.isStatusOK) {
+                    stateFlow.value = Resource.success(tag, response.message.toString())
+                } else {
+                    stateFlow.value = Resource.warn(tag, response.message.toString())
+                }
+            }
+    }
+}
+
+fun <B> Flow<B>.customSubscription(
+    stateFlow: MutableStateFlow<Resource<B?>>,
+    coroutineScope: CoroutineScope
+): Job {
+    return coroutineScope.launch {
+        this@customSubscription
+            .onStart {
+                stateFlow.value = Resource.loading()
+            }
+            .flowOn(Dispatchers.IO)
+            .catch { throwable ->
+                val error = parseException(throwable)
+                stateFlow.value = Resource.error(null, error)
+            }
+            .collectLatest { data ->
+                stateFlow.value = Resource.success(data, "Successful")
+            }
+    }
+}
+
 
 suspend fun <T> StateFlow<Resource<T>>.customCollector(
-
     onLoading: (Boolean) -> Unit,
     onSuccess: ((data: T?) -> Unit)?,
     onError: ((throwable: Throwable, isShow: Boolean) -> Unit)?,
