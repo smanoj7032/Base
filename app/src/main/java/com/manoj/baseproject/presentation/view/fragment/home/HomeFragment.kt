@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
@@ -13,6 +15,7 @@ import com.manoj.baseproject.databinding.ItemPostBinding
 import com.manoj.baseproject.presentation.common.adapter.CallBackModel
 import com.manoj.baseproject.presentation.common.adapter.LoadMoreAdapter
 import com.manoj.baseproject.presentation.common.adapter.RVAdapterWithPaging
+import com.manoj.baseproject.presentation.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.presentation.common.base.BaseFragment
 import com.manoj.baseproject.presentation.common.base.BaseViewModel
 import com.manoj.baseproject.presentation.view.fragment.auth.LoginFragmentDirections
@@ -49,7 +52,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         val footerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val headerAdapter = LoadMoreAdapter { postsAdapter.retry() }
-        val layoutManager = LinearLayoutManager(baseContext)
+        val layoutManager = GridLayoutManager(requireActivity().applicationContext, 3)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if ((position == postsAdapter.itemCount) && footerAdapter.itemCount > 0) 3
+                else if (postsAdapter.itemCount == 0 && headerAdapter.itemCount > 0) 3
+                else 1
+            }
+        }
         postsAdapter = RVAdapterWithPaging(
             diffCallback,
             R.layout.item_post,
@@ -62,7 +72,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             itemAnimator = null
             this.layoutManager = layoutManager
             adapter = postsAdapter.withLoadStateHeaderAndFooter(headerAdapter, footerAdapter)
-            setHasFixedSize(true)
         }
         postsAdapter.attachLoadStateListener(onLoading = ::onLoading, onError = ::onError)
     }

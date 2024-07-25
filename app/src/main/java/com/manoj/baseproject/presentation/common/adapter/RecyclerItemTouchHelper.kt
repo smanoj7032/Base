@@ -13,7 +13,7 @@ import com.manoj.baseproject.utils.Drw
 import kotlin.math.abs
 
 class RecyclerItemTouchHelper(
-    private val adapter: CustomAdapter<*, *>
+    private val adapter: CustomAdapter<*, *>?
 ) : ItemTouchHelper.Callback() {
     private val paint = Paint()
     private val swipeThreshold = 0.9f
@@ -22,7 +22,7 @@ class RecyclerItemTouchHelper(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         val swipeFlags = ItemTouchHelper.LEFT
         return makeMovementFlags(dragFlags, swipeFlags)
     }
@@ -34,7 +34,7 @@ class RecyclerItemTouchHelper(
     ): Boolean {
         val fromPosition = viewHolder.bindingAdapterPosition
         val toPosition = target.bindingAdapterPosition
-        adapter.moveItem(fromPosition, toPosition)
+        adapter?.moveItem(fromPosition, toPosition)
         return true
     }
 
@@ -94,9 +94,9 @@ class RecyclerItemTouchHelper(
             val itemView = viewHolder.itemView
             val swipeThreshold = itemView.width * this.swipeThreshold
             if (abs(viewHolder.itemView.translationX) > swipeThreshold) {
-                adapter.removeItem(viewHolder.bindingAdapterPosition)
+                adapter?.removeItem(viewHolder.bindingAdapterPosition)
             } else {
-                adapter.notifyItemChanged(viewHolder.bindingAdapterPosition)
+                adapter?.notifyItemChanged(viewHolder.bindingAdapterPosition)
             }
         }
     }

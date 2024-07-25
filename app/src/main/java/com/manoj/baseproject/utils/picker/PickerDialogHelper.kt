@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.databinding.DialogPickerBinding
@@ -22,6 +23,7 @@ import com.manoj.baseproject.databinding.ItemPickerGridBinding
 import com.manoj.baseproject.presentation.common.adapter.CallBackModel
 import com.manoj.baseproject.presentation.common.adapter.Callbacks
 import com.manoj.baseproject.presentation.common.adapter.CustomAdapter
+import com.manoj.baseproject.presentation.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.presentation.common.basedialogs.BaseBottomSheetDialog
 import com.manoj.baseproject.utils.Drw
 import com.manoj.baseproject.utils.PERMISSION_READ_STORAGE
@@ -93,6 +95,8 @@ class PickerDialogHelper(
                 pickerItems.layoutManager = layoutManager
                 pickerItems.adapter = pickerAdapter
                 pickerAdapter?.list = items
+                val itemTouchHelper = ItemTouchHelper(RecyclerItemTouchHelper(pickerAdapter))
+                itemTouchHelper.attachToRecyclerView(this.pickerItems)
             }
         }, onCancelListener = {})
     }
