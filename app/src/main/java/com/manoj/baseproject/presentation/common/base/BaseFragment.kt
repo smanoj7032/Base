@@ -68,7 +68,11 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(), NetworkObse
     protected abstract suspend fun apiCall()
 
     override fun onNetworkAvailable() {
-        lifecycleScope.launch { apiCall() }
+        networkObserver.addPendingAction {
+            lifecycleScope.launch {
+                apiCall()
+            }
+        }
     }
 
     override fun onNetworkLost() {
