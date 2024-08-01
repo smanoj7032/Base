@@ -42,7 +42,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
-    override fun apiCall() {
+    override suspend fun apiCall() {
 
     }
 
@@ -73,7 +73,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             this.layoutManager = layoutManager
             adapter = postsAdapter.withLoadStateHeaderAndFooter(headerAdapter, footerAdapter)
         }
-        postsAdapter.attachLoadStateListener(onLoading = ::onLoading, onError = ::onError)
+        postsAdapter.attachLoadStateListener(onLoading = {}, onError = ::onError)
     }
 
     private fun navigateToPostDetail(id: String?) = findNavController().navigate(

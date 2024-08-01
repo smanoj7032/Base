@@ -18,9 +18,8 @@ class PostDetailVM @javax.inject.Inject constructor(
 ) : BaseViewModel(dispatchers) {
 
     val obrPosts by lazy { SingleRequestEvent<Posts>() }
-    val posts by lazy {  MutableStateFlow<Resource<Posts?>>(Resource.loading())}
+    val posts by lazy { MutableStateFlow<Resource<Posts?>>(Resource.loading()) }
 
-    fun getPost(id: String) = launchOnIO {
-        getPostUseCase.invoke(id).customSubscription(posts,viewModelScope)
-    }
+    fun getPost(id: String) =
+        launchOnIO { getPostUseCase.invoke(id).customSubscription(posts, viewModelScope) }
 }

@@ -14,9 +14,6 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.LinearInterpolator
-import android.view.animation.RotateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -30,12 +27,10 @@ import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
@@ -46,11 +41,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.manoj.baseproject.R
 import com.manoj.baseproject.data.bean.PlaceDetails
+import com.manoj.baseproject.presentation.common.motiontoast.MotionToast
+import com.manoj.baseproject.presentation.common.motiontoast.MotionToastStyle
 import com.manoj.baseproject.utils.helper.Resource
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -110,7 +106,27 @@ fun Activity.showKeyboard() {
 }
 
 fun Fragment.showToast(message: String) {
-    Toast.makeText(this.context, message, Toast.LENGTH_LONG).show()
+    Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+}
+fun Activity.showSuccessToast(message: String) {
+    MotionToast.createColorToast(
+        this,
+        "Success",
+        message,
+        MotionToastStyle.SUCCESS,
+        MotionToast.GRAVITY_BOTTOM,
+        MotionToast.SHORT_DURATION
+    )
+}
+fun Activity.showErrorToast(errorMessage: String) {
+    MotionToast.createColorToast(
+        this,
+        "Error",
+        errorMessage,
+        MotionToastStyle.ERROR,
+        MotionToast.GRAVITY_BOTTOM,
+        MotionToast.LONG_DURATION
+    )
 }
 
 fun View.showSnackBar(message: String) {

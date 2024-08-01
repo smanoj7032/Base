@@ -1,18 +1,15 @@
 package com.manoj.baseproject.injection
 
 import android.app.Application
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.manoj.baseproject.BuildConfig
 import com.manoj.baseproject.network.api.BaseApi
-import com.manoj.baseproject.network.helper.NetworkMonitor
 import com.manoj.baseproject.utils.DispatchersProvider
 import com.manoj.baseproject.utils.DispatchersProviderImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -55,11 +52,6 @@ class ApplicationModule {
         return application.getSharedPreferences(application.packageName, MODE_PRIVATE)
     }
 
-    @Provides
-    @Singleton
-    fun provideNetworkMonitor(
-        @ApplicationContext context: Context
-    ): NetworkMonitor = NetworkMonitor(context)
 
     @Provides
     fun provideDispatchersProvider(): DispatchersProvider {

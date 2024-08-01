@@ -95,12 +95,11 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
         itemTouchHelper.attachToRecyclerView(binding.rvPosts)
     }
 
-    override fun apiCall() {
+    override suspend fun apiCall() {
         arguments?.let {
             val id = PostDetailFragmentArgs.fromBundle(it).id
             Logger.d("ID--->>>", "$id")
             viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
         }
-
     }
 }

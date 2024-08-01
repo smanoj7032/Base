@@ -3,62 +3,109 @@ package com.manoj.baseproject.network.helper
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.util.Log
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.manoj.baseproject.utils.DispatchersProvider
+import com.manoj.baseproject.utils.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NetworkMonitor(
-    @ApplicationContext context: Context
-) {
+@Singleton
+class NetworkMonitor @Inject constructor(
+    @ApplicationContext private val context: Context,
+     private val dispatchersProvider: DispatchersProvider,
+) : DefaultLifecycleObserver {
 
     enum class NetworkState {
-        Available, Lost;
-
-        fun isAvailable() = this == Available
-        fun isLost() = this == Lost
+        Available, Lost
     }
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    var previousState: NetworkState? = null
+
+    private var previousState: NetworkState? = null
+
+    private val scope = CoroutineScope(dispatchersProvider.getIO() + SupervisorJob())
+
     val networkState: Flow<NetworkState> = callbackFlow {
-
-        launch { send(getInitialState()) }
-
         val callback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                super.onAvailable(network)
-                val currentState = NetworkState.Available
-                if (currentState != previousState) {
-                    launch { send(currentState) }
-                    previousState = currentState
-                    Log.d("NetworkState-->>>", "NetworkMonitor: onAvailable()")
-                }
+                handleNetworkAvailability(this@callbackFlow)
             }
 
             override fun onLost(network: Network) {
-                super.onLost(network)
-                val currentState = NetworkState.Lost
-                if (currentState != previousState) {
-                    launch { send(currentState) }
-                    previousState = currentState
-                    Log.d("NetworkState-->>>", "NetworkMonitor: onLost()")
-                }
+                handleNetworkLoss(this@callbackFlow)
             }
         }
 
         connectivityManager.registerDefaultNetworkCallback(callback)
-
-        awaitClose {
-            Log.d("XXX", "NetworkMonitor: awaitClose")
-            connectivityManager.unregisterNetworkCallback(callback)
-        }
+        trySend(getInitialState()).isSuccess
+        awaitClose { connectivityManager.unregisterNetworkCallback(callback) }
     }.distinctUntilChanged()
+
+    private fun handleNetworkAvailability(channel: SendChannel<NetworkState>) {
+        if (previousState != NetworkState.Available) {
+            scope.launch {
+                if (hasActiveInternetConnection()) {
+                    withContext(dispatchersProvider.getMain()) {
+                        channel.trySend(NetworkState.Available).isSuccess
+                        previousState = NetworkState.Available
+                        Logger.d("Network state changed to: Available")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleNetworkLoss(channel: SendChannel<NetworkState>) {
+        if (previousState != NetworkState.Lost) {
+            channel.trySend(NetworkState.Lost).isSuccess
+            previousState = NetworkState.Lost
+            Logger.d("Network state changed to: Lost")
+        }
+    }
 
     private fun getInitialState(): NetworkState =
         if (connectivityManager.activeNetwork != null) NetworkState.Available else NetworkState.Lost
+
+    suspend fun hasActiveInternetConnection(): Boolean {
+        val url = "https://www.google.com"
+        val client = OkHttpClient.Builder().build()
+
+        return withContext(dispatchersProvider.getIO()) {
+            try {
+                val request = Request.Builder().url(url).build()
+                client.newCall(request).execute().use { response ->
+                    response.isSuccessful
+                }
+            } catch (e: Exception) {
+                Logger.e("Error checking internet connection", e.message)
+                false
+            }
+        }
+    }
+
+    init {
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        ProcessLifecycleOwner.get().lifecycle.removeObserver(this)
+        scope.cancel()
+    }
 }

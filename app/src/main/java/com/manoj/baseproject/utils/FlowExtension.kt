@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import com.manoj.baseproject.MyApplication
+import com.manoj.baseproject.MyApplication.Companion.instance
 import com.manoj.baseproject.network.helper.BaseApiResponse
 import com.manoj.baseproject.network.helper.DataResponse
 import com.manoj.baseproject.utils.helper.Resource
@@ -96,18 +97,20 @@ fun <B> Flow<B>.customSubscription(
     coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
-        this@customSubscription
-            .onStart {
-                stateFlow.value = Resource.loading()
-            }
-            .flowOn(Dispatchers.IO)
-            .catch { throwable ->
-                val error = parseException(throwable)
-                stateFlow.value = Resource.error(null, error)
-            }
-            .collectLatest { data ->
-                stateFlow.value = Resource.success(data, "Successful")
-            }
+        if (instance.isOnline()) {
+            this@customSubscription
+                .onStart {
+                    stateFlow.value = Resource.loading()
+                }
+                .flowOn(Dispatchers.IO)
+                .catch { throwable ->
+                    val error = parseException(throwable)
+                    stateFlow.value = Resource.error(null, error)
+                }
+                .collectLatest { data ->
+                    stateFlow.value = Resource.success(data, "Successful")
+                }
+        } else stateFlow.value = Resource.error(null, "No internet connection")
     }
 }
 

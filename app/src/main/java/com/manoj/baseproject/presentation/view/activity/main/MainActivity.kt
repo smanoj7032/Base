@@ -22,6 +22,7 @@ import com.manoj.baseproject.presentation.common.base.BaseActivity
 import com.manoj.baseproject.presentation.common.base.BaseViewModel
 import com.manoj.baseproject.utils.Logger
 import com.manoj.baseproject.utils.Str
+import com.manoj.baseproject.utils.showSuccessToast
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -48,14 +49,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         override fun handleOnBackPressed() {
             if (doubleBackToExitPressedOnce + TIME_INTERVAL > System.currentTimeMillis()) {
                 finish()
-            } else showToast("Please click BACK again to exit")
+            } else showSuccessToast("Please click BACK again to exit")
             doubleBackToExitPressedOnce = System.currentTimeMillis()
         }
     }
     private val viewModel: MainViewModel by viewModels()
 
-    override fun apiCall() {
-
+    override suspend fun apiCall() {
+        Logger.d("Api Call--->>", "Called()")
     }
 
 
@@ -110,6 +111,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             this.title = title
         }
     }
+
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val v = currentFocus

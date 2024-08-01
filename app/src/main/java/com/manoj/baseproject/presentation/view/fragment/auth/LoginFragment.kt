@@ -30,7 +30,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     }
 
-    override fun apiCall() {
+    override suspend fun apiCall() {
 
     }
 

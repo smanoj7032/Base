@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Properties
 
 plugins {
@@ -19,15 +21,14 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        val properties = Properties()
 
+        val properties = Properties()
         val localPropertiesFile = project.rootProject.file("apikeys.properties")
-       properties.load(localPropertiesFile.inputStream())
+        properties.load(localPropertiesFile.inputStream())
         val apiKey: String = properties.getProperty("APP_ID") ?: ""
 
-
-        this.buildConfigField("String","APP_ID", apiKey)
-        this.buildConfigField("String","BASE_URL","\"https://dummyapi.io/\"")
+        this.buildConfigField("String", "APP_ID", apiKey)
+        this.buildConfigField("String", "BASE_URL", "\"https://dummyapi.io/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -41,10 +42,10 @@ android {
         }
     }
     dataBinding {
-        this.enable=true
+        this.enable = true
     }
     buildFeatures {
-        viewBinding =true
+        viewBinding = true
         buildConfig = true
     }
     compileOptions {
@@ -53,6 +54,18 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    applicationVariants.configureEach {
+        val variant = this
+        val builtType = variant.buildType.name
+        val flavor = variant.flavorName
+        val versionCode = variant.versionCode
+        val formattedDate = SimpleDateFormat("dd-MMM-yyyy hh:mm a").format(Date())
+        val outputFileName = "Base  $builtType  $flavor $versionCode $formattedDate.apk"
+        variant.outputs.map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                output.outputFileName = outputFileName
+            }
     }
 }
 
