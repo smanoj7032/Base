@@ -96,6 +96,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     }
 
     override suspend fun apiCall() {
+        Logger.d("Api Call--->>", "Fragment Called()")
         arguments?.let {
             val id = PostDetailFragmentArgs.fromBundle(it).id
             Logger.d("ID--->>>", "$id")

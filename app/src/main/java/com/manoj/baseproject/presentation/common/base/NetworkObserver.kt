@@ -13,7 +13,6 @@ class NetworkObserver(
 
     private var isApiCallMade = false
     private val listeners = mutableListOf<NetworkStateListener>()
-    private val pendingActions = mutableListOf<() -> Unit>()
 
     interface NetworkStateListener {
         fun onNetworkAvailable()
@@ -23,13 +22,14 @@ class NetworkObserver(
     fun addListener(listener: NetworkStateListener) {
         listeners.add(listener)
         /** Notify immediately if network is available */
-        scope.launch {
+       /* scope.launch {
             if (networkMonitor.hasActiveInternetConnection()) {
                 listener.onNetworkAvailable()
+                isApiCallMade = true
             } else {
                 listener.onNetworkLost()
             }
-        }
+        }*/
     }
 
     fun removeListener(listener: NetworkStateListener) {
@@ -44,7 +44,6 @@ class NetworkObserver(
                         if (!isApiCallMade) {
                             isApiCallMade = true
                             listeners.forEach { it.onNetworkAvailable() }
-                            executePendingActions()
                         }
                     }
 
@@ -55,19 +54,4 @@ class NetworkObserver(
             }
         }
     }
-
-    fun addPendingAction(action: () -> Unit) {
-        pendingActions.add(action)
-        scope.launch {
-            if (networkMonitor.hasActiveInternetConnection()) {
-                executePendingActions()
-            }
-        }
-    }
-
-    private fun executePendingActions() {
-        pendingActions.forEach { it.invoke() }
-        pendingActions.clear()
-    }
 }
-

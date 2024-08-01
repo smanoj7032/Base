@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val viewModel: MainViewModel by viewModels()
 
     override suspend fun apiCall() {
-        Logger.d("Api Call--->>", "Called()")
+        Logger.d("Api Call--->>", "Activity Called()")
     }
 
 
