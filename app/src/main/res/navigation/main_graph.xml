@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.manoj.baseproject.presentation.view.fragment.auth.LoginFragment"
+        android:name="com.manoj.baseproject.presentation.fragment.auth.LoginFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_login">
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.manoj.baseproject.presentation.view.fragment.home.HomeFragment"
+        android:name="com.manoj.baseproject.presentation.fragment.home.HomeFragment"
         android:label="Feed"
         tools:layout="@layout/fragment_home">
 
@@ -38,7 +38,7 @@
 
     <fragment
         android:id="@+id/postDetailFragment"
-        android:name="com.manoj.baseproject.presentation.view.fragment.postdetail.PostDetailFragment"
+        android:name="com.manoj.baseproject.presentation.fragment.postdetail.PostDetailFragment"
         android:label="Popular"
         tools:layout="@layout/fragment_post_detail">
         <argument

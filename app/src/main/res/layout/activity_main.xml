@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.view.activity.main.MainViewModel" />
+            type="com.manoj.baseproject.presentation.activity.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

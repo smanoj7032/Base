@@ -7,7 +7,7 @@
 
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.view.fragment.home.HomeVM" />
+            type="com.manoj.baseproject.presentation.fragment.home.HomeVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

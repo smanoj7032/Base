@@ -3,11 +3,9 @@ package com.manoj.baseproject.data.local
 import android.content.SharedPreferences
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.manoj.baseproject.utils.getValue
-import com.manoj.baseproject.utils.saveValue
+import com.manoj.baseproject.core.utils.getValue
+import com.manoj.baseproject.core.utils.saveValue
 import javax.inject.Inject
-import java.lang.reflect.Type
 
 open class SharedPrefManager @Inject constructor(private val sharedPreferences: SharedPreferences) {
 
