@@ -4,17 +4,17 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.manoj.baseproject.MyApplication
-import com.manoj.baseproject.core.utils.executeApiCall
-import com.manoj.baseproject.core.network.helper.Status
-import com.manoj.baseproject.core.utils.isOnline
-import com.manoj.baseproject.core.utils.parseException
+import com.manoj.baseproject.core.utils.extension.executeApiCall
+import com.manoj.baseproject.core.utils.extension.isOnline
+import com.manoj.baseproject.core.utils.extension.parseException
+import com.manoj.baseproject.data.api.ApiServices
 import com.manoj.baseproject.data.bean.Post
-import com.manoj.baseproject.data.api.BaseApi
 import kotlinx.coroutines.flow.catch
+import com.manoj.baseproject.core.network.helper.Result
 
 
 class PostsPagingSource(
-    private val remote: BaseApi, private val appId: String
+    private val remote: ApiServices, private val appId: String
 ) : PagingSource<Int, Post>() {
     override fun getRefreshKey(state: PagingState<Int, Post>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -39,20 +39,22 @@ class PostsPagingSource(
                     Throwable(parseException(exception).ifEmpty { "Something went wrong" })
                 )
             }.collect { state ->
-                when (state.status) {
-                    Status.SUCCESS -> {
+                when (state) {
+                    is Result.Success -> {
                         result = LoadResult.Page(
                             data = state.data?.data ?: emptyList(),
                             prevKey = if (page == 1) null else page - 1,
                             nextKey = if (state.data?.data.isNullOrEmpty()) null else page + 1
                         )
                     }
-                    Status.ERROR -> {
+
+                    is Result.Error -> {
                         result = LoadResult.Error(
-                            Throwable(state.message?.ifEmpty { "Something went wrong" })
+                            Throwable(state.message.ifEmpty { "Something went wrong" })
                         )
                     }
-                    else -> {}
+
+                    is Result.Loading -> {}
                 }
             }
 

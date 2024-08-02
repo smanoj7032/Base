@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.launchAndRepeatWithViewLifecycle
+import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentHomeBinding
 import com.manoj.baseproject.databinding.ItemPostBinding

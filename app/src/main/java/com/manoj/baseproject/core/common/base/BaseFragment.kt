@@ -13,12 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.hideKeyboard
-import com.manoj.baseproject.core.utils.showErrorToast
-import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.core.network.helper.NetworkMonitor
+import com.manoj.baseproject.core.utils.extension.hideKeyboard
+import com.manoj.baseproject.core.utils.extension.showErrorToast
+import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
     NetworkObserver.NetworkStateListener {
@@ -26,6 +27,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
     lateinit var sharedPrefManager: SharedPrefManager
     lateinit var baseContext: Context
     lateinit var binding: Binding
+
 
     private lateinit var networkObserver: NetworkObserver
 
@@ -82,8 +84,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
     }
 
     fun onLoading(show: Boolean) {
-        val progressBar: View = requireActivity().findViewById(R.id.progress_bar)
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+        parentActivity?.onLoading(show)
     }
 
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->

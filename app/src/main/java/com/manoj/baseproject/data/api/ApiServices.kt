@@ -1,15 +1,13 @@
 package com.manoj.baseproject.data.api
 
 import com.manoj.baseproject.data.bean.Posts
-import io.reactivex.Single
-import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
 
-interface BaseApi {
+interface ApiServices {
 
     @GET("data/v1/post")
     suspend fun getPosts(

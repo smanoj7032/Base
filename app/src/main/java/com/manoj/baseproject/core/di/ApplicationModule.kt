@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.manoj.baseproject.BuildConfig
-import com.manoj.baseproject.core.utils.DispatchersProvider
-import com.manoj.baseproject.core.utils.DispatchersProviderImpl
-import com.manoj.baseproject.data.api.BaseApi
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
+import com.manoj.baseproject.data.api.ApiServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +44,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesApiService(retrofit: Retrofit): BaseApi = retrofit.create(BaseApi::class.java)
+    fun providesApiService(retrofit: Retrofit): ApiServices = retrofit.create(ApiServices::class.java)
 
     @Provides
     @Singleton

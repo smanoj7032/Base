@@ -1,11 +1,10 @@
-package com.manoj.baseproject.core.utils
+package com.manoj.baseproject.core.utils.extension
 
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.manoj.baseproject.MyApplication
-import com.manoj.baseproject.core.network.helper.Resource
+import com.manoj.baseproject.core.network.helper.Result
 import com.manoj.baseproject.core.network.helper.SingleRequestEvent
-import com.manoj.baseproject.core.network.helper.Status
 import com.manoj.baseproject.core.network.helper.DataResponse
 import com.manoj.baseproject.core.network.helper.BaseApiResponse
 import io.reactivex.Single
@@ -21,14 +20,14 @@ import java.net.HttpURLConnection
 
 fun <M> Single<DataResponse<M>>.apiSubscription(liveData: SingleRequestEvent<M>): Disposable {
     return this.doOnSubscribe {
-        liveData.postValue(Resource.loading<M>())
+        liveData.postValue(Result.Loading)
     }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        if (it.isStatusOK) liveData.postValue(Resource.success(it.data, it.message.toString()))
-        else liveData.postValue(Resource.warn(null, it.message.toString()))
+        if (it.isStatusOK) liveData.postValue(Result.Success(it.data))
+        else liveData.postValue(Result.Error(it.message.toString()))
     }, { it ->
         val error = parseException(it)
         error.let {
-            liveData.postValue(Resource.error(null, it))
+            liveData.postValue(Result.Error(it))
         }
     })
 }
@@ -36,14 +35,14 @@ fun <M> Single<DataResponse<M>>.apiSubscription(liveData: SingleRequestEvent<M>)
 
 fun Single<BaseApiResponse>.simpleSubscription(liveData: SingleRequestEvent<Void>): Disposable {
     return this.doOnSubscribe {
-        liveData.postValue(Resource.loading<Void>())
+        liveData.postValue(Result.Loading)
     }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        if (it.isStatusOK) liveData.postValue(Resource.success(null, it.message.toString()))
-        else liveData.postValue(Resource.warn(null, it.message.toString()))
+        if (it.isStatusOK) liveData.postValue(Result.Success(null, it.message.toString()))
+        else liveData.postValue(Result.Error(it.message.toString()))
     }, { it ->
         val error = parseException(it);
         error.let {
-            liveData.postValue(Resource.error(null, it))
+            liveData.postValue(Result.Error(it))
         }
 
     })
@@ -51,13 +50,13 @@ fun Single<BaseApiResponse>.simpleSubscription(liveData: SingleRequestEvent<Void
 
 fun <B> Single<B>.customSubscription(liveData: SingleRequestEvent<B>): Disposable {
     return this.doOnSubscribe {
-        liveData.postValue(Resource.loading<B>())
+        liveData.postValue(Result.Loading)
     }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        liveData.postValue(Resource.success(it, "Successful"))
+        liveData.postValue(Result.Success(it, "Successful"))
     }, { it ->
         val error = parseException(it);
         error.let {
-            liveData.postValue(Resource.error(null, it))
+            liveData.postValue(Result.Error(it))
         }
     })
 }
@@ -66,14 +65,14 @@ fun <M> Single<BaseApiResponse>.simpleSubscriptionWithTag(
     tag: M, liveData: SingleRequestEvent<M>
 ): Disposable {
     return this.doOnSubscribe {
-        liveData.postValue(Resource.loading<M>())
+        liveData.postValue(Result.Loading)
     }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe({
-        if (it.isStatusOK) liveData.postValue(Resource.success(tag, it.message.toString()))
-        else liveData.postValue(Resource.warn(tag, it.message.toString()))
+        if (it.isStatusOK) liveData.postValue(Result.Success(tag, it.message.toString()))
+        else liveData.postValue(Result.Error(it.message.toString()))
     }, { it ->
         val error = parseException(it)
         error.let {
-            liveData.postValue(Resource.error(tag, it))
+            liveData.postValue(Result.Error(it))
         }
 
     })
@@ -86,15 +85,15 @@ fun <T> SingleRequestEvent<T>.singleObserver(
     onError: ((throwable: Throwable, showError: Boolean) -> Unit),
 ) {
     this.observe(owner, object : SingleRequestEvent.RequestObserver<T> {
-        override fun onRequestReceived(resource: Resource<T?>) {
-            when (resource.status) {
-                Status.LOADING -> onLoading(true)
-                Status.SUCCESS -> {
+        override fun onRequestReceived(resource: Result<T?>) {
+            when (resource) {
+                is Result.Loading -> onLoading(true)
+                is Result.Success -> {
                     onLoading(false)
                     resource.data?.let { onSuccess(it) }
                 }
 
-                else -> {
+                is Result.Error -> {
                     onLoading(false)
                     onError(Throwable(resource.message), true)
                 }
@@ -161,5 +160,3 @@ fun HttpException.extractErrorText(): String {
         message()
     }
 }
-
-class UnAuthUser

@@ -1,4 +1,4 @@
-package com.manoj.baseproject.core.utils
+package com.manoj.baseproject.core.utils.extension
 
 import android.app.Activity
 import android.content.ContentResolver
@@ -40,16 +40,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.network.helper.Resource
 import com.manoj.baseproject.data.bean.PlaceDetails
 import com.manoj.baseproject.core.common.motiontoast.MotionToast
 import com.manoj.baseproject.core.common.motiontoast.MotionToastStyle
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 
 typealias Str = R.string
 typealias Ids = R.id
@@ -108,6 +111,7 @@ fun Activity.showKeyboard() {
 fun Fragment.showToast(message: String) {
     Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
 }
+
 fun Activity.showSuccessToast(message: String) {
     MotionToast.createColorToast(
         this,
@@ -118,6 +122,7 @@ fun Activity.showSuccessToast(message: String) {
         MotionToast.SHORT_DURATION
     )
 }
+
 fun Activity.showErrorToast(errorMessage: String) {
     MotionToast.createColorToast(
         this,
@@ -136,8 +141,8 @@ fun View.showSnackBar(message: String) {
     }
 }
 
-fun <T> Resource<T>.log() {
-    Log.i("Resource", this.toString())
+fun <T> Result<T>.log() {
+    Log.i("Result", this.toString())
 }
 
 fun RecyclerView.setLinearLayoutManger() {

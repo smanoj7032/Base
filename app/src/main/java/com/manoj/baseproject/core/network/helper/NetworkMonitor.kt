@@ -6,7 +6,7 @@ import android.net.Network
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.manoj.baseproject.core.utils.DispatchersProvider
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope

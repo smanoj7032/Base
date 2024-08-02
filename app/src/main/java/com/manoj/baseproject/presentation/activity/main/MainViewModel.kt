@@ -4,7 +4,7 @@ package com.manoj.baseproject.presentation.activity.main
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.manoj.baseproject.core.utils.DispatchersProvider
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.domain.usecase.GetPostsUseCase
 import com.manoj.baseproject.core.common.base.BaseViewModel

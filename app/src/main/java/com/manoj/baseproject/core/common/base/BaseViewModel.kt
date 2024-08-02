@@ -5,7 +5,7 @@ import android.os.MessageQueue
 import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.manoj.baseproject.core.utils.DispatchersProvider
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.network.helper.SingleActionEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

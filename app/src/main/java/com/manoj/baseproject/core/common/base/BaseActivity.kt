@@ -1,7 +1,6 @@
 package com.manoj.baseproject.core.common.base
 
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.View
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
@@ -9,7 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.core.utils.showErrorToast
+import com.manoj.baseproject.R
+import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.databinding.ViewProgressSheetBinding
 import com.manoj.baseproject.core.network.helper.NetworkMonitor
@@ -20,7 +20,12 @@ import javax.inject.Inject
 abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
     NetworkObserver.NetworkStateListener {
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
-    private val networkObserver: NetworkObserver by lazy { NetworkObserver(networkMonitor, lifecycleScope) }
+    private val networkObserver: NetworkObserver by lazy {
+        NetworkObserver(
+            networkMonitor,
+            lifecycleScope
+        )
+    }
     lateinit var binding: Binding
     private var progressSheet: ProgressSheet? = null
     private val TIMER_ANIMATION: Long = 400
@@ -84,7 +89,10 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
             showErrorToast(error.message.toString())
         }
     }
-
+    fun onLoading(show: Boolean) {
+        val progressBar: View = findViewById(R.id.progress_bar)
+        progressBar.visibility = if (show) View.VISIBLE else View.GONE
+    }
     override fun onDestroy() {
         progressSheet?.dismissAllowingStateLoss()
         networkObserver.removeListener(this)

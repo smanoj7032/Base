@@ -11,8 +11,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.Logger
-import com.manoj.baseproject.core.utils.Str
-import com.manoj.baseproject.core.utils.showSuccessToast
+import com.manoj.baseproject.core.utils.extension.Str
+import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel

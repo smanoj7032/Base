@@ -3,7 +3,7 @@ package com.manoj.baseproject.core.common.adapter
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.manoj.baseproject.core.utils.setSingleClickListener
+import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 
 class RecyclerViewHolder<Binding : ViewDataBinding>(var binding: Binding) :
     RecyclerView.ViewHolder(binding.root) {

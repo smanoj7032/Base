@@ -6,7 +6,7 @@ import java.net.HttpURLConnection
 
 open class BaseApiResponse : Serializable {
     @SerializedName("code")
-    var status :Int?= null
+    var status: Int? = null
 
     @SerializedName("message")
     var message: String? = null
@@ -17,12 +17,11 @@ open class BaseApiResponse : Serializable {
         protected set
 
     override fun toString(): String {
-        return "SimpleApiResponse{" +
+        return "BaseApiResponse{" +
                 "success=" + status +
                 ", message='" + message + '\'' +
                 '}'
     }
 
-    val isStatusOK: Boolean
-        get() = status == HttpURLConnection.HTTP_OK
+    val isStatusOK: Boolean get() = status in 200..299
 }

@@ -1,4 +1,4 @@
-package com.manoj.baseproject.core.utils
+package com.manoj.baseproject.core.utils.dispatchers
 
 import kotlinx.coroutines.CoroutineDispatcher
 

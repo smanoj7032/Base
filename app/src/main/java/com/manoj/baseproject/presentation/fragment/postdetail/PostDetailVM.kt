@@ -1,13 +1,11 @@
 package com.manoj.baseproject.presentation.fragment.postdetail
 
 import androidx.lifecycle.viewModelScope
-import com.manoj.baseproject.core.utils.DispatchersProvider
-import com.manoj.baseproject.core.utils.customSubscription
-import com.manoj.baseproject.core.network.helper.Resource
-import com.manoj.baseproject.core.network.helper.SingleRequestEvent
+import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.domain.usecase.GetPostUseCase
-import com.manoj.baseproject.core.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -17,9 +15,7 @@ class PostDetailVM @javax.inject.Inject constructor(
     dispatchers: DispatchersProvider
 ) : BaseViewModel(dispatchers) {
 
-    val obrPosts by lazy { SingleRequestEvent<Posts>() }
-    val posts by lazy { MutableStateFlow<Resource<Posts?>>(Resource.loading()) }
+     val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
 
-    fun getPost(id: String) =
-        launchOnIO { getPostUseCase.invoke(id).customSubscription(posts, viewModelScope) }
+    fun getPost(id: String)= getPostUseCase.invoke(id, posts, viewModelScope)
 }

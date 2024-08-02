@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.setSingleClickListener
+import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import com.manoj.baseproject.databinding.FragmentLoginBinding
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel

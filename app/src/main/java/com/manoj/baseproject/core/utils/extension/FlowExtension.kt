@@ -1,4 +1,4 @@
-package com.manoj.baseproject.core.utils
+package com.manoj.baseproject.core.utils.extension
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -6,12 +6,10 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import com.google.gson.Gson
-import com.manoj.baseproject.MyApplication
 import com.manoj.baseproject.MyApplication.Companion.instance
-import com.manoj.baseproject.core.network.helper.Resource
-import com.manoj.baseproject.core.network.helper.Status
 import com.manoj.baseproject.core.network.helper.BaseApiResponse
 import com.manoj.baseproject.core.network.helper.DataResponse
+import com.manoj.baseproject.core.network.helper.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,7 +17,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -28,99 +25,96 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-fun <T> Flow<Resource<T>>.emitter(
-    mutableStateFlow: MutableStateFlow<Resource<T?>>,
+fun <T> Flow<Result<T>>.emitter(
+    mutableStateFlow: MutableStateFlow<Result<T?>>,
     scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 ) {
     this.onEach { state ->
-        when (state.status) {
-            Status.SUCCESS -> mutableStateFlow.value = Resource.success(state.data)
-            Status.ERROR -> mutableStateFlow.value = Resource.error(null, state.message)
-            else -> mutableStateFlow.value = Resource.loading()
+        when (state) {
+            is Result.Success -> mutableStateFlow.value = Result.Success(state.data)
+            is Result.Error -> mutableStateFlow.value = Result.Error(state.message)
+            else -> mutableStateFlow.value = Result.Loading
         }
     }.catch { throwable ->
         val networkError = parseException(throwable)
-        mutableStateFlow.value = Resource.error(null, networkError)
+        mutableStateFlow.value = Result.Error(networkError)
     }.launchIn(scope)
 }
 
 fun <M> Flow<DataResponse<M>>.apiSubscription(
-    stateFlow: MutableStateFlow<Resource<M?>>,
+    stateFlow: MutableStateFlow<Result<M?>>,
     coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
         this@apiSubscription
             .onStart {
-                stateFlow.value = Resource.loading()
+                stateFlow.value = Result.Loading
             }
             .flowOn(Dispatchers.IO)
             .catch { throwable ->
                 val error = parseException(throwable)
-                stateFlow.value = Resource.error(null, error)
+                stateFlow.value = Result.Error(error)
             }
             .collect { response ->
                 if (response.isStatusOK) {
-                    stateFlow.value = Resource.success(response.data, response.message.toString())
+                    stateFlow.value = Result.Success(response.data)
                 } else {
-                    stateFlow.value = Resource.warn(null, response.message.toString())
+                    stateFlow.value = Result.Error(response.message.toString())
                 }
             }
     }
 }
 
 fun <M> Flow<BaseApiResponse>.simpleSubscriptionWithTag(
-    tag: M, stateFlow: MutableStateFlow<Resource<M?>>, coroutineScope: CoroutineScope
+    tag: M, stateFlow: MutableStateFlow<Result<M?>>, coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
         this@simpleSubscriptionWithTag
             .onStart {
-                stateFlow.value = Resource.loading()
+                stateFlow.value = Result.Loading
             }
             .flowOn(Dispatchers.IO)
             .catch { throwable ->
                 val error = parseException(throwable)
-                stateFlow.value = Resource.error(tag, error)
+                stateFlow.value = Result.Error(error)
             }
             .collect { response ->
                 if (response.isStatusOK) {
-                    stateFlow.value = Resource.success(tag, response.message.toString())
+                    stateFlow.value = Result.Success(tag)
                 } else {
-                    stateFlow.value = Resource.warn(tag, response.message.toString())
+                    stateFlow.value = Result.Error(response.message.toString())
                 }
             }
     }
 }
 
 fun <B> Flow<B>.customSubscription(
-    stateFlow: MutableStateFlow<Resource<B?>>,
+    stateFlow: MutableStateFlow<Result<B?>>,
     coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
         if (instance.isOnline()) {
             this@customSubscription
-                .onStart {
-                    stateFlow.value = Resource.loading()
-                }
                 .flowOn(Dispatchers.IO)
                 .catch { throwable ->
                     val error = parseException(throwable)
-                    stateFlow.value = Resource.error(null, error)
+                    stateFlow.value = Result.Error(error)
                 }
-                .collectLatest { data ->
-                    stateFlow.value = Resource.success(data, "Successful")
+                .collect { data ->
+                    stateFlow.value = Result.Success(data)
                 }
-        } else stateFlow.value = Resource.error(null, "No internet connection")
+        } else stateFlow.value = Result.Error("No internet connection")
     }
 }
 
 
-suspend fun <T> StateFlow<Resource<T>>.customCollector(
+suspend fun <T> StateFlow<Result<T>>.customCollector(
     onLoading: (Boolean) -> Unit,
     onSuccess: ((data: T?) -> Unit)?,
     onError: ((throwable: String?, isShow: Boolean) -> Unit)?,
 ) {
     collect { state ->
-        when (state.status) {
+        /*when (state.status) {
             Status.LOADING -> {
                 onLoading.invoke(true)
             }
@@ -139,34 +133,49 @@ suspend fun <T> StateFlow<Resource<T>>.customCollector(
                 onLoading.invoke(false)
                 onError?.invoke(state.message, true)
             }
+        }*/
+        when (state) {
+            is Result.Success -> {
+                onSuccess?.invoke(state.data)
+                onLoading.invoke(false)
+            }
+
+            is Result.Error -> {
+                onLoading.invoke(false)
+                onError?.invoke(state.message, true)
+            }
+
+            is Result.Loading -> {
+                onLoading.invoke(true)
+            }
         }
     }
 }
 
-suspend fun <T> executeApiCall(apiCall: suspend () -> Response<T>): Flow<Resource<T?>> {
+suspend fun <T> executeApiCall(apiCall: suspend () -> Response<T>): Flow<Result<T?>> {
     return flow {
-        emit(Resource.loading<T>())
+        emit(Result.Loading)
         try {
-            if (MyApplication.instance.isOnline()) {
+            if (instance.isOnline()) {
                 val response = apiCall.invoke()
                 Log.e("Response-->>", "executeApiCall: ${Gson().toJson(response.message())}")
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        emit(Resource.success(body))
+                        emit(Result.Success(body))
                     } else {
-                        emit(Resource.error<T>(null, "Response body is null"))
+                        emit(Result.Error("Response body is null"))
                     }
                 } else {
                     val errorMessage = response.extractErrorMessage()
-                    emit(Resource.error<T>(null, errorMessage))
+                    emit(Result.Error(errorMessage))
                 }
             } else {
-                emit(Resource.error<T>(null, "Check your internet connection"))
+                emit(Result.Error("No internet connection"))
             }
         } catch (e: Exception) {
             val exceptionMessage = parseException(e)
-            emit(Resource.error<T>(null, exceptionMessage))
+            emit(Result.Error(exceptionMessage))
         }
     }.flowOn(Dispatchers.IO)
 }

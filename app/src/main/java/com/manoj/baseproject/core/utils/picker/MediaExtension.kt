@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.core.content.FileProvider
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.Str
+import com.manoj.baseproject.core.utils.extension.Str
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream

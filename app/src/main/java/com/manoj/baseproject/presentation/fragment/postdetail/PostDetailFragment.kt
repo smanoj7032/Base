@@ -6,11 +6,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.Logger
-import com.manoj.baseproject.core.utils.customCollector
+import com.manoj.baseproject.core.utils.extension.customCollector
 import com.manoj.baseproject.core.utils.picker.ItemModel
 import com.manoj.baseproject.core.utils.picker.ItemType
 import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
