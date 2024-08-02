@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
@@ -47,14 +48,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         val footerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val headerAdapter = LoadMoreAdapter { postsAdapter.retry() }
-        val layoutManager = GridLayoutManager(requireActivity().applicationContext, 3)
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+        val layoutManager = LinearLayoutManager(requireActivity().applicationContext)
+        /*layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if ((position == postsAdapter.itemCount) && footerAdapter.itemCount > 0) 3
                 else if (postsAdapter.itemCount == 0 && headerAdapter.itemCount > 0) 3
                 else 1
             }
-        }
+        }*/
         postsAdapter = RVAdapterWithPaging(
             diffCallback,
             R.layout.item_post,

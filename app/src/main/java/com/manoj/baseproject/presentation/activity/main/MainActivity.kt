@@ -17,7 +17,9 @@ import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.utils.extension.hide
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
+import com.manoj.baseproject.core.utils.extension.show
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -100,7 +102,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setTitle(title: String?, isBack: Boolean = false) {
-        binding.header.ivBack.isVisible = isBack
+        if (isBack) binding.header.ivBack.show() else binding.header.ivBack.hide()
         binding.header.tvTitle.text = title
         binding.header.ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
     }

@@ -31,23 +31,23 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
     }
 
     private fun setAnimation(viewToAnimate: View) {
-          val anim = ScaleAnimation(
-              0.0f,
-              1.0f,
-              0.0f,
-              1.0f,
-              Animation.RELATIVE_TO_SELF,
-              0.5f,
-              Animation.RELATIVE_TO_SELF,
-              0.5f
-          )
-          anim.duration = 300
-          viewToAnimate.startAnimation(anim)
+        val anim = ScaleAnimation(
+            0.0f,
+            1.0f,
+            0.0f,
+            1.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        anim.duration = 300
+        viewToAnimate.startAnimation(anim)
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder<B>, position: Int) {
         getItem(position)?.let { item ->
-            holder.bindTo(variableId, item, onBind = {binding,beab->})
+            holder.bindTo(variableId, item, onBind = { binding, beab -> })
             holder.bindClickListener(item, callbacks)
             setAnimation(holder.binding.root)
         }
@@ -74,14 +74,9 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
         onLoading: (Boolean) -> Unit,
         onError: (String?, Boolean) -> Unit
     ) {
-        var isFirstLoad = true
-
         this.addLoadStateListener { loadState ->
             if (loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading) {
-                if (isFirstLoad) {
-                    onLoading(true)
-                    isFirstLoad = false
-                }
+                onLoading(itemCount < 1)
             } else {
                 onLoading(false)
                 val errorState = when {
