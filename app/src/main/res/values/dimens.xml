@@ -50,4 +50,5 @@
     <dimen name="dimen_64">64dp</dimen>
     <dimen name="dimen_72">72dp</dimen>
 
+    <dimen name="toolbar_height">@dimen/_60sdp</dimen>
 </resources>

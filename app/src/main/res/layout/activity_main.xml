@@ -11,17 +11,26 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main"
         tools:context=".presentation.view.ArcoreMeasurement">
 
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:constraint_referenced_ids="header,container" />
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/action_bar" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/container"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:orientation="vertical"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />

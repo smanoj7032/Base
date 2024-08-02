@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 
 open class BaseViewModel ( dispatchers: DispatchersProvider): ViewModel() {
     val TAG: String = this.javaClass.simpleName
-    var compositeDisposable = CompositeDisposable()
+    private var compositeDisposable = CompositeDisposable()
 
     val onClick: SingleActionEvent<View> = SingleActionEvent()
 

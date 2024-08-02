@@ -2,6 +2,7 @@ package com.manoj.baseproject.domain.usecase
 
 import com.manoj.baseproject.core.network.helper.Result
 import com.manoj.baseproject.core.utils.extension.customSubscription
+import com.manoj.baseproject.core.utils.extension.defaultEmitter
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.domain.repositary.BaseRepo
 import kotlinx.coroutines.CoroutineScope
@@ -13,5 +14,5 @@ class GetPostUseCase @Inject constructor(private val repository: BaseRepo) {
           id: String,
           posts: MutableStateFlow<Result<Posts?>>,
           viewModelScope: CoroutineScope
-     )= repository.getPost(id).customSubscription(posts,viewModelScope)
+     )= repository.getPost(id).defaultEmitter(posts,viewModelScope)
 }

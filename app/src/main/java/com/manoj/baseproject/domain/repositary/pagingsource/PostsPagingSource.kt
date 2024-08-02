@@ -11,11 +11,14 @@ import com.manoj.baseproject.data.api.ApiServices
 import com.manoj.baseproject.data.bean.Post
 import kotlinx.coroutines.flow.catch
 import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.data.bean.Posts
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class PostsPagingSource(
     private val remote: ApiServices, private val appId: String
 ) : PagingSource<Int, Post>() {
+    val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
     override fun getRefreshKey(state: PagingState<Int, Post>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
@@ -27,7 +30,6 @@ class PostsPagingSource(
         Log.d("Page---->>", "load: $page")
         if (MyApplication.instance.isOnline()) {
             val response = executeApiCall { remote.getPosts(appId, page) }
-
             var result: LoadResult<Int, Post> = LoadResult.Page(
                 data = emptyList(),
                 prevKey = null,

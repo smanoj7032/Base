@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.R
@@ -16,6 +17,7 @@ import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -98,11 +100,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setTitle(title: String?, isBack: Boolean = false) {
-        supportActionBar?.apply {
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(isBack)
-            this.title = title
-        }
+        binding.header.ivBack.isVisible = isBack
+        binding.header.tvTitle.text = title
+        binding.header.ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {

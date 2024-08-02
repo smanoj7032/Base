@@ -15,7 +15,7 @@ class PostDetailVM @javax.inject.Inject constructor(
     dispatchers: DispatchersProvider
 ) : BaseViewModel(dispatchers) {
 
-     val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
+    val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
 
-    fun getPost(id: String)= getPostUseCase.invoke(id, posts, viewModelScope)
+    fun getPost(id: String) = launchOnIO { getPostUseCase.invoke(id, posts, this) }
 }

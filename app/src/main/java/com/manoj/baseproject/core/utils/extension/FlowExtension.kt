@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -41,12 +42,12 @@ fun <T> Flow<Result<T>>.emitter(
     }.launchIn(scope)
 }
 
-fun <M> Flow<DataResponse<M>>.apiSubscription(
+fun <M> Flow<DataResponse<M>>.apiEmitter(
     stateFlow: MutableStateFlow<Result<M?>>,
     coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
-        this@apiSubscription
+        this@apiEmitter
             .onStart {
                 stateFlow.value = Result.Loading
             }
@@ -65,11 +66,11 @@ fun <M> Flow<DataResponse<M>>.apiSubscription(
     }
 }
 
-fun <M> Flow<BaseApiResponse>.simpleSubscriptionWithTag(
-    tag: M, stateFlow: MutableStateFlow<Result<M?>>, coroutineScope: CoroutineScope
+fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
+    data: M, stateFlow: MutableStateFlow<Result<M?>>, coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
-        this@simpleSubscriptionWithTag
+        this@simpleApiEmitter
             .onStart {
                 stateFlow.value = Result.Loading
             }
@@ -80,7 +81,7 @@ fun <M> Flow<BaseApiResponse>.simpleSubscriptionWithTag(
             }
             .collect { response ->
                 if (response.isStatusOK) {
-                    stateFlow.value = Result.Success(tag)
+                    stateFlow.value = Result.Success(data)
                 } else {
                     stateFlow.value = Result.Error(response.message.toString())
                 }
@@ -88,22 +89,24 @@ fun <M> Flow<BaseApiResponse>.simpleSubscriptionWithTag(
     }
 }
 
-fun <B> Flow<B>.customSubscription(
+fun <B> Flow<B>.defaultEmitter(
     stateFlow: MutableStateFlow<Result<B?>>,
     coroutineScope: CoroutineScope
 ): Job {
     return coroutineScope.launch {
         if (instance.isOnline()) {
-            this@customSubscription
+            this@defaultEmitter.onStart {
+                stateFlow.emit(Result.Loading)
+            }
                 .flowOn(Dispatchers.IO)
                 .catch { throwable ->
                     val error = parseException(throwable)
-                    stateFlow.value = Result.Error(error)
+                    stateFlow.emit(Result.Error(error))
                 }
                 .collect { data ->
-                    stateFlow.value = Result.Success(data)
+                    stateFlow.emit(Result.Success(data))
                 }
-        } else stateFlow.value = Result.Error("No internet connection")
+        } else stateFlow.emit(Result.Error("No internet connection"))
     }
 }
 
@@ -114,26 +117,6 @@ suspend fun <T> StateFlow<Result<T>>.customCollector(
     onError: ((throwable: String?, isShow: Boolean) -> Unit)?,
 ) {
     collect { state ->
-        /*when (state.status) {
-            Status.LOADING -> {
-                onLoading.invoke(true)
-            }
-
-            Status.SUCCESS -> {
-                onSuccess?.invoke(state.data)
-                onLoading.invoke(false)
-            }
-
-            Status.ERROR -> {
-                onLoading.invoke(false)
-                onError?.invoke(state.message, true)
-            }
-
-            Status.WARN -> {
-                onLoading.invoke(false)
-                onError?.invoke(state.message, true)
-            }
-        }*/
         when (state) {
             is Result.Success -> {
                 onSuccess?.invoke(state.data)
@@ -201,4 +184,11 @@ fun Context.isOnline(): Boolean {
         }
     }
     return false
+}
+
+fun <T> Flow<T>.asResult(): Flow<Result<T>> {
+    return this
+        .map<T, Result<T>> { Result.Success(it) }
+        .onStart { emit(Result.Loading) }
+        .catch { emit(Result.Error(parseException(it))) }
 }
