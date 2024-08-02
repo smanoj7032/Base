@@ -31,6 +31,7 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:padding="@dimen/_10sdp"
             android:orientation="vertical"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
