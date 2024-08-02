@@ -21,6 +21,8 @@ import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -28,7 +30,6 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -41,7 +42,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
@@ -64,9 +64,17 @@ import java.util.concurrent.TimeUnit
  * The view visibility will be changed to [View.VISIBLE]
  * @see [View.setVisibility]
  * **/
+
+
 fun View.show() {
-    visibility = View.VISIBLE
+    this.visibility = View.VISIBLE
+    val fadeIn = AlphaAnimation(0.0f, 1.0f).apply {
+        duration = 300
+        fillAfter = true
+    }
+    this.startAnimation(fadeIn)
 }
+
 
 /**
  * Use this extension to hide the view.
@@ -74,7 +82,20 @@ fun View.show() {
  * @see [View.setVisibility]
  * **/
 fun View.hide() {
-    visibility = View.GONE
+    val fadeOut = AlphaAnimation(1f, 0f).apply {
+        duration = 300
+        fillAfter = true
+    }
+    this.startAnimation(fadeOut)
+    fadeOut.setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation?) {}
+
+        override fun onAnimationEnd(animation: Animation?) {
+            this@hide.visibility = View.GONE
+        }
+
+        override fun onAnimationRepeat(animation: Animation?) {}
+    })
 }
 
 /**

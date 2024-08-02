@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.Logger
@@ -87,7 +88,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
             picker.show()
         })
         postAdapter = CustomAdapter(R.layout.item_post, BR.bean, callbacks = clickListener)
-        binding.rvPosts.layoutManager = GridLayoutManager(baseContext,3)
+        binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
         binding.rvPosts.adapter = postAdapter
         val itemTouchHelper = ItemTouchHelper(RecyclerItemTouchHelper(postAdapter))
         itemTouchHelper.attachToRecyclerView(binding.rvPosts)
