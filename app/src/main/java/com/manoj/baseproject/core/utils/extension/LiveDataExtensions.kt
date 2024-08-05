@@ -85,17 +85,17 @@ fun <T> SingleRequestEvent<T>.singleObserver(
     onError: ((throwable: Throwable, showError: Boolean) -> Unit),
 ) {
     this.observe(owner, object : SingleRequestEvent.RequestObserver<T> {
-        override fun onRequestReceived(resource: Result<T?>) {
-            when (resource) {
+        override fun onRequestReceived(result: Result<T?>) {
+            when (result) {
                 is Result.Loading -> onLoading(true)
                 is Result.Success -> {
                     onLoading(false)
-                    resource.data?.let { onSuccess(it) }
+                    result.data?.let { onSuccess(it) }
                 }
 
                 is Result.Error -> {
                     onLoading(false)
-                    onError(Throwable(resource.message), true)
+                    onError(Throwable(result.message), true)
                 }
             }
         }

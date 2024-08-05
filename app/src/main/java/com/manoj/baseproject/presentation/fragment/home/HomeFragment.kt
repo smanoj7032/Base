@@ -49,6 +49,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         val footerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val headerAdapter = LoadMoreAdapter { postsAdapter.retry() }
         val layoutManager = LinearLayoutManager(requireActivity().applicationContext)
+
+        /**Un- Comment this code if you want set layout manager in Grid*/
         /*layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if ((position == postsAdapter.itemCount) && footerAdapter.itemCount > 0) 3

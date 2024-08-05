@@ -4,11 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.common.adapter.CallBackModel
+import com.manoj.baseproject.core.common.adapter.Callbacks
+import com.manoj.baseproject.core.common.adapter.CustomAdapter
+import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
+import com.manoj.baseproject.core.common.base.BaseFragment
+import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.customCollector
 import com.manoj.baseproject.core.utils.picker.ItemModel
@@ -17,12 +22,6 @@ import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentPostDetailBinding
 import com.manoj.baseproject.databinding.ItemPostBinding
-import com.manoj.baseproject.core.common.adapter.CallBackModel
-import com.manoj.baseproject.core.common.adapter.Callbacks
-import com.manoj.baseproject.core.common.adapter.CustomAdapter
-import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
-import com.manoj.baseproject.core.common.base.BaseFragment
-import com.manoj.baseproject.core.common.base.BaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -64,7 +63,8 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
 
     override fun setObserver() {
        lifecycleScope.launch {
-           viewModel.posts.customCollector(
+           viewModel.posts.
+           customCollector(
                onLoading = ::onLoading,
                onSuccess = {
                    val arrayList: ArrayList<Post> = it?.data as ArrayList
@@ -96,10 +96,12 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
 
     override suspend fun apiCall() {
         Logger.d("Api Call--->>", "Fragment Called()")
-        arguments?.let {
-            val id = PostDetailFragmentArgs.fromBundle(it).id
-            Logger.d("ID--->>>", "$id")
-            viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
-        }
+        getPost()
+    }
+
+    private fun getPost() = arguments?.let {
+        val id = PostDetailFragmentArgs.fromBundle(it).id
+        Logger.d("ID--->>>", "$id")
+        viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
     }
 }

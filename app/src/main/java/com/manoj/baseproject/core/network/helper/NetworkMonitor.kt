@@ -6,8 +6,10 @@ import android.net.Network
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
+import com.manoj.baseproject.core.utils.extension.Str
+import com.manoj.baseproject.core.utils.extension.showErrorToast
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -75,6 +77,7 @@ class NetworkMonitor @Inject constructor(
         if (previousState != NetworkState.Lost) {
             channel.trySend(NetworkState.Lost).isSuccess
             previousState = NetworkState.Lost
+            context.showErrorToast(context.getString(Str.slow_or_no_internet_access))
             Logger.d("Network state changed to: Lost")
         }
     }

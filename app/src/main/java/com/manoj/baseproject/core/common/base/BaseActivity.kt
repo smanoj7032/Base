@@ -2,30 +2,33 @@ package com.manoj.baseproject.core.common.base
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.network.helper.SystemVariables
+import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
+import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.databinding.ViewProgressSheetBinding
-import com.manoj.baseproject.core.network.helper.NetworkMonitor
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
-    NetworkObserver.NetworkStateListener {
+abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
+    val emptyView: View by lazy { findViewById(Ids.emptyView) }
+    val container: FragmentContainerView by lazy { findViewById(Ids.container) }
+    val btnRetry: Button by lazy { findViewById(Ids.btnRetry) }
+    val tvErrorText: TextView by lazy { findViewById(Ids.tvErrorText) }
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
-    private val networkObserver: NetworkObserver by lazy {
-        NetworkObserver(
-            networkMonitor,
-            lifecycleScope
-        )
-    }
     lateinit var binding: Binding
     private var progressSheet: ProgressSheet? = null
     private val TIMER_ANIMATION: Long = 400
@@ -33,18 +36,16 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
     @Inject
     lateinit var sharedPrefManager: SharedPrefManager
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
-
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isMain()) splashManager.setupSplashScreen()
         binding = DataBindingUtil.setContentView(this, getLayoutResource())
         binding.setVariable(BR.vm, getViewModel())
-        networkObserver.addListener(this)
-        networkObserver.observeNetworkChanges()
-
+        lifecycleScope.launch { apiCall() }
+        SystemVariables.onNetworkChange = {
+            Logger.e("onNetworkChange", "Activity------>> $it")
+        }
         onCreateView()
         setObserver()
     }
@@ -54,14 +55,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
     protected abstract fun getViewModel(): BaseViewModel
     protected abstract fun onCreateView()
     protected abstract fun setObserver()
-
-    override fun onNetworkAvailable() {
-        lifecycleScope.launch { apiCall() }
-    }
-
-    override fun onNetworkLost() {
-        showErrorToast("No internet connection.")
-    }
 
     fun showLoading(message: String?) {
         progressSheet?.dismissAllowingStateLoss()
@@ -84,20 +77,20 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity(),
         return null
     }
 
-    fun onError(error: Throwable, showErrorView: Boolean) {
-        if (showErrorView) {
-            showErrorToast(error.message.toString())
-        }
+    fun onError(errorMessage: String?, showErrorView: Boolean) {
+        if (showErrorView) showErrorToast(errorMessage)
     }
+
     fun onLoading(show: Boolean) {
         val progressBar: View = findViewById(R.id.progress_bar)
         progressBar.visibility = if (show) View.VISIBLE else View.GONE
     }
+
     override fun onDestroy() {
         progressSheet?.dismissAllowingStateLoss()
-        networkObserver.removeListener(this)
         super.onDestroy()
     }
 
     private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"
+
 }

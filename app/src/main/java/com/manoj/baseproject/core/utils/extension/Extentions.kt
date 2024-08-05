@@ -123,14 +123,14 @@ fun Activity.showSuccessToast(message: String) {
     )
 }
 
-fun Activity.showErrorToast(errorMessage: String) {
+fun Context.showErrorToast(errorMessage: String?)=errorMessage?.let {
     MotionToast.createColorToast(
         this,
         "Error",
         errorMessage,
         MotionToastStyle.ERROR,
         MotionToast.GRAVITY_BOTTOM,
-        MotionToast.LONG_DURATION
+        MotionToast.SHORT_DURATION
     )
 }
 

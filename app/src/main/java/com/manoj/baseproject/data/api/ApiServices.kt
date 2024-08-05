@@ -20,4 +20,9 @@ interface ApiServices {
         @Header("app-id") token: String,
         @Query("id") id: String?
     ):Posts
+   @GET("data/v1/post")
+   suspend  fun getPostSingle(
+        @Header("app-id") token: String,
+        @Query("id") id: String?
+    ):Response<Posts>
 }

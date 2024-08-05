@@ -12,6 +12,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -56,5 +58,10 @@ class ApplicationModule {
     @Provides
     fun provideDispatchersProvider(): DispatchersProvider {
         return DispatchersProviderImpl
+    }
+    @Singleton
+    @Provides
+    fun provideCoroutineScope(dispatchersProvider: DispatchersProvider): CoroutineScope {
+        return CoroutineScope(dispatchersProvider.getIO() + SupervisorJob())
     }
 }

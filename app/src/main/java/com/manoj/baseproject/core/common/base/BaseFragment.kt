@@ -12,27 +12,18 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.R
-import com.manoj.baseproject.core.network.helper.NetworkMonitor
+import com.manoj.baseproject.core.network.helper.SystemVariables
+import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.hideKeyboard
-import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-
-abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
-    NetworkObserver.NetworkStateListener {
+abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     val TAG: String = this.javaClass.simpleName
     lateinit var sharedPrefManager: SharedPrefManager
     lateinit var baseContext: Context
     lateinit var binding: Binding
-
-
-    private lateinit var networkObserver: NetworkObserver
-
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
+    private var isApiCallMade = true
 
     val parentActivity: BaseActivity<*>?
         get() = activity as? BaseActivity<*>
@@ -56,12 +47,12 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
         parentActivity?.let {
             sharedPrefManager = it.sharedPrefManager
         }
-        networkObserver = NetworkObserver(networkMonitor, lifecycleScope)
-        networkObserver.addListener(this)
-        networkObserver.observeNetworkChanges()
-
         onCreateView(view, savedInstanceState)
         setObserver()
+        lifecycleScope.launch { apiCall() }
+        SystemVariables.onNetworkChange = {
+            Logger.e("onNetworkChange", "${this.javaClass.simpleName}------>> $it")
+        }
     }
 
     protected abstract fun getLayoutResource(): Int
@@ -69,14 +60,6 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     protected abstract fun setObserver()
     protected abstract suspend fun apiCall()
-
-    override fun onNetworkAvailable() {
-        lifecycleScope.launch { apiCall() }
-    }
-
-    override fun onNetworkLost() {
-        parentActivity?.showErrorToast("No internet connection.")
-    }
 
     override fun onPause() {
         super.onPause()
@@ -88,14 +71,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment(),
     }
 
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
-        if (showErrorView) {
-            parentActivity?.showErrorToast(msg)
-            Log.e("Error-->>", msg)
-        }
-    }
-
-    override fun onDestroyView() {
-        networkObserver.removeListener(this)
-        super.onDestroyView()
+        parentActivity?.onError(msg, showErrorView)
+        Log.e("Error-->>", msg)
     }
 }

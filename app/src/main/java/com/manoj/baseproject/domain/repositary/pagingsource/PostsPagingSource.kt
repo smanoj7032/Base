@@ -5,12 +5,12 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.manoj.baseproject.MyApplication
 import com.manoj.baseproject.core.utils.extension.executeApiCall
-import com.manoj.baseproject.core.utils.extension.isOnline
 import com.manoj.baseproject.core.utils.extension.parseException
 import com.manoj.baseproject.data.api.ApiServices
 import com.manoj.baseproject.data.bean.Post
 import kotlinx.coroutines.flow.catch
 import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.data.bean.Posts
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -28,7 +28,7 @@ class PostsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
         val page = params.key ?: 1
         Log.d("Page---->>", "load: $page")
-        if (MyApplication.instance.isOnline()) {
+        if (isInternetConnected) {
             val response = executeApiCall { remote.getPosts(appId, page) }
             var result: LoadResult<Int, Post> = LoadResult.Page(
                 data = emptyList(),

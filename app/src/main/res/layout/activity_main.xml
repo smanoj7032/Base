@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:constraint_referenced_ids="header,container" />
+            app:constraint_referenced_ids="header,container,emptyView" />
 
         <include
             android:id="@+id/header"
@@ -31,8 +31,9 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:padding="@dimen/_10sdp"
             android:orientation="vertical"
+            android:padding="@dimen/_10sdp"
+            android:visibility="visible"
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
 
@@ -45,5 +46,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/emptyView"
+            layout="@layout/empty_view"
+            android:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

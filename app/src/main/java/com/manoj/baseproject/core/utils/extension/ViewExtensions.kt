@@ -48,6 +48,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.utils.SingleClickListener
 import com.manoj.baseproject.data.bean.PlaceDetails
 import kotlinx.coroutines.CoroutineScope
@@ -464,7 +465,11 @@ fun <T> Spinner.setSpinnerItems(
 fun View.setSingleClickListener(listener: (v: View) -> Unit) {
     this.setOnClickListener(object : SingleClickListener() {
         override fun onClickView(v: View) {
-            listener(v)
+            if (isInternetConnected) {
+                listener(v)
+            } else {
+                v.context.showErrorToast(context.getString(Str.slow_or_no_internet_access))
+            }
         }
     })
 }

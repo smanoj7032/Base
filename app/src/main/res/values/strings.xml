@@ -23,4 +23,7 @@
     <string name="text_info">Info</string>
     <string name="text_no_internet">No internet connection</string>
     <string name="text_mock_description">Lorem Ipsum is simply dummy text of the printing</string>
+    <string name="retry">Retry</string>
+    <string name="oppps_please_try_again">Oppps! please try again!</string>
+    <string name="slow_or_no_internet_access">Slow or No Internet Access</string>
 </resources>

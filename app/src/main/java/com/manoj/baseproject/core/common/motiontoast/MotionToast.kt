@@ -389,7 +389,7 @@ class MotionToast {
 
         // all color toast CTA
         fun createColorToast(
-            context: Activity,
+            context: Context,
             title: String? = null,
             message: String,
             style: MotionToastStyle,
