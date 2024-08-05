@@ -6,13 +6,11 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Log
 import com.google.gson.Gson
-import com.manoj.baseproject.MyApplication.Companion.instance
-import com.manoj.baseproject.core.network.helper.BaseApiResponse
 import com.manoj.baseproject.core.network.helper.DataResponse
 import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,93 +21,22 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.launch
 import retrofit2.Response
 
 fun <T> Flow<Result<T>>.emitter(
-    mutableStateFlow: MutableStateFlow<Result<T?>>,
-    scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
+    mutableStateFlow: MutableStateFlow<Result<T?>>, scope: CoroutineScope
 ) {
     this.onEach { state ->
         when (state) {
-            is Result.Success -> mutableStateFlow.value = Result.Success(state.data)
-            is Result.Error -> mutableStateFlow.value = Result.Error(state.message)
-            else -> mutableStateFlow.value = Result.Loading
+            is Result.Success -> mutableStateFlow.emit(Result.Success(state.data))
+            is Result.Error -> mutableStateFlow.emit(Result.Error(state.message))
+            else -> mutableStateFlow.emit(Result.Loading)
         }
     }.catch { throwable ->
         val networkError = parseException(throwable)
         mutableStateFlow.value = Result.Error(networkError)
-    }.launchIn(scope)
+    }.onStart { mutableStateFlow.emit(Result.Loading) }.launchIn(scope)
 }
-
-fun <M> Flow<DataResponse<M>>.apiEmitter(
-    stateFlow: MutableStateFlow<Result<M?>>,
-    coroutineScope: CoroutineScope
-): Job {
-    return coroutineScope.launch {
-        this@apiEmitter
-            .onStart {
-                stateFlow.value = Result.Loading
-            }
-            .flowOn(Dispatchers.IO)
-            .catch { throwable ->
-                val error = parseException(throwable)
-                stateFlow.value = Result.Error(error)
-            }
-            .collect { response ->
-                if (response.isStatusOK) {
-                    stateFlow.value = Result.Success(response.data)
-                } else {
-                    stateFlow.value = Result.Error(response.message.toString())
-                }
-            }
-    }
-}
-
-fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
-    data: M, stateFlow: MutableStateFlow<Result<M?>>, coroutineScope: CoroutineScope
-): Job {
-    return coroutineScope.launch {
-        this@simpleApiEmitter
-            .onStart {
-                stateFlow.value = Result.Loading
-            }
-            .flowOn(Dispatchers.IO)
-            .catch { throwable ->
-                val error = parseException(throwable)
-                stateFlow.value = Result.Error(error)
-            }
-            .collect { response ->
-                if (response.isStatusOK) {
-                    stateFlow.value = Result.Success(data)
-                } else {
-                    stateFlow.value = Result.Error(response.message.toString())
-                }
-            }
-    }
-}
-
-fun <B> Flow<B>.defaultEmitter(
-    stateFlow: MutableStateFlow<Result<B?>>,
-    coroutineScope: CoroutineScope
-): Job {
-    return coroutineScope.launch {
-        if (instance.isOnline()) {
-            this@defaultEmitter.onStart {
-                stateFlow.emit(Result.Loading)
-            }
-                .flowOn(Dispatchers.IO)
-                .catch { throwable ->
-                    val error = parseException(throwable)
-                    stateFlow.emit(Result.Error(error))
-                }
-                .collect { data ->
-                    stateFlow.emit(Result.Success(data))
-                }
-        } else stateFlow.emit(Result.Error("No internet connection"))
-    }
-}
-
 
 suspend fun <T> StateFlow<Result<T>>.customCollector(
     onLoading: (Boolean) -> Unit,
@@ -137,30 +64,52 @@ suspend fun <T> StateFlow<Result<T>>.customCollector(
 
 suspend fun <T> executeApiCall(apiCall: suspend () -> Response<T>): Flow<Result<T?>> {
     return flow {
-        emit(Result.Loading)
-        try {
-            if (instance.isOnline()) {
-                val response = apiCall.invoke()
-                Log.e("Response-->>", "executeApiCall: ${Gson().toJson(response.message())}")
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        emit(Result.Success(body))
-                    } else {
-                        emit(Result.Error("Response body is null"))
-                    }
+        if (isInternetConnected) {
+            val response = apiCall.invoke()
+            Log.e("Response-->>", "executeApiCall: ${Gson().toJson(response.message())}")
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    emit(Result.Success(body))
                 } else {
-                    val errorMessage = response.extractErrorMessage()
-                    emit(Result.Error(errorMessage))
+                    emit(Result.Error("Response body is null"))
                 }
             } else {
-                emit(Result.Error("No internet connection"))
+                val errorMessage = response.extractErrorMessage()
+                emit(Result.Error(errorMessage))
             }
-        } catch (e: Exception) {
-            val exceptionMessage = parseException(e)
-            emit(Result.Error(exceptionMessage))
+        } else {
+            emit(Result.Error("No internet connection"))
         }
-    }.flowOn(Dispatchers.IO)
+
+    }.catch {
+        emit(Result.Error(parseException(it)))
+    }.onStart { emit(Result.Loading) }.flowOn(Dispatchers.IO)
+}
+
+suspend fun <T> executeNetworkCall(apiCall: suspend () -> DataResponse<T>): Flow<Result<T?>> {
+    return flow {
+        if (isInternetConnected) {
+            val response = apiCall.invoke()
+            Log.e("Response-->>", "executeApiCall: ${Gson().toJson(response.message)}")
+            if (response.isStatusOK) {
+                val body = response.data
+                if (body != null) {
+                    this.emit(Result.Success(body))
+                } else {
+                    this.emit(Result.Error("Response body is null"))
+                }
+            } else {
+                val errorMessage = response.message ?: ""
+                this.emit(Result.Error(errorMessage))
+            }
+        } else {
+            this.emit(Result.Error("No internet connection"))
+        }
+
+    }.catch {
+        emit(Result.Error(parseException(it)))
+    }.onStart { emit(Result.Loading) }.flowOn(Dispatchers.IO)
 }
 
 fun Context.isOnline(): Boolean {
@@ -187,8 +136,6 @@ fun Context.isOnline(): Boolean {
 }
 
 fun <T> Flow<T>.asResult(): Flow<Result<T>> {
-    return this
-        .map<T, Result<T>> { Result.Success(it) }
-        .onStart { emit(Result.Loading) }
+    return this.map<T, Result<T>> { Result.Success(it) }.onStart { emit(Result.Loading) }
         .catch { emit(Result.Error(parseException(it))) }
 }

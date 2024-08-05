@@ -3,6 +3,8 @@ package com.manoj.baseproject.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.manoj.baseproject.BuildConfig
+import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.utils.extension.executeApiCall
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.domain.repositary.pagingsource.PostsPagingSource
@@ -32,7 +34,8 @@ class BaseRepoImpl @Inject constructor(
     ),
         pagingSourceFactory = { PostsPagingSource(apiService, getAppId()) }).flow
 
-    override fun getPost(id: String): Flow<Posts> {
-        return flow { emit(apiService.getPost(getAppId(), id)) }
+
+    override suspend fun getPost(id: String): Flow<Result<Posts?>> {
+        return executeApiCall { apiService.getPostSingle(getAppId(), id) }
     }
 }
