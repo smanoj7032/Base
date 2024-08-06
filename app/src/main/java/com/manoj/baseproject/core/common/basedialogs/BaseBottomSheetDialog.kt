@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -33,19 +34,24 @@ open class BaseBottomSheetDialog<T : ViewDataBinding>() : BottomSheetDialogFragm
     }
 
     lateinit var binding: T
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
+        return super.onGetLayoutInflater(savedInstanceState)
+
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        /*val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+       val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         dialog.setOnShowListener {
             val bottomSheet =
                 dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let {
-                val behavior = BottomSheetBehavior.from(it)
+            bottomSheet?.apply {
+                background =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.bg_sheet_white)
+                val behavior = BottomSheetBehavior.from(this)
                 behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 behavior.skipCollapsed = true
             }
-        }*/
-        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        }
         return dialog
     }
 

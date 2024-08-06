@@ -26,8 +26,10 @@
         <item name="windowSplashScreenAnimationDuration">3000</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
     </style>
-    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
-        <item name="android:backgroundDimAmount">0.3</item>
-        <item name="android:colorBackground">@android:color/transparent</item>
+    <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarDividerColor">?android:colorBackground</item>
     </style>
 </resources>

@@ -17,6 +17,7 @@ import com.manoj.baseproject.core.common.adapter.LoadMoreAdapter
 import com.manoj.baseproject.core.common.adapter.RVAdapterWithPaging
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.network.helper.SystemVariables
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 postsAdapter.submitData(it)
             }
         }
+        SystemVariables.onNetworkChange = { postsAdapter.retry() }
     }
 
     override suspend fun apiCall() {
