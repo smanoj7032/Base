@@ -58,6 +58,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
         }
     }
 
-    private fun navigateToHome() =
+    private fun navigateToHome() {
         findNavController().navigate(LoginFragmentDirections.toHomeFragment())
+        sharedPrefManager.saveAccessToken("manoj")
+    }
 }

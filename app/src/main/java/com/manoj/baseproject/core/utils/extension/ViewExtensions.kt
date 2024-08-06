@@ -40,6 +40,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -541,4 +542,10 @@ fun Context.showToast(style: CustomToastStyle, message: String) {
     toast.duration = Toast.LENGTH_SHORT
     toast.view = layout
     toast.show()
+}
+
+fun NavController.setupNavGraph(startDestinationId: Int) {
+    val navGraph = navInflater.inflate(R.navigation.main_graph)
+    navGraph.setStartDestination(startDestinationId)
+    graph = navGraph
 }

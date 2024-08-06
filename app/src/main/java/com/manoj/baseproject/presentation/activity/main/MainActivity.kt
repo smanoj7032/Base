@@ -1,29 +1,23 @@
 package com.manoj.baseproject.presentation.activity.main
 
-import android.content.Context
-import android.graphics.Rect
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.Logger
-import com.manoj.baseproject.core.utils.extension.Str
-import com.manoj.baseproject.core.utils.extension.showSuccessToast
-import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Ids
+import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.hide
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
+import com.manoj.baseproject.core.utils.extension.setupNavGraph
 import com.manoj.baseproject.core.utils.extension.show
+import com.manoj.baseproject.core.utils.extension.showSuccessToast
+import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.databinding.AlertSheetBinding
-import com.manoj.baseproject.presentation.fragment.auth.LoginFragmentDirections
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,17 +30,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             Logger.d("Destination", "$destination")
             when (destination.id) {
-                R.id.loginFragment -> setTitle(getString(Str.login), isMain = false, isBack = false)
+                Ids.loginFragment -> setTitle(getString(Str.login), isMain = false, isBack = false)
 
 
-                R.id.homeFragment -> setTitle(
+                Ids.homeFragment -> setTitle(
                     getString(Str.dashboard),
                     isMain = true,
                     isBack = false
                 )
 
 
-                R.id.postDetailFragment -> setTitle(
+                Ids.postDetailFragment -> setTitle(
                     getString(Str.post_detail),
                     isMain = false,
                     isBack = true
@@ -80,11 +74,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onCreateView() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
-        navController = navHostFragment.navController
+        setupNavController()
         initViews()
         setUpLogoutSheet()
+    }
+
+    private fun setupNavController() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(Ids.container) as NavHostFragment
+        navController = navHostFragment.navController
+        val startDestinationId = if (sharedPrefManager.getAccessToken()
+                .isNullOrEmpty()
+        ) Ids.loginFragment else Ids.homeFragment
+        navController.setupNavGraph(startDestinationId)
     }
 
     private fun setUpLogoutSheet() {
@@ -93,7 +95,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 vTop.title = getString(Str.logout)
                 tvMessage.text = getString(Str.are_you_sure_want_to_logout)
                 btnOk.setSingleClickListener {
-                    navigateToHome()
+                    navigateToLogin()
                     logoutSheet.dismiss()
                 }
                 btnClose.setSingleClickListener { logoutSheet.dismiss() }
@@ -151,23 +153,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
 
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            val v = currentFocus
-            if (v is EditText) {
-                val outRect = Rect()
-                v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
-                    v.clearFocus()
-                    val imm =
-                        getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event)
+    /** override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+    if (event.action == MotionEvent.ACTION_DOWN) {
+    val v = currentFocus
+    if (v is EditText) {
+    val outRect = Rect()
+    v.getGlobalVisibleRect(outRect)
+    if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt())) {
+    v.clearFocus()
+    val imm =
+    getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(v.getWindowToken(), 0)
     }
+    }
+    }
+    return super.dispatchTouchEvent(event)
+    }*/
 
-    private fun navigateToHome() =
+    private fun navigateToLogin() {
         navController.navigate(HomeFragmentDirections.toLoginFragment())
+        sharedPrefManager.clearUser()
+    }
 }

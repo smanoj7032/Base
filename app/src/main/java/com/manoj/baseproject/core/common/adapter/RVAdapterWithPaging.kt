@@ -48,7 +48,6 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
         getItem(position)?.let { item ->
             holder.bindTo(variableId, item, onBind = { binding, beab -> })
             holder.bindClickListener(item, callbacks)
-            setAnimation(holder.binding.root)
         }
     }
 

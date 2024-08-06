@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.graphics.Path
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.splashscreen.SplashScreenViewProvider
 
 class CustomScreenAnimator {
@@ -54,6 +55,9 @@ class CustomScreenAnimator {
             View.ALPHA,
             1f,
             0f
-        )
+        ).apply {
+            duration = 2000
+            interpolator = AccelerateDecelerateInterpolator()
+        }
     }
 }

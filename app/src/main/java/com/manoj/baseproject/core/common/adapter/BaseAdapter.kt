@@ -109,7 +109,6 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
         val item = dataList[position]
         holder.bindTo(variableId, item, onBind)
         holder.bindClickListener(item, callbacks)
-        setAnimation(holder.binding.root)
     }
 
     private fun setAnimation(viewToAnimate: View) {

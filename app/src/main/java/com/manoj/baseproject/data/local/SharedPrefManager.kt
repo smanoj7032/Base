@@ -26,16 +26,16 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.saveValue(USER_NAME, name)
     }
 
-    fun getUserName(): String {
-        return sharedPreferences.getString(USER_NAME, "").toString()
+    fun getUserName(): String? {
+        return sharedPreferences.getString(USER_NAME, "")
     }
 
     fun saveAccessToken(token: String?) {
         sharedPreferences.saveValue(ACCESS_TOKEN, token)
     }
 
-    fun getAccessToken(): String {
-        return sharedPreferences.getValue<String>(ACCESS_TOKEN, null).toString()
+    fun getAccessToken(): String? {
+        return sharedPreferences.getValue<String>(ACCESS_TOKEN, null)
     }
 
 
@@ -43,8 +43,8 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.saveValue(LOGIN_USING, loginUsing)
     }
 
-    fun getLoginPlatform(): String {
-        return sharedPreferences.getValue<String>(LOGIN_USING, null).toString()
+    fun getLoginPlatform(): String? {
+        return sharedPreferences.getValue<String>(LOGIN_USING, null)
     }
 
     fun <T> saveUser(bean: T) {
@@ -59,18 +59,16 @@ open class SharedPrefManager @Inject constructor(private val sharedPreferences: 
         sharedPreferences.saveValue(USER_EMAIL, email)
     }
 
-    fun getCurrentUserEmail(): String {
-
-        return sharedPreferences.getValue<String?>(USER_EMAIL, null).toString()
+    fun getCurrentUserEmail(): String? {
+        return sharedPreferences.getValue<String?>(USER_EMAIL, null)
     }
 
     fun saveEmailAtForgotPassword(email: String) {
         sharedPreferences.saveValue(EMAIL_AT_FORGOT, email)
-
     }
 
-    fun getEmailAtForgotPassword(): String {
-        return sharedPreferences.getValue<String>(EMAIL_AT_FORGOT, null).toString()
+    fun getEmailAtForgotPassword(): String? {
+        return sharedPreferences.getValue<String>(EMAIL_AT_FORGOT, null)
     }
 
     fun clearUser() {
