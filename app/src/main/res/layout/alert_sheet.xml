@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/v_top"
+            android:id="@+id/cLayContent"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -62,6 +63,11 @@
                 android:text="@string/close" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_below="@+id/cLayContent"
+            android:foreground="@color/white"
+            android:layout_height="@dimen/_10sdp"/>
     </RelativeLayout>
 
 </layout>

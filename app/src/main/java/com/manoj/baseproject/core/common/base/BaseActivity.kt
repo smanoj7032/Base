@@ -45,6 +45,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")
+            lifecycleScope.launch {  apiCall() }
         }
         onCreateView()
         setObserver()

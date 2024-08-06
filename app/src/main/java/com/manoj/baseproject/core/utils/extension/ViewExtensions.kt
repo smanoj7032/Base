@@ -19,6 +19,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.util.Patterns
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -29,6 +30,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +50,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.utils.SingleClickListener
 import com.manoj.baseproject.data.bean.PlaceDetails
@@ -377,10 +380,6 @@ fun EditText.getEditText(): String {
     return this.text.toString().trim()
 }
 
-fun EditText.isValidEmail(): Boolean {
-    return this.text.isNotEmpty() && Patterns.EMAIL_ADDRESS.matcher(this.text).matches()
-}
-
 fun EditText.findEmails(success: (String?, Array<String>?) -> Unit) {
     val emailList = this.text.split(";").map { it.trim() }
     val validEmails = emailList.filter { it.isValidEmail() }
@@ -501,7 +500,7 @@ fun AppCompatActivity.requestPermission(
 
 fun ImageView.loadImage(uri: Uri?) {
     Glide.with(this.context).load(uri).circleCrop()
-        .placeholder(R.drawable.ic_image).error(R.drawable.ic_image)
+        .placeholder(Drw.ic_image).error(Drw.ic_image)
         .into(this)
 }
 
@@ -524,4 +523,47 @@ fun Context.displayDialog(
     val alert = dialogBuilder.create()
     alert.show()
 
+}
+
+fun Context.showToast(style: CustomToastStyle, message: String) {
+    val inflater = LayoutInflater.from(this)
+    val layout = inflater.inflate(R.layout.custom_toast, null)
+
+    val imageView: ImageView = layout.findViewById(R.id.custom_toast_image)
+    val messageTextView: TextView = layout.findViewById(R.id.custom_toast_text)
+    val descriptionTextView: TextView = layout.findViewById(R.id.custom_toast_description)
+    val relativeLayout: View = layout.findViewById(R.id.motion_toast_view)
+
+    descriptionTextView.text = message
+
+    when (style) {
+        CustomToastStyle.SUCCESS -> {
+            imageView.setImageResource(Drw.ic_check_green)
+            messageTextView.text = getString(Str.text_success)
+            relativeLayout.backgroundTintList = getColorStateList(Clr.success_color)
+        }
+
+        CustomToastStyle.ERROR -> {
+            imageView.setImageResource(Drw.ic_error_)
+            messageTextView.text = getString(Str.text_error)
+            relativeLayout.backgroundTintList = getColorStateList(Clr.error_color)
+        }
+
+        CustomToastStyle.INFO -> {
+            messageTextView.text = getString(Str.text_info)
+            imageView.setImageResource(Drw.ic_info_yellow)
+            relativeLayout.backgroundTintList = getColorStateList(Clr.custom_warning_color)
+        }
+
+        CustomToastStyle.DELETE -> {
+            imageView.setImageResource(Drw.ic_info_blue)
+            messageTextView.text = getString(Str.text_warning)
+            relativeLayout.backgroundTintList = getColorStateList(Clr.info_color)
+        }
+    }
+
+    val toast = Toast(this)
+    toast.duration = Toast.LENGTH_SHORT
+    toast.view = layout
+    toast.show()
 }

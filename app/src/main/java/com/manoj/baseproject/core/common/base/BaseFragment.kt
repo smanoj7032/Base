@@ -51,6 +51,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         setObserver()
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
+            lifecycleScope.launch { apiCall() }
             Logger.e("onNetworkChange", "${this.javaClass.simpleName}------>> $it")
         }
     }

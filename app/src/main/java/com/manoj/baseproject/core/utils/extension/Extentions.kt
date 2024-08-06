@@ -40,19 +40,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.data.bean.PlaceDetails
-import com.manoj.baseproject.core.common.motiontoast.MotionToast
-import com.manoj.baseproject.core.common.motiontoast.MotionToastStyle
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
 
 typealias Str = R.string
 typealias Ids = R.id
@@ -113,25 +108,11 @@ fun Fragment.showToast(message: String) {
 }
 
 fun Activity.showSuccessToast(message: String) {
-    MotionToast.createColorToast(
-        this,
-        "Success",
-        message,
-        MotionToastStyle.SUCCESS,
-        MotionToast.GRAVITY_BOTTOM,
-        MotionToast.SHORT_DURATION
-    )
+    showToast(CustomToastStyle.SUCCESS, message)
 }
 
-fun Context.showErrorToast(errorMessage: String?)=errorMessage?.let {
-    MotionToast.createColorToast(
-        this,
-        "Error",
-        errorMessage,
-        MotionToastStyle.ERROR,
-        MotionToast.GRAVITY_BOTTOM,
-        MotionToast.SHORT_DURATION
-    )
+fun Context.showErrorToast(errorMessage: String?) = errorMessage?.let {
+    showToast(CustomToastStyle.ERROR, errorMessage)
 }
 
 fun View.showSnackBar(message: String) {

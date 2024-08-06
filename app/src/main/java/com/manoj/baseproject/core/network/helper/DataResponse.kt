@@ -2,12 +2,12 @@ package com.manoj.baseproject.core.network.helper
 
 import com.google.gson.annotations.SerializedName
 
-open class DataResponse<T> : BaseApiResponse() {
+data class DataResponse<T>(
     @SerializedName("data")
     val data: T? = null
+) : BaseApiResponse() {
+
     override fun toString(): String {
-        return "DataResponse{" +
-                "data=" + data +
-                '}'
+        return "DataResponse(data=$data) ${super.toString()}"
     }
 }
