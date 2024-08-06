@@ -62,22 +62,21 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     }
 
     override fun setObserver() {
-       lifecycleScope.launch {
-           viewModel.posts.
-           customCollector(
-               onLoading = ::onLoading,
-               onSuccess = {
-                   val arrayList: ArrayList<Post> = it?.data as ArrayList
-                   arrayList.addAll(it.data)
-                   arrayList.addAll(it.data)
-                   arrayList.addAll(it.data)
-                   arrayList.addAll(it.data)
-                   postAdapter.list = arrayList
+        lifecycleScope.launch {
+            viewModel.posts.customCollector(
+                onLoading = ::onLoading,
+                onSuccess = {
+                    val arrayList: ArrayList<Post> = it?.data as ArrayList
+                    arrayList.addAll(it.data)
+                    arrayList.addAll(it.data)
+                    arrayList.addAll(it.data)
+                    arrayList.addAll(it.data)
+                    postAdapter.list = arrayList
 
-               },
-               onError = ::onError
-           )
-       }
+                },
+                onError = ::onError
+            )
+        }
     }
 
     private fun setAdapter() {
@@ -103,5 +102,10 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
         val id = PostDetailFragmentArgs.fromBundle(it).id
         Logger.d("ID--->>>", "$id")
         viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
+    }
+
+    override fun onDestroy() {
+        onLoading(false)
+        super.onDestroy()
     }
 }

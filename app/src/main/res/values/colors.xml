@@ -10,7 +10,7 @@
     <color name="colorBlue">#0040FF</color>
     <color name="blue">#1D4ED8</color>
     <color name="darkBlue">#4270f3</color>
-    <color name="red">#CA4545</color>
+    <color name="rippleColor">#3ECA4545</color>
 
     <color name="transparent">#00000000</color>
     <color name="Black">#000</color>

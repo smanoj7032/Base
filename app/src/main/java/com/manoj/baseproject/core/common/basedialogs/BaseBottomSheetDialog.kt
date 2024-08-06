@@ -14,8 +14,9 @@ import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.manoj.baseproject.R
 
-open class BaseBottomSheetDialog<T>() : BottomSheetDialogFragment() where T : ViewDataBinding {
+open class BaseBottomSheetDialog<T : ViewDataBinding>() : BottomSheetDialogFragment() {
 
     private var layoutRes: Int = 0
     var onBind: (binding: T) -> Unit = { _ -> }
@@ -31,10 +32,10 @@ open class BaseBottomSheetDialog<T>() : BottomSheetDialogFragment() where T : Vi
         this.onCancelListener = onCancelListener
     }
 
-    lateinit var binding: ViewDataBinding
+    lateinit var binding: T
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        /*val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
         dialog.setOnShowListener {
             val bottomSheet =
                 dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
@@ -43,7 +44,8 @@ open class BaseBottomSheetDialog<T>() : BottomSheetDialogFragment() where T : Vi
                 behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 behavior.skipCollapsed = true
             }
-        }
+        }*/
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
         return dialog
     }
 
@@ -68,7 +70,7 @@ open class BaseBottomSheetDialog<T>() : BottomSheetDialogFragment() where T : Vi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         try {
-            onBind(binding as T)
+            onBind(binding)
         } catch (e: Exception) {
             e.printStackTrace()
             Log.e(
@@ -84,7 +86,6 @@ open class BaseBottomSheetDialog<T>() : BottomSheetDialogFragment() where T : Vi
             it.setOnCancelListener {
                 onCancelListener()
             }
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
     }
 }

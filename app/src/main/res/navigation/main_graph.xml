@@ -33,6 +33,14 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/toLoginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/enter_from_left"
+            app:exitAnim="@anim/exit_to_right"
+            app:popEnterAnim="@anim/exit_to_left"
+            app:popExitAnim="@anim/enter_from_right"
+            app:popUpTo="@+id/navigation_graph" />
 
     </fragment>
 

@@ -10,11 +10,12 @@
             type="com.manoj.baseproject.data.bean.Post" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvPostRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_2sdp"
+        android:layout_margin="@dimen/_5sdp"
+        app:rippleColor="@color/rippleColor"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="@dimen/_10sdp"
@@ -26,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/_5sdp">
 
-            <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="@dimen/_50sdp"
                 android:layout_height="@dimen/_50sdp"
@@ -67,5 +68,5 @@
                 tools:text="Android" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
