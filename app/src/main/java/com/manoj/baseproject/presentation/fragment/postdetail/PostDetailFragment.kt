@@ -10,11 +10,12 @@ import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.Callbacks
-import com.manoj.baseproject.core.common.adapter.CustomAdapter
+import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.customCollector
 import com.manoj.baseproject.core.utils.picker.ItemModel
 import com.manoj.baseproject.core.utils.picker.ItemType
@@ -28,7 +29,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     private val viewModel: PostDetailVM by viewModels()
-    private lateinit var postAdapter: CustomAdapter<ItemPostBinding, Post>
+    private lateinit var postAdapter: BaseAdapter<ItemPostBinding, Post>
     private lateinit var picker: PickerDialogHelper
     private var updatePos: Int? = null
     private lateinit var item: Post
@@ -54,7 +55,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     }
 
     override fun getLayoutResource(): Int {
-        return R.layout.fragment_post_detail
+        return Lyt.fragment_post_detail
     }
 
     override fun getViewModel(): BaseViewModel {
@@ -86,7 +87,8 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
             item = model
             picker.show()
         })
-        postAdapter = CustomAdapter(R.layout.item_post, BR.bean, callbacks = clickListener)
+        postAdapter =
+            BaseAdapter(Lyt.item_post, BR.bean, binding.emptyView, callbacks = clickListener)
         binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
         binding.rvPosts.adapter = postAdapter
         val itemTouchHelper = ItemTouchHelper(RecyclerItemTouchHelper(postAdapter))

@@ -27,7 +27,7 @@ import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
 import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.Callbacks
-import com.manoj.baseproject.core.common.adapter.CustomAdapter
+import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
 
@@ -40,7 +40,7 @@ class PickerDialogHelper(
 ) {
 
     private var pickerDialog: BaseBottomSheetDialog<DialogPickerBinding>? = null
-    private var pickerAdapter: CustomAdapter<ItemPickerGridBinding, ItemModel>? = null
+    private var pickerAdapter: BaseAdapter<ItemPickerGridBinding, ItemModel>? = null
 
     private val REQUEST_PICK_PHOTO = 1102
     private val REQUEST_VIDEO = 1103
@@ -82,7 +82,7 @@ class PickerDialogHelper(
         })
         pickerDialog = BaseBottomSheetDialog(R.layout.dialog_picker, onBind = { binding ->
             with(binding) {
-                pickerAdapter = CustomAdapter(
+                pickerAdapter = BaseAdapter(
                     R.layout.item_picker_grid,
                     BR.bean,
                     callbacks = clickListener, onBind =  { binding, bean ->

@@ -10,7 +10,6 @@ import androidx.databinding.ViewDataBinding
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 
 
 open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
@@ -18,16 +17,16 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
     private val layoutResId: Int,
     private val variableId: Int,
     private val callbacks: Callbacks<B, M>? = null,
-) : PagingDataAdapter<M, RecyclerViewHolder<B>>(diffCallback) {
+) : PagingDataAdapter<M, BaseViewHolder<B>>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder<B> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<B> {
         val binding: B = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             layoutResId,
             parent,
             false
         )
-        return RecyclerViewHolder(binding)
+        return BaseViewHolder(binding)
     }
 
     private fun setAnimation(viewToAnimate: View) {
@@ -45,7 +44,7 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
         viewToAnimate.startAnimation(anim)
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder<B>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<B>, position: Int) {
         getItem(position)?.let { item ->
             holder.bindTo(variableId, item, onBind = { binding, beab -> })
             holder.bindClickListener(item, callbacks)

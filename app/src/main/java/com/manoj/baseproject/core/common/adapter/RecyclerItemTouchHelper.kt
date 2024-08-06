@@ -13,7 +13,7 @@ import com.manoj.baseproject.core.utils.extension.Drw
 import kotlin.math.abs
 
 class RecyclerItemTouchHelper(
-    private val adapter: CustomAdapter<*, *>?
+    private val adapter: BaseAdapter<*, *>?
 ) : ItemTouchHelper.Callback() {
     private val paint = Paint()
     private val swipeThreshold = 0.9f

@@ -473,31 +473,6 @@ fun View.setSingleClickListener(listener: (v: View) -> Unit) {
     })
 }
 
-fun AppCompatActivity.requestPermission(
-    vararg permissions: String,
-    onPermissionGranted: () -> Unit,
-    onPermissionsDenied: ((List<String>) -> Unit)? = null
-) {
-    val notGrantedPermission = permissions.filter {
-        this.checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED
-    }
-    if (notGrantedPermission.isEmpty()) {
-        onPermissionGranted()
-    } else {
-        val requestMultiplePermissionsLauncher = this.registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissionsResult: Map<String, Boolean> ->
-            val deniedPermissions = permissionsResult.filterValues { !it }.keys.toList()
-            if (deniedPermissions.isEmpty()) {
-                onPermissionGranted()
-            } else {
-                onPermissionsDenied?.invoke(deniedPermissions)
-            }
-        }
-        requestMultiplePermissionsLauncher.launch(notGrantedPermission.toTypedArray())
-    }
-}
-
 fun ImageView.loadImage(uri: Uri?) {
     Glide.with(this.context).load(uri).circleCrop()
         .placeholder(Drw.ic_image).error(Drw.ic_image)

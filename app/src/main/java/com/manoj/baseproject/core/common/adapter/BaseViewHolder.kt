@@ -5,7 +5,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 
-class RecyclerViewHolder<Binding : ViewDataBinding>(var binding: Binding) :
+class BaseViewHolder<Binding : ViewDataBinding>(var binding: Binding) :
     RecyclerView.ViewHolder(binding.root) {
     fun <Model> bindTo(variableId: Int, model: Model, onBind: ((Binding, Model) -> Unit)? = null) {
         binding.setVariable(variableId, model)

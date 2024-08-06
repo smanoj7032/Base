@@ -9,21 +9,20 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import java.util.Collections
 
-class CustomAdapter<Binding : ViewDataBinding, Model>(
+class BaseAdapter<Binding : ViewDataBinding, Model>(
     private val layoutId: Int,
-    private val variableId: Int,
+    private val variableId: Int, private val emptyView: View? = null,
     private val callbacks: Callbacks<Binding, Model>? = null,
     private val onBind: ((Binding, Model) -> Unit)? = null
-) : RecyclerView.Adapter<RecyclerViewHolder<Binding>>() {
+) : RecyclerView.Adapter<BaseViewHolder<Binding>>() {
 
     private var dataList: ArrayList<Model> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder<Binding> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Binding> {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<Binding>(inflater, layoutId, parent, false)
-        return RecyclerViewHolder(binding)
+        return BaseViewHolder(binding)
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -40,6 +39,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
 
     fun replaceList(subList: ArrayList<Model>) {
         updateList(subList)
+        checkEmptyView()
     }
 
     fun getItemList(): ArrayList<Model> = dataList
@@ -48,6 +48,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
 
     fun clearList() {
         dataList.clear()
+        checkEmptyView()
         notifyDataSetChanged()
     }
 
@@ -57,6 +58,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
             notifyItemRemoved(i)
             notifyItemRangeChanged(i, dataList.size)
         }
+        checkEmptyView()
     }
 
     fun addItemAt(position: Int, model: Model) {
@@ -69,6 +71,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
     fun addItem(model: Model) {
         dataList.add(model)
         notifyItemInserted(dataList.size - 1)
+        checkEmptyView()
     }
 
     fun updateItem(data: Model, position: Int) {
@@ -102,7 +105,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onBindViewHolder(holder: RecyclerViewHolder<Binding>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<Binding>, position: Int) {
         val item = dataList[position]
         holder.bindTo(variableId, item, onBind)
         holder.bindClickListener(item, callbacks)
@@ -128,6 +131,7 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
         dataList.clear()
         dataList.addAll(newDataList)
         diffResult.dispatchUpdatesTo(this)
+        checkEmptyView()
     }
     class DiffCallback<Model>(private val oldList: List<Model>, private val newList: List<Model>) : DiffUtil.Callback() {
 
@@ -142,5 +146,8 @@ class CustomAdapter<Binding : ViewDataBinding, Model>(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
+    }
+    private fun checkEmptyView() {
+        emptyView?.visibility = if (dataList.isEmpty()) View.VISIBLE else View.GONE
     }
 }
