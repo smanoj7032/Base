@@ -19,7 +19,8 @@ This is a base project for Android development using Kotlin. The project is conf
 
 Create a file named `apikeys.properties` in the root of your project and add the following line, replacing `your_app_id` with the application ID you obtained:
 
-APP_ID=your_app_id
+```properties `APP_ID=your_app_id`
+
 
 ### 4. ScreenShot
 <img src="https://github.com/user-attachments/assets/c45d29f8-73aa-4d44-a3ed-479046175603" alt="Splash Screen" width="100"/>
