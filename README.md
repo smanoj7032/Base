@@ -21,6 +21,6 @@ Create a file named `apikeys.properties` in the root of your project and add the
 
 ### 4. Screenshots
 ---
-<img src="https://github.com/user-attachments/assets/c45d29f8-73aa-4d44-a3ed-479046175603" alt="Splash Screen" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/user-attachments/assets/79f56ef2-9b0e-4163-b645-cc65c0d144f3" alt="Login Screen" width="200"/>&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/user-attachments/assets/47bc4c4b-93c1-4c51-9f00-a69ba931c521" alt="Home Screen" width="200"/>
+<img src="https://github.com/user-attachments/assets/c45d29f8-73aa-4d44-a3ed-479046175603" alt="Splash Screen" width="250"/>&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/user-attachments/assets/79f56ef2-9b0e-4163-b645-cc65c0d144f3" alt="Login Screen" width="250"/>&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/user-attachments/assets/47bc4c4b-93c1-4c51-9f00-a69ba931c521" alt="Home Screen" width="250"/>
