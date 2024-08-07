@@ -21,6 +21,8 @@ Create a file named `apikeys.properties` in the root of your project and add the
 
 ```properties
 APP_ID=your_app_id
+
+```markdown
 ![Splash](https://github.com/user-attachments/assets/c45d29f8-73aa-4d44-a3ed-479046175603)
 ![Login](https://github.com/user-attachments/assets/79f56ef2-9b0e-4163-b645-cc65c0d144f3)
 ![Home](https://github.com/user-attachments/assets/47bc4c4b-93c1-4c51-9f00-a69ba931c521)
