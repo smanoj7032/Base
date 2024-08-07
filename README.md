@@ -18,7 +18,7 @@ This is a base project for Android development using Kotlin. The project is conf
 ### 3. Creating `apikeys.properties`
 
 Create a file named `apikeys.properties` in the root of your project and add the following line, replacing `your_app_id` with the application ID you obtained:
-
+APP_ID=your_app_id
 
 
 
@@ -29,4 +29,4 @@ Create a file named `apikeys.properties` in the root of your project and add the
 
 
 ```properties
-APP_ID=your_app_id
+
