@@ -22,7 +22,7 @@ import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
+/** ENJOY CODING */
 abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     val emptyView: View by lazy { findViewById(Ids.emptyView) }
     val container: FragmentContainerView by lazy { findViewById(Ids.container) }
