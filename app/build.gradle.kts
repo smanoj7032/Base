@@ -72,7 +72,7 @@ android {
          * - formattedDate: Current date and time formatted as "dd-MMM-yyyy hh:mm a".
          *   Why: This adds a timestamp to the output APK file name for version tracking.
          */
-        val formattedDate = SimpleDateFormat("dd-MMM-yyyy hh:mm a").format(Date())
+        val formattedDate = SimpleDateFormat("ddMMMyy_HHmm").format(Date())
 
         /**
          * Create a custom output file name
