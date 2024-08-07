@@ -21,3 +21,7 @@ Create a file named `apikeys.properties` in the root of your project and add the
 
 ```properties
 APP_ID=your_app_id
+![Splash](https://github.com/user-attachments/assets/3ee3bced-b056-425d-85e7-06af35d62318)
+
+![Login](https://github.com/user-attachments/assets/ee7affa0-9acb-4a90-8f64-117bfe0c5296)
+![Home](https://github.com/user-attachments/assets/40abfb91-0a90-47fd-b832-fe6ac50154c1)
