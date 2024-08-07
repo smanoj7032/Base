@@ -55,7 +55,7 @@
             android:visibility="gone"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
-            android:padding="@dimen/_5sdp"
+            android:padding="@dimen/_10sdp"
             android:text="@string/please_wait"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar" />
 
