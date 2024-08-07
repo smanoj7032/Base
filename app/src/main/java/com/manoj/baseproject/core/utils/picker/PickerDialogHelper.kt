@@ -80,7 +80,7 @@ class PickerDialogHelper(
                 ItemType.ITEM_FILES -> openFilePicker()
             }
         })
-        pickerDialog = BaseBottomSheetDialog(R.layout.dialog_picker, onBind = { binding ->
+        pickerDialog = BaseBottomSheetDialog(context,R.layout.dialog_picker, onBind = { binding ->
             with(binding) {
                 pickerAdapter = BaseAdapter(
                     R.layout.item_picker_grid,
@@ -98,7 +98,7 @@ class PickerDialogHelper(
                 val itemTouchHelper = ItemTouchHelper(RecyclerItemTouchHelper(pickerAdapter))
                 itemTouchHelper.attachToRecyclerView(this.pickerItems)
             }
-        }, onCancelListener = {})
+        })
     }
 
 
@@ -239,7 +239,7 @@ class PickerDialogHelper(
     }
 
     fun show() {
-        fragmentManager.let { pickerDialog?.show(it, "") }
+        fragmentManager.let { pickerDialog?.show() }
     }
 
     private fun setLauncher() {

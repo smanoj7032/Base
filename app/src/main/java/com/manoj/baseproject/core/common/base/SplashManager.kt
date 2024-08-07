@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+import androidx.core.app.ComponentActivity
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
-class SplashManager(private val activity: AppCompatActivity, private val animationDuration: Long) {
+class SplashManager(private val activity: ComponentActivity, private val animationDuration: Long) {
 
     fun setupSplashScreen() {
         val splashScreen = activity.installSplashScreen()

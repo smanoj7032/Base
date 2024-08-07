@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.network.helper.SystemVariables
-import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.showErrorToast

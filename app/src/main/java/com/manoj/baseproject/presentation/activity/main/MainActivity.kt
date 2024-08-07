@@ -18,6 +18,7 @@ import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.databinding.AlertSheetBinding
+import com.manoj.baseproject.presentation.fragment.home.HomeFragment
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,16 +35,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
                 Ids.homeFragment -> setTitle(
-                    getString(Str.dashboard),
-                    isMain = true,
-                    isBack = false
+                    getString(Str.dashboard), isMain = true, isBack = false
                 )
 
 
                 Ids.postDetailFragment -> setTitle(
-                    getString(Str.post_detail),
-                    isMain = false,
-                    isBack = true
+                    getString(Str.post_detail), isMain = false, isBack = true
                 )
             }
         }
@@ -90,7 +87,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setUpLogoutSheet() {
-        logoutSheet = BaseBottomSheetDialog(R.layout.alert_sheet, onBind = { binding ->
+        logoutSheet = BaseBottomSheetDialog(this, R.layout.alert_sheet, onBind = { binding ->
             with(binding) {
                 vTop.title = getString(Str.logout)
                 tvMessage.text = getString(Str.are_you_sure_want_to_logout)
@@ -100,7 +97,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 }
                 btnClose.setSingleClickListener { logoutSheet.dismiss() }
             }
-        }, onCancelListener = {})
+        })
     }
 
     private fun initViews() {
@@ -126,30 +123,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onPause()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Logger.d("Test--->>", "onDestroy")
-    }
-
     private fun setTitle(title: String?, isBack: Boolean = false, isMain: Boolean) =
         with(binding.header) {
             if (isBack) ivBack.show() else binding.header.ivBack.hide()
-            if (isMain) {
-                /*ivProfile.show()*/
+            if (isMain) {/*ivProfile.show()*/
                 ivLogout.show()
-                ivLogout.setSingleClickListener {
-                }
-            } else {
-                /*ivProfile.hide()*/
+                ivLogout.setSingleClickListener {}
+            } else {/*ivProfile.hide()*/
                 ivLogout.hide()
             }
             tvTitle.text = title
             ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
+
             ivLogout.setSingleClickListener {
-                logoutSheet.show(
-                    supportFragmentManager,
-                    "Logout Sheet"
-                )
+                if (isHome) logoutSheet.show()
+                else logoutSheet.dismiss()
             }
         }
 
@@ -174,4 +162,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         navController.navigate(HomeFragmentDirections.toLoginFragment())
         sharedPrefManager.clearUser()
     }
+
+    private val isHome: Boolean by lazy { navController.currentDestination?.id == Ids.homeFragment }
 }

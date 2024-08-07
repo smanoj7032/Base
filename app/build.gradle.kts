@@ -90,9 +90,7 @@ dependencies {
     implementation(libs.ssp.android)
 
     implementation(libs.hilt.android)
-    implementation(libs.androidx.biometric.ktx)
     kapt(libs.hilt.android.compiler)
-
 
     implementation(libs.places)
 
