@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -28,17 +27,14 @@
 
         <TextView
             android:id="@+id/tv_title"
+            style="@style/TextView.Header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
             android:text="@{title}"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_18ssp"
-            android:fontFamily="@font/roboto_bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/v_top"
-            tools:text="Title" />
+            app:layout_constraintTop_toBottomOf="@id/v_top" />
 
         <View
             android:id="@+id/line1"

@@ -57,8 +57,8 @@
                 android:id="@+id/textView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{bean.owner.title}"
-                tools:text="Android" />
+                android:paddingVertical="@dimen/_5sdp"
+                android:text="@{bean.text}" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvName"
