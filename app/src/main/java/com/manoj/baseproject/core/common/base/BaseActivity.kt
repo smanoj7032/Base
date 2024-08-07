@@ -16,8 +16,9 @@ import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.showErrorToast
+import com.manoj.baseproject.core.utils.extension.slideIn
+import com.manoj.baseproject.core.utils.extension.slideOut
 import com.manoj.baseproject.data.local.SharedPrefManager
-import com.manoj.baseproject.databinding.ViewProgressSheetBinding
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,7 +30,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     val tvErrorText: TextView by lazy { findViewById(Ids.tvErrorText) }
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
     lateinit var binding: Binding
-    private var progressSheet: ProgressSheet? = null
     private val TIMER_ANIMATION: Long = 400
 
     @Inject
@@ -44,7 +44,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")
-            lifecycleScope.launch {  apiCall() }
+            lifecycleScope.launch { apiCall() }
         }
         onCreateView()
         setObserver()
@@ -56,22 +56,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     protected abstract fun onCreateView()
     protected abstract fun setObserver()
 
-    fun showLoading(message: String?) {
-        progressSheet?.dismissAllowingStateLoss()
-        progressSheet = ProgressSheet(object : ProgressSheet.BaseCallback {
-            override fun onClick(view: View?) {}
-            override fun onBind(bind: ViewProgressSheetBinding) {
-                progressSheet?.showMessage(message)
-            }
-        })
-        progressSheet?.show(supportFragmentManager, progressSheet?.tag)
-    }
-
-    fun hideLoading() {
-        progressSheet?.dismissAllowingStateLoss()
-        progressSheet = null
-        getLoaderView()?.setVariable(BR.show, false)
-    }
 
     protected open fun getLoaderView(): ViewDataBinding? {
         return null
@@ -83,12 +67,14 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
 
     fun onLoading(show: Boolean) {
         val progressBar: View = findViewById(R.id.progress_bar)
-        progressBar.visibility = if (show) View.VISIBLE else View.GONE
-    }
-
-    override fun onDestroy() {
-        progressSheet?.dismissAllowingStateLoss()
-        super.onDestroy()
+        val loadingText: View = findViewById(R.id.tvPleaseWait)
+        if (show) {
+            progressBar.slideIn()
+            loadingText.slideIn()
+        } else {
+            progressBar.slideOut()
+            loadingText.slideOut()
+        }
     }
 
     private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"

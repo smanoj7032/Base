@@ -63,6 +63,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvName"
                 android:layout_width="0dp"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_height="wrap_content"
                 android:text="@{bean.owner.firstName}"
                 tools:text="Android" />

@@ -37,15 +37,26 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/main_graph" />
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvPleaseWait"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#4D929597"
+            android:visibility="gone"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/please_wait"
+            app:layout_constraintBottom_toTopOf="@+id/progress_bar" />
 
         <include
             android:id="@+id/emptyView"

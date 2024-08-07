@@ -1,6 +1,10 @@
 package com.manoj.baseproject.core.utils.extension
 
 import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -548,4 +552,30 @@ fun NavController.setupNavGraph(startDestinationId: Int) {
     val navGraph = navInflater.inflate(R.navigation.main_graph)
     navGraph.setStartDestination(startDestinationId)
     graph = navGraph
+}
+
+fun View.slideIn() {
+    this.visibility = View.VISIBLE
+    val slideIn = ObjectAnimator.ofFloat(this, "translationY", this.height.toFloat(), 0f)
+    val fadeIn = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f)
+    AnimatorSet().apply {
+        playTogether(slideIn, fadeIn)
+        duration = 300
+        start()
+    }
+}
+
+fun View.slideOut() {
+    val slideOut = ObjectAnimator.ofFloat(this, "translationY", 0f, this.height.toFloat())
+    val fadeOut = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f)
+    AnimatorSet().apply {
+        playTogether(slideOut, fadeOut)
+        duration = 300
+        start()
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                this@slideOut.visibility = View.GONE
+            }
+        })
+    }
 }

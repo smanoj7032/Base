@@ -2,6 +2,7 @@ package com.manoj.baseproject.presentation.activity.main
 
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.R
@@ -18,7 +19,6 @@ import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.databinding.AlertSheetBinding
-import com.manoj.baseproject.presentation.fragment.home.HomeFragment
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -125,7 +125,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setTitle(title: String?, isBack: Boolean = false, isMain: Boolean) =
         with(binding.header) {
-            if (isBack) ivBack.show() else binding.header.ivBack.hide()
+            /*  if (isBack) ivBack.show() else binding.header.ivBack.hide()*/
+            ivBack.isVisible = isBack
             if (isMain) {/*ivProfile.show()*/
                 ivLogout.show()
                 ivLogout.setSingleClickListener {}
@@ -163,5 +164,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         sharedPrefManager.clearUser()
     }
 
-    private fun isHome(): Boolean =  navController.currentDestination?.id == Ids.homeFragment
+    private fun isHome(): Boolean = navController.currentDestination?.id == Ids.homeFragment
 }
