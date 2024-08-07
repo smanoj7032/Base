@@ -136,7 +136,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
 
             ivLogout.setSingleClickListener {
-                if (isHome) logoutSheet.show()
+                if (isHome()) logoutSheet.show()
                 else logoutSheet.dismiss()
             }
         }
@@ -163,5 +163,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         sharedPrefManager.clearUser()
     }
 
-    private val isHome: Boolean by lazy { navController.currentDestination?.id == Ids.homeFragment }
+    private fun isHome(): Boolean =  navController.currentDestination?.id == Ids.homeFragment
 }
