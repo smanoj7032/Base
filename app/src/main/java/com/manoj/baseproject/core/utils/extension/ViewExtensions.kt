@@ -588,52 +588,6 @@ fun View.slideOut() {
     }
 }
 
-fun <T> Spinner.setSpinnerItems(
-    items: List<T>,
-    context: Context,
-    textColor: Int,
-    textSize: Float = 14f,
-    typefacePath: String = "nimbus_reg.ttf",
-    itemToString: (T) -> String,
-    onItemSelected: ((position: Int, item: T) -> Unit)? = null
-) {
-    var isInitial = true
-    val adapter =
-        ArrayAdapter(context, android.R.layout.simple_list_item_1, items.map(itemToString))
-    adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
-    this.adapter = adapter
-
-    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            if (position != -1) {
-                try {
-                    val textView = parent?.getChildAt(0) as? TextView
-                    textView?.let {
-                        it.setTextColor(ContextCompat.getColor(context, textColor))
-                        it.typeface = Typeface.createFromAsset(context.assets, typefacePath)
-                        //   it.textSize = 14f
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                if (!isInitial) {
-                    val selectedItem = items[position]
-                    onItemSelected?.invoke(position, selectedItem)
-                }
-                isInitial = false
-            }
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-    }
-}
-
-
 infix fun ImageView.set(@DrawableRes id: Int) {
     setImageResource(id)
 }

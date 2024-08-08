@@ -57,14 +57,8 @@ fun SharedPreferences.saveValue(key: String, value: Any?) {
 
 fun <T> SharedPreferences.getValue(key: String, defaultValue: Any? = null): T? {
     return when (defaultValue) {
-        is String? -> {
-            getString(key, defaultValue as? String) as? T
-        }
-
-        is Int -> {
-            getInt(key, defaultValue as? Int ?: -1) as? T
-        }
-
+        is String? -> getString(key, defaultValue as? String) as? T
+        is Int -> getInt(key, defaultValue as? Int ?: -1) as? T
         is Boolean -> getBoolean(key, defaultValue as? Boolean ?: false) as? T
         is Float -> getFloat(key, defaultValue as? Float ?: -1f) as? T
         is Long -> getLong(key, defaultValue as? Long ?: -1) as? T
@@ -81,13 +75,6 @@ inline fun SharedPreferences.editNdCommit(operation: (SharedPreferences.Editor) 
 fun Activity.hideKeyboard() {
     val manager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     manager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-}
-
-fun Activity.showKeyboard() {
-    val manager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-    manager.toggleSoftInputFromWindow(
-        this.currentFocus?.applicationWindowToken, InputMethodManager.SHOW_FORCED, 0
-    )
 }
 
 fun Fragment.showToast(message: String) {
