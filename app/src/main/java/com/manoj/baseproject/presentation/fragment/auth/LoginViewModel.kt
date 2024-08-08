@@ -10,6 +10,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     dispatchers: DispatchersProvider
 ) : BaseViewModel(dispatchers) {
-    val fieldEmail by lazy { ObservableField("smanoj7032@gmail.com") }
+    val fieldEmail by lazy { ObservableField("base@yopmail.com") }
     val fieldPass by lazy { ObservableField("Mind@123") }
 }
