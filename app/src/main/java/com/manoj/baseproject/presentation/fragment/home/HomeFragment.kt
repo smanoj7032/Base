@@ -18,6 +18,7 @@ import com.manoj.baseproject.core.common.adapter.RVAdapterWithPaging
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.network.helper.SystemVariables
+import com.manoj.baseproject.core.utils.Logger
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,6 +39,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
         }
         SystemVariables.onNetworkChange = { postsAdapter.retry() }
+        setPickerListener()
+    }
+
+    private fun setPickerListener() {
+        SystemVariables.onPickerClosed = { itemType, uri, uris ->
+            Logger.e("onPickerClosed", "$itemType")
+        }
     }
 
     override suspend fun apiCall() {
@@ -65,7 +73,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             R.layout.item_post,
             BR.bean,
             callbacks = arrayListOf(
-                CallBackModel(R.id.cvPostRoot) { model, position, binding -> navigateToPostDetail(model.id) },
+                CallBackModel(R.id.cvPostRoot) { model, position, binding ->
+                    navigateToPostDetail(
+                        model.id
+                    )
+                },
                 CallBackModel(R.id.ivProfile) { model, position, binding -> picker.show() }
             )
         )

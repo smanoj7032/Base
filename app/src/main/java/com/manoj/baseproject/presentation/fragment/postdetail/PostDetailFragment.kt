@@ -58,6 +58,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
                     it
                 )
             }
+            Logger.e("onPickerClosed", "$itemType")
         }
     }
 
