@@ -515,12 +515,12 @@ fun Context.displayDialog(
 
 fun Context.showToast(style: CustomToastStyle, message: String) {
     val inflater = LayoutInflater.from(this)
-    val layout = inflater.inflate(R.layout.custom_toast, null)
+    val layout = inflater.inflate(Lyt.custom_toast, null)
 
-    val imageView: ImageView = layout.findViewById(R.id.custom_toast_image)
-    val messageTextView: TextView = layout.findViewById(R.id.custom_toast_text)
-    val descriptionTextView: TextView = layout.findViewById(R.id.custom_toast_description)
-    val relativeLayout: View = layout.findViewById(R.id.motion_toast_view)
+    val imageView: ImageView = layout.findViewById(Ids.custom_toast_image)
+    val messageTextView: TextView = layout.findViewById(Ids.custom_toast_text)
+    val descriptionTextView: TextView = layout.findViewById(Ids.custom_toast_description)
+    val relativeLayout: View = layout.findViewById(Ids.motion_toast_view)
 
     descriptionTextView.text = message
 

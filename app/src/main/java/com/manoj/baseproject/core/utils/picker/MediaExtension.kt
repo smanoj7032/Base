@@ -54,7 +54,7 @@ fun getMakeFile(context: Context, suffix: String): File {
 fun File.getUriFromFile(context: Context): Uri {
     return FileProvider.getUriForFile(
         context,
-        context.packageName + context.getString(R.string.provider_authority_suffix),
+        context.packageName + context.getString(Str.provider_authority_suffix),
         this
     )
 }
@@ -94,7 +94,7 @@ fun shareBitmapToOtherApps(context: Context, bitmap: Bitmap): String? {
         val newFile = File(imagePath, "$name.png")
         val contentUri = FileProvider.getUriForFile(
             context,
-            context.packageName + context.getString(R.string.provider_authority_suffix),
+            context.packageName + context.getString(Str.provider_authority_suffix),
             newFile
         )
         val shareIntent = Intent(Intent.ACTION_SEND)

@@ -19,6 +19,8 @@ import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Ids
+import com.manoj.baseproject.core.utils.extension.Lyt
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,7 +31,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         setPagingAdapter()
     }
 
-    override fun getLayoutResource(): Int = R.layout.fragment_home
+    override fun getLayoutResource(): Int = Lyt.fragment_home
 
     override fun getViewModel(): BaseViewModel = viewModel
     override fun setObserver() {
@@ -70,15 +72,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }*/
         postsAdapter = RVAdapterWithPaging(
             diffCallback,
-            R.layout.item_post,
+            Lyt.item_post,
             BR.bean,
             callbacks = arrayListOf(
-                CallBackModel(R.id.cvPostRoot) { model, position, binding ->
+                CallBackModel(Ids.cvPostRoot) { model, position, binding ->
                     navigateToPostDetail(
                         model.id
                     )
                 },
-                CallBackModel(R.id.ivProfile) { model, position, binding -> picker.show() }
+                CallBackModel(Ids.ivProfile) { model, position, binding -> picker.show() }
             )
         )
         binding.rvPosts.apply {

@@ -68,7 +68,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     }
 
     fun onLoading(show: Boolean) {
-        val progressBar: View = findViewById(R.id.progress_bar)
+        val progressBar: View = findViewById(Ids.progress_bar)
         if (show) {
             progressBar.show()
         } else {

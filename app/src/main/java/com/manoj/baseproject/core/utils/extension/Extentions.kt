@@ -104,7 +104,7 @@ fun Context.showErrorToast(errorMessage: String?) = errorMessage?.let {
 
 fun View.showSnackBar(message: String) {
     Snackbar.make(this, message, Snackbar.LENGTH_LONG).also {
-        it.view.setBackgroundColor(ContextCompat.getColor(this.context, R.color.black))
+        it.view.setBackgroundColor(ContextCompat.getColor(this.context, Clr.black))
         it.show()
     }
 }
@@ -249,10 +249,10 @@ fun FragmentActivity?.replaceFragment(
         val fragmentTransaction = fragmentManager.beginTransaction()
         if (isAnimate) {
             fragmentTransaction.setCustomAnimations(
-                R.anim.enter_from_right,
-                R.anim.exit_to_left,
-                R.anim.enter_from_left,
-                R.anim.exit_to_right
+                Anm.enter_from_right,
+                Anm.exit_to_left,
+                Anm.enter_from_left,
+                Anm.exit_to_right
             )
         }
         fragmentTransaction.replace(containerId, fragment)

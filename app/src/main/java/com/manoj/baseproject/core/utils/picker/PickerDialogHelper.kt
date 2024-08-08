@@ -22,6 +22,8 @@ import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.extension.Drw
+import com.manoj.baseproject.core.utils.extension.Ids
+import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.PERMISSION_READ_STORAGE
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.checkNull
@@ -65,7 +67,7 @@ class PickerDialogHelper(
 
     private fun setupPickerDialog() {
         val clickListener = Callbacks<ItemPickerGridBinding, ItemModel>()
-        clickListener.add(CallBackModel(R.id.cvItem) { model, position, binding ->
+        clickListener.add(CallBackModel(Ids.cvItem) { model, position, binding ->
             when (model.type) {
                 ItemType.ITEM_CAMERA -> openCamera()
 
@@ -78,10 +80,10 @@ class PickerDialogHelper(
                 ItemType.ITEM_FILES -> openFilePicker()
             }
         })
-        pickerDialog = BaseBottomSheetDialog(context, R.layout.dialog_picker, onBind = { binding ->
+        pickerDialog = BaseBottomSheetDialog(context, Lyt.dialog_picker, onBind = { binding ->
             with(binding) {
                 pickerAdapter = BaseAdapter(
-                    R.layout.item_picker_grid,
+                    Lyt.item_picker_grid,
                     BR.bean,
                     callbacks = clickListener, onBind = { binding, bean ->
                         initIcon(bean, binding)

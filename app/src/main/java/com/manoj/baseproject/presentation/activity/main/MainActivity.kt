@@ -11,6 +11,7 @@ import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
+import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.hide
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
@@ -64,7 +65,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     override fun getLayoutResource(): Int {
-        return R.layout.activity_main
+        return Lyt.activity_main
     }
 
     override fun getViewModel(): BaseViewModel {
@@ -88,7 +89,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setUpLogoutSheet() {
-        logoutSheet = BaseBottomSheetDialog(this, R.layout.alert_sheet, onBind = { binding ->
+        logoutSheet = BaseBottomSheetDialog(this, Lyt.alert_sheet, onBind = { binding ->
             with(binding) {
                 vTop.title = getString(Str.logout)
                 tvMessage.text = getString(Str.are_you_sure_want_to_logout)

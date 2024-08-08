@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.utils.extension.Drw
 import com.manoj.baseproject.core.utils.extension.hideKeyboard
 import com.manoj.baseproject.core.utils.picker.ItemModel
 import com.manoj.baseproject.core.utils.picker.ItemType
@@ -52,11 +53,11 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         }
         picker = PickerDialogHelper(
             this, false, baseContext, items = arrayListOf(
-                ItemModel(ItemType.ITEM_CAMERA, itemIcon = R.drawable.ic_camera_svg),
-                ItemModel(ItemType.ITEM_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_VIDEO, itemIcon = R.drawable.ic_camera_svg),
-                ItemModel(ItemType.ITEM_VIDEO_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_FILES, itemIcon = R.drawable.ic_camera_svg)
+                ItemModel(ItemType.ITEM_CAMERA, itemIcon = Drw.ic_camera_svg),
+                ItemModel(ItemType.ITEM_GALLERY, itemIcon = Drw.ic_gallery_svg),
+                ItemModel(ItemType.ITEM_VIDEO, itemIcon = Drw.ic_camera_svg),
+                ItemModel(ItemType.ITEM_VIDEO_GALLERY, itemIcon = Drw.ic_gallery_svg),
+                ItemModel(ItemType.ITEM_FILES, itemIcon = Drw.ic_camera_svg)
             )
         )
         onCreateView(view, savedInstanceState)

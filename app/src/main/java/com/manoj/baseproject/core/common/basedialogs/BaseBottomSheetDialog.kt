@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.utils.extension.Drw
 
 open class BaseBottomSheetDialog<Binding : ViewDataBinding>(
     context: Context,
@@ -30,7 +31,7 @@ open class BaseBottomSheetDialog<Binding : ViewDataBinding>(
         setOnShowListener {
             val bottomSheet = findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.apply {
-                background = ContextCompat.getDrawable(context, R.drawable.bg_sheet_white)
+                background = ContextCompat.getDrawable(context, Drw.bg_sheet_white)
                 val behavior = BottomSheetBehavior.from(this)
                 behavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
                 behavior.skipCollapsed = true

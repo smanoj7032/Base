@@ -18,6 +18,7 @@ import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.customCollector
@@ -90,7 +91,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
 
     private fun setAdapter() {
         val clickListener = Callbacks<ItemPostBinding, Post>()
-        clickListener.add(CallBackModel(R.id.ivProfile) { model, position, binding ->
+        clickListener.add(CallBackModel(Ids.ivProfile) { model, position, binding ->
             updatePos = position
             item = model
             picker.show()
