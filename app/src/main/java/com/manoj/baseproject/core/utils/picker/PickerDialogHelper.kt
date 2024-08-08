@@ -30,6 +30,7 @@ import com.manoj.baseproject.core.common.adapter.Callbacks
 import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.core.utils.extension.checkNull
 
 class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
@@ -80,12 +81,12 @@ class PickerDialogHelper(
                 ItemType.ITEM_FILES -> openFilePicker()
             }
         })
-        pickerDialog = BaseBottomSheetDialog(context,R.layout.dialog_picker, onBind = { binding ->
+        pickerDialog = BaseBottomSheetDialog(context, R.layout.dialog_picker, onBind = { binding ->
             with(binding) {
                 pickerAdapter = BaseAdapter(
                     R.layout.item_picker_grid,
                     BR.bean,
-                    callbacks = clickListener, onBind =  { binding, bean ->
+                    callbacks = clickListener, onBind = { binding, bean ->
                         initIcon(bean, binding)
                         initLabel(bean, binding)
                     }
@@ -138,11 +139,17 @@ class PickerDialogHelper(
     }
 
     private fun openGallery() {
-        PERMISSION_READ_STORAGE?.let {
+        PERMISSION_READ_STORAGE.checkNull(actionIfNull = {
+            chooseImage.launch(
+                PickVisualMediaRequest(
+                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                )
+            )
+        }, actionIfNotNull = {
             context.runWithPermissions(*it) {
                 chooseImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
-        }
+        })
     }
 
     private fun openImageGallery() {
@@ -165,23 +172,36 @@ class PickerDialogHelper(
     }
 
     private fun openVideoGallery() {
-        PERMISSION_READ_STORAGE?.let {
-            context.runWithPermissions(*it) {
+        PERMISSION_READ_STORAGE.checkNull(
+            actionIfNull = {
                 val pickVideo = Intent(Intent.ACTION_PICK)
                 pickVideo.type = "video/*"
                 chooseVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
-            }
-        }
+            },
+            actionIfNotNull = {
+                context.runWithPermissions(*it) {
+                    val pickVideo = Intent(Intent.ACTION_PICK)
+                    pickVideo.type = "video/*"
+                    chooseVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+                }
+            })
+
     }
 
     private fun openFilePicker() {
-        PERMISSION_READ_STORAGE?.let {
-            context.runWithPermissions(*it) {
+        PERMISSION_READ_STORAGE.checkNull(
+            actionIfNull = {
                 val pickFile = Intent(Intent.ACTION_GET_CONTENT)
                 pickFile.type = "application/pdf"
                 selectFile.launch(arrayOf("application/pdf"))
+            }, actionIfNotNull = {
+                context.runWithPermissions(*it) {
+                    val pickFile = Intent(Intent.ACTION_GET_CONTENT)
+                    pickFile.type = "application/pdf"
+                    selectFile.launch(arrayOf("application/pdf"))
+                }
             }
-        }
+        )
     }
 
     private fun onActivityResult(requestCode: Int, resultCode: ActivityResult) {

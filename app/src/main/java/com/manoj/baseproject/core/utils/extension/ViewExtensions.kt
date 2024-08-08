@@ -10,8 +10,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -28,6 +30,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -36,7 +41,9 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -54,6 +61,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
@@ -577,5 +585,94 @@ fun View.slideOut() {
                 this@slideOut.visibility = View.GONE
             }
         })
+    }
+}
+
+fun <T> Spinner.setSpinnerItems(
+    items: List<T>,
+    context: Context,
+    textColor: Int,
+    textSize: Float = 14f,
+    typefacePath: String = "nimbus_reg.ttf",
+    itemToString: (T) -> String,
+    onItemSelected: ((position: Int, item: T) -> Unit)? = null
+) {
+    var isInitial = true
+    val adapter =
+        ArrayAdapter(context, android.R.layout.simple_list_item_1, items.map(itemToString))
+    adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
+    this.adapter = adapter
+
+    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>?,
+            view: View?,
+            position: Int,
+            id: Long
+        ) {
+            if (position != -1) {
+                try {
+                    val textView = parent?.getChildAt(0) as? TextView
+                    textView?.let {
+                        it.setTextColor(ContextCompat.getColor(context, textColor))
+                        it.typeface = Typeface.createFromAsset(context.assets, typefacePath)
+                        //   it.textSize = 14f
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                if (!isInitial) {
+                    val selectedItem = items[position]
+                    onItemSelected?.invoke(position, selectedItem)
+                }
+                isInitial = false
+            }
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {}
+    }
+}
+
+
+infix fun ImageView.set(@DrawableRes id: Int) {
+    setImageResource(id)
+}
+
+infix fun ImageView.set(bitmap: Bitmap) {
+    setImageBitmap(bitmap)
+}
+
+infix fun ImageView.set(drawable: Drawable) {
+    setImageDrawable(drawable)
+}
+
+infix fun ImageView.set(ic: Icon) {
+    setImageIcon(ic)
+}
+
+infix fun ImageView.set(uri: Uri) {
+    setImageURI(uri)
+}
+
+infix fun TextView.set(@StringRes id: Int) {
+    setText(id)
+}
+
+infix fun TextView.set(text: String) {
+    setText(text)
+}
+
+fun WebView.setup(url: String, configure: (WebSettings.() -> Unit)? = null) {
+    this.webViewClient = WebViewClient()
+    this.settings.javaScriptEnabled = true
+    configure?.let {
+        this.settings.apply(it)
+    }
+    this.loadUrl(url)
+}
+
+fun BottomNavigationView.setMenuItemsVisibility(isVisible: Boolean, vararg itemIds: Int) {
+    itemIds.forEach { itemId ->
+        menu.findItem(itemId)?.isVisible = isVisible
     }
 }

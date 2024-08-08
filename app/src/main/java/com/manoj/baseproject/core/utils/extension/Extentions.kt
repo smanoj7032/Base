@@ -6,26 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Typeface
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.Icon
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -35,7 +23,6 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -251,11 +238,6 @@ fun getPlaceDetails(context: Context, placeId: String?, callback: (PlaceDetails?
     }
 }
 
-fun BottomNavigationView.setMenuItemsVisibility(isVisible: Boolean, vararg itemIds: Int) {
-    itemIds.forEach { itemId ->
-        menu.findItem(itemId)?.isVisible = isVisible
-    }
-}
 
 fun FragmentActivity?.replaceFragment(
     containerId: Int,
@@ -281,85 +263,9 @@ fun FragmentActivity?.replaceFragment(
     }
 }
 
-fun <T> Spinner.setSpinnerItems(
-    items: List<T>,
-    context: Context,
-    textColor: Int,
-    textSize: Float = 14f,
-    typefacePath: String = "nimbus_reg.ttf",
-    itemToString: (T) -> String,
-    onItemSelected: ((position: Int, item: T) -> Unit)? = null
-) {
-    var isInitial = true
-    val adapter =
-        ArrayAdapter(context, android.R.layout.simple_list_item_1, items.map(itemToString))
-    adapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
-    this.adapter = adapter
 
-    this.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            if (position != -1) {
-                try {
-                    val textView = parent?.getChildAt(0) as? TextView
-                    textView?.let {
-                        it.setTextColor(ContextCompat.getColor(context, textColor))
-                        it.typeface = Typeface.createFromAsset(context.assets, typefacePath)
-                        //   it.textSize = 14f
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                if (!isInitial) {
-                    val selectedItem = items[position]
-                    onItemSelected?.invoke(position, selectedItem)
-                }
-                isInitial = false
-            }
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {}
-    }
-}
-
-
-infix fun ImageView.set(@DrawableRes id: Int) {
-    setImageResource(id)
-}
-
-infix fun ImageView.set(bitmap: Bitmap) {
-    setImageBitmap(bitmap)
-}
-
-infix fun ImageView.set(drawable: Drawable) {
-    setImageDrawable(drawable)
-}
-
-infix fun ImageView.set(ic: Icon) {
-    setImageIcon(ic)
-}
-
-infix fun ImageView.set(uri: Uri) {
-    setImageURI(uri)
-}
-
-infix fun TextView.set(@StringRes id: Int) {
-    setText(id)
-}
-
-infix fun TextView.set(text: String) {
-    setText(text)
-}
-
-fun WebView.setup(url: String, configure: (WebSettings.() -> Unit)? = null) {
-    this.webViewClient = WebViewClient()
-    this.settings.javaScriptEnabled = true
-    configure?.let {
-        this.settings.apply(it)
-    }
-    this.loadUrl(url)
+inline fun <T> T?.checkNull(actionIfNull: () -> Unit, actionIfNotNull: (T) -> Unit) {
+    if (this != null) {
+        actionIfNotNull(this)
+    } else actionIfNull()
 }
