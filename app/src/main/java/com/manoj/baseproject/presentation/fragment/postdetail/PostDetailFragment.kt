@@ -38,17 +38,6 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
         setAdapter()
         setPickerListener()
-        handelBackPress()
-    }
-
-    private fun handelBackPress() {
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (SystemVariables.isInternetConnected) {
-                    findNavController().popBackStack()
-                } else requireContext().showErrorToast(getString(Str.slow_or_no_internet_access))
-            }
-        })
     }
 
     private fun setPickerListener() {
@@ -115,8 +104,4 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
         viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
     }
 
-    override fun onDestroy() {
-        onLoading(false)
-        super.onDestroy()
-    }
 }
