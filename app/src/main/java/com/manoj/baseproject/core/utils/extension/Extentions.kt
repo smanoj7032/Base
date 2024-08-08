@@ -265,7 +265,6 @@ fun FragmentActivity?.replaceFragment(
 
 
 inline fun <T> T?.checkNull(actionIfNull: () -> Unit, actionIfNotNull: (T) -> Unit) {
-    if (this != null) {
-        actionIfNotNull(this)
-    } else actionIfNull()
+    if (this != null) actionIfNotNull(this)
+    else actionIfNull()
 }
