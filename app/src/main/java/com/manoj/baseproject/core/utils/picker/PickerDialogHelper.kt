@@ -56,7 +56,7 @@ class PickerDialogHelper(
     private lateinit var takePhoto: ActivityResultLauncher<Uri>
     private lateinit var chooseImage: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var chooseVideo: ActivityResultLauncher<PickVisualMediaRequest>
-    private lateinit var recordVideo: ActivityResultLauncher<Intent>
+    private lateinit var recordVideo: ActivityResultLauncher<Uri>
     private lateinit var selectFile: ActivityResultLauncher<Array<String>>
 
 
@@ -162,11 +162,8 @@ class PickerDialogHelper(
     private fun openVideoCamera() = context.runWithPermissions(Manifest.permission.CAMERA) {
         fileName = (System.currentTimeMillis() / 1000).toString() + ".mp4"
         val videoFile = File(context.cacheDir, fileName)
-        val takeVideo = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, videoFile.getUriFromFile(context))
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-        }
-        recordVideo.launch(takeVideo)
+        uri = videoFile.getUriFromFile(context)
+        uri?.let { recordVideo.launch(it) }
     }
 
     private fun openVideoGallery() {
@@ -260,8 +257,11 @@ class PickerDialogHelper(
                     }
                 }
             recordVideo =
-                it.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    onActivityResult(REQUEST_VIDEO, result)
+                it.registerForActivityResult(ActivityResultContracts.CaptureVideo()) { result ->
+                    if (result) {
+                        SystemVariables.onPickerClosed(ItemType.ITEM_VIDEO, uri, null)
+                        pickerDialog?.dismiss()
+                    }
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
@@ -298,8 +298,11 @@ class PickerDialogHelper(
                     }
                 }
             recordVideo =
-                it.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                    onActivityResult(REQUEST_VIDEO, result)
+                it.registerForActivityResult(ActivityResultContracts.CaptureVideo()) { result ->
+                    if (result) {
+                        SystemVariables.onPickerClosed(ItemType.ITEM_VIDEO, uri, null)
+                        pickerDialog?.dismiss()
+                    }
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { result ->
