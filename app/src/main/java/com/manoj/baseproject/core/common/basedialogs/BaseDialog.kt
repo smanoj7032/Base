@@ -1,6 +1,7 @@
 package com.manoj.baseproject.core.common.basedialogs
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -13,70 +14,33 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 
-open class BaseDialog<T>() : DialogFragment() where T : ViewDataBinding {
+open class BaseDialog<T>(
+    context: Context,
+    private var layoutRes: Int = 0,
+    var onBind: (binding: T) -> Unit,
+    var onCancelListener: () -> Unit
+) : Dialog(context) where T : ViewDataBinding {
 
-    private var layoutRes: Int = 0
-    var onBind: (binding: T) -> Unit = { _ -> }
-    var onCancelListener: () -> Unit = {}
 
-    constructor(
-        @LayoutRes layoutRes: Int,
-        onBind: (binding: T) -> Unit,
-        onCancelListener: () -> Unit = {}
-    ) : this() {
-        this.layoutRes = layoutRes
-        this.onBind = onBind
-        this.onCancelListener = onCancelListener
-    }
+    lateinit var binding: T
 
-    lateinit var binding: ViewDataBinding
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return object : Dialog(requireActivity(), theme) {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutRes, null, false)
+        setContentView(binding.root)
+        onBind(binding)
+        setOnCancelListener {
+            onCancelListener()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.let {
-            it.setOnCancelListener {
-                onCancelListener()
-            }
-            it.window?.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setOnCancelListener {
+            onCancelListener()
         }
-    }
+        window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return try {
-            binding = DataBindingUtil.inflate(inflater, layoutRes, container, false)
-            binding.root
-        } catch (e: Exception) {
-            Log.e(
-                "BaseDialogException",
-                "Inflating Error, You had forget to convert your layout to data binding layout"
-            )
-            null
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        try {
-            onBind(binding as T)
-        } catch (e: Exception) {
-            Log.e(
-                "BaseDialogException",
-                "Casting error, please make sure you're passing the right binding class",
-            )
-        }
     }
 }
