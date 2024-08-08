@@ -13,13 +13,14 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
+import com.manoj.baseproject.R
 
 open class BaseDialog<T>(
     context: Context,
     private var layoutRes: Int = 0,
     var onBind: (binding: T) -> Unit,
     var onCancelListener: () -> Unit
-) : Dialog(context) where T : ViewDataBinding {
+) : Dialog(context, R.style.AppTheme) where T : ViewDataBinding {
 
 
     lateinit var binding: T
