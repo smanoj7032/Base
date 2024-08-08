@@ -64,9 +64,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             diffCallback,
             R.layout.item_post,
             BR.bean,
-            callbacks = arrayListOf(CallBackModel(R.id.cvPostRoot) { model, position, binding ->
-                navigateToPostDetail(model.id)
-            })
+            callbacks = arrayListOf(
+                CallBackModel(R.id.cvPostRoot) { model, position, binding -> navigateToPostDetail(model.id) },
+                CallBackModel(R.id.ivProfile) { model, position, binding -> picker.show() }
+            )
         )
         binding.rvPosts.apply {
             itemAnimator = null

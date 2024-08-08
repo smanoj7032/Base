@@ -13,30 +13,29 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.common.adapter.BaseAdapter
+import com.manoj.baseproject.core.common.adapter.CallBackModel
+import com.manoj.baseproject.core.common.adapter.Callbacks
+import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
+import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.extension.Drw
 import com.manoj.baseproject.core.utils.extension.PERMISSION_READ_STORAGE
 import com.manoj.baseproject.core.utils.extension.Str
-import com.manoj.baseproject.core.utils.permissionutils.runWithPermissions
+import com.manoj.baseproject.core.utils.extension.checkNull
 import com.manoj.baseproject.core.utils.extension.set
+import com.manoj.baseproject.core.utils.permissionutils.runWithPermissions
 import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
-import com.manoj.baseproject.core.common.adapter.CallBackModel
-import com.manoj.baseproject.core.common.adapter.Callbacks
-import com.manoj.baseproject.core.common.adapter.BaseAdapter
-import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
-import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
-import com.manoj.baseproject.core.utils.extension.checkNull
 
 class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
     isMultiple: Boolean? = null,
     private var context: Context,
-    private var fragmentManager: FragmentManager,
     private var items: ArrayList<ItemModel>
 ) {
 
@@ -50,7 +49,6 @@ class PickerDialogHelper(
 
     private var uri: Uri? = null
     private var fileName = ""
-    private var onPickerCloseListener: OnPickerCloseListener? = null
     private var resultCaller: ActivityResultCaller? = resultCaller
 
     /** ACTIVITY RESULT LAUNCHER */
@@ -162,7 +160,6 @@ class PickerDialogHelper(
 
     private fun openVideoCamera() = context.runWithPermissions(Manifest.permission.CAMERA) {
         fileName = (System.currentTimeMillis() / 1000).toString() + ".mp4"
-
         val takeVideo = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
         takeVideo.putExtra(
             MediaStore.EXTRA_OUTPUT,
@@ -185,7 +182,6 @@ class PickerDialogHelper(
                     chooseVideo.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
                 }
             })
-
     }
 
     private fun openFilePicker() {
@@ -218,12 +214,8 @@ class PickerDialogHelper(
         if (data == null) {
             return
         }
-
         val uri = data.data ?: return
-
-        if (onPickerCloseListener != null) {
-            onPickerCloseListener?.onPickerClosed(ItemType.ITEM_GALLERY, uri, null)
-        }
+        SystemVariables.onPickerClosed(ItemType.ITEM_GALLERY, uri, null)
         pickerDialog?.dismiss()
     }
 
@@ -231,12 +223,8 @@ class PickerDialogHelper(
         if (data == null) {
             return
         }
-
         val uri = data.data ?: return
-
-        if (onPickerCloseListener != null) {
-            onPickerCloseListener?.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, uri, null)
-        }
+        SystemVariables.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, uri, null)
         pickerDialog?.dismiss()
     }
 
@@ -244,22 +232,13 @@ class PickerDialogHelper(
         if (data == null) {
             return
         }
-
         val uri = data.data ?: return
-
-        if (onPickerCloseListener != null) {
-            onPickerCloseListener?.onPickerClosed(ItemType.ITEM_FILES, uri, null)
-        }
+        SystemVariables.onPickerClosed(ItemType.ITEM_FILES, uri, null)
         pickerDialog?.dismiss()
     }
 
-    fun setPickerCloseListener(onClose: (ItemType, Uri?, List<Uri>?) -> Unit) {
-        onPickerCloseListener =
-            OnPickerCloseListener(onClose)
-    }
-
     fun show() {
-        fragmentManager.let { pickerDialog?.show() }
+        pickerDialog?.show()
     }
 
     private fun setLauncher() {
@@ -267,14 +246,14 @@ class PickerDialogHelper(
             takePhoto =
                 it.registerForActivityResult(ActivityResultContracts.TakePicture()) { isSaved ->
                     if (isSaved) {
-                        onPickerCloseListener?.onPickerClosed(ItemType.ITEM_CAMERA, uri, null)
+                        SystemVariables.onPickerClosed(ItemType.ITEM_CAMERA, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
             chooseImage =
                 it.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                     uri.let { tempUri ->
-                        onPickerCloseListener?.onPickerClosed(ItemType.ITEM_GALLERY, uri, null)
+                        SystemVariables.onPickerClosed(ItemType.ITEM_GALLERY, uri, null)
                         pickerDialog?.dismiss()
 
                     }
@@ -285,12 +264,12 @@ class PickerDialogHelper(
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
-                    onPickerCloseListener?.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, result, null)
+                    SystemVariables.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, result, null)
                     pickerDialog?.dismiss()
                 }
             selectFile =
                 it.registerForActivityResult(ActivityResultContracts.OpenDocument()) { result ->
-                    onPickerCloseListener?.onPickerClosed(ItemType.ITEM_FILES, result, null)
+                    SystemVariables.onPickerClosed(ItemType.ITEM_FILES, result, null)
                     pickerDialog?.dismiss()
                 }
         }
@@ -301,7 +280,7 @@ class PickerDialogHelper(
             takePhoto =
                 it.registerForActivityResult(ActivityResultContracts.TakePicture()) { isSaved ->
                     if (isSaved) {
-                        onPickerCloseListener?.onPickerClosed(ItemType.ITEM_CAMERA, uri, null)
+                        SystemVariables.onPickerClosed(ItemType.ITEM_CAMERA, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
@@ -312,7 +291,7 @@ class PickerDialogHelper(
                     )
                 ) { uri ->
                     uri.let { tempUri ->
-                        onPickerCloseListener?.onPickerClosed(ItemType.ITEM_GALLERY, null, tempUri)
+                        SystemVariables.onPickerClosed(ItemType.ITEM_GALLERY, null, tempUri)
                         pickerDialog?.dismiss()
 
                     }
@@ -323,12 +302,12 @@ class PickerDialogHelper(
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { result ->
-                    onPickerCloseListener?.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, null, result)
+                    SystemVariables.onPickerClosed(ItemType.ITEM_VIDEO_GALLERY, null, result)
                     pickerDialog?.dismiss()
                 }
             selectFile =
                 it.registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { result ->
-                    onPickerCloseListener?.onPickerClosed(ItemType.ITEM_FILES, null, result)
+                    SystemVariables.onPickerClosed(ItemType.ITEM_FILES, null, result)
                     pickerDialog?.dismiss()
                 }
         }

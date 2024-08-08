@@ -15,6 +15,8 @@ import com.manoj.baseproject.R
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
+import com.manoj.baseproject.core.utils.extension.hide
+import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.core.utils.extension.slideIn
 import com.manoj.baseproject.core.utils.extension.slideOut
@@ -67,13 +69,10 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
 
     fun onLoading(show: Boolean) {
         val progressBar: View = findViewById(R.id.progress_bar)
-        val loadingText: View = findViewById(R.id.tvPleaseWait)
         if (show) {
-            progressBar.slideIn()
-            loadingText.slideIn()
+            progressBar.show()
         } else {
-            progressBar.slideOut()
-            loadingText.slideOut()
+            progressBar.hide()
         }
     }
 

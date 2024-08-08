@@ -2,24 +2,26 @@ package com.manoj.baseproject.presentation.fragment.postdetail
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.Callbacks
-import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Lyt
+import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.customCollector
-import com.manoj.baseproject.core.utils.picker.ItemModel
-import com.manoj.baseproject.core.utils.picker.ItemType
-import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
+import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentPostDetailBinding
 import com.manoj.baseproject.databinding.ItemPostBinding
@@ -30,21 +32,26 @@ import kotlinx.coroutines.launch
 class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     private val viewModel: PostDetailVM by viewModels()
     private lateinit var postAdapter: BaseAdapter<ItemPostBinding, Post>
-    private lateinit var picker: PickerDialogHelper
     private var updatePos: Int? = null
     private lateinit var item: Post
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
         setAdapter()
-        picker = PickerDialogHelper(
-            this, false, baseContext, childFragmentManager, items = arrayListOf(
-                ItemModel(ItemType.ITEM_CAMERA, itemIcon = R.drawable.ic_camera_svg),
-                ItemModel(ItemType.ITEM_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_VIDEO, itemIcon = R.drawable.ic_camera_svg),
-                ItemModel(ItemType.ITEM_VIDEO_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_FILES, itemIcon = R.drawable.ic_camera_svg)
-            )
-        )
-        picker.setPickerCloseListener { itemType, uri, uris ->
+        setPickerListener()
+        handelBackPress()
+    }
+
+    private fun handelBackPress() {
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (SystemVariables.isInternetConnected) {
+                    findNavController().popBackStack()
+                } else requireContext().showErrorToast(getString(Str.slow_or_no_internet_access))
+            }
+        })
+    }
+
+    private fun setPickerListener() {
+        SystemVariables.onPickerClosed = { itemType, uri, uris ->
             updatePos?.let {
                 postAdapter.updateItem(
                     item.copy(owner = item.owner.copy(picture = uri.toString())),

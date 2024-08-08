@@ -12,9 +12,11 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.core.network.helper.SystemVariables
-import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.extension.hideKeyboard
+import com.manoj.baseproject.core.utils.picker.ItemModel
+import com.manoj.baseproject.core.utils.picker.ItemType
+import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 
@@ -24,6 +26,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     lateinit var baseContext: Context
     lateinit var binding: Binding
     private var isApiCallMade = true
+    lateinit var picker: PickerDialogHelper
 
     val parentActivity: BaseActivity<*>?
         get() = activity as? BaseActivity<*>
@@ -47,6 +50,15 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         parentActivity?.let {
             sharedPrefManager = it.sharedPrefManager
         }
+        picker = PickerDialogHelper(
+            this, false, baseContext, items = arrayListOf(
+                ItemModel(ItemType.ITEM_CAMERA, itemIcon = R.drawable.ic_camera_svg),
+                ItemModel(ItemType.ITEM_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
+                ItemModel(ItemType.ITEM_VIDEO, itemIcon = R.drawable.ic_camera_svg),
+                ItemModel(ItemType.ITEM_VIDEO_GALLERY, itemIcon = R.drawable.ic_gallery_svg),
+                ItemModel(ItemType.ITEM_FILES, itemIcon = R.drawable.ic_camera_svg)
+            )
+        )
         onCreateView(view, savedInstanceState)
         setObserver()
         lifecycleScope.launch { apiCall() }
