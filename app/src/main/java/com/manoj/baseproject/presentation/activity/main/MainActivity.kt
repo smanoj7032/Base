@@ -30,6 +30,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             Logger.d("Destination", "$destination")
+            logoutSheet.dismiss()
             when (destination.id) {
                 Ids.loginFragment -> setTitle(getString(Str.login), isMain = false, isBack = false)
 
