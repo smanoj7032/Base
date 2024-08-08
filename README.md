@@ -57,6 +57,12 @@ Dependency: [androidx.core:core-splashscreen:1.0.1](https://mvnrepository.com/ar
 - Provides flexibility to choose between the two based on your preference.
 - Both implementations are provided in the codebase.
 
+### 6. Gradle Version Catalogs
+
+- This project utilizes the latest Gradle version catalogs.
+- Version catalogs offer a convenient way to manage dependencies and their versions.
+- This approach enhances maintainability and consistency across the project.
+
 ## Compatibility
 
 - All code is compatible with Android 14, ensuring the latest features and security updates are
