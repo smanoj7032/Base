@@ -56,7 +56,13 @@ Dependency: [androidx.core:core-splashscreen:1.0.1](https://mvnrepository.com/ar
 - Provides flexibility to choose between the two based on your preference.
 - Both implementations are provided in the codebase.
 
-### 6. Gradle Version Catalogs
+- ### 6. Pagination with Paging 3
+
+- This project implements the native Paging 3 library.
+- Paging 3 simplifies the process of loading and displaying large data sets efficiently.
+- It provides a seamless way to handle pagination, improving performance and user experience.
+
+### 7. Gradle Version Catalogs
 
 - This project utilizes the latest Gradle version catalogs.
 - Version catalogs offer a convenient way to manage dependencies and their versions.
