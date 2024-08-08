@@ -56,7 +56,7 @@ Dependency: [androidx.core:core-splashscreen:1.0.1](https://mvnrepository.com/ar
 - Provides flexibility to choose between the two based on your preference.
 - Both implementations are provided in the codebase.
 
-- ### 6. Pagination with Paging 3
+### 6. Pagination with Paging 3
 
 - This project implements the native Paging 3 library.
 - Paging 3 simplifies the process of loading and displaying large data sets efficiently.
