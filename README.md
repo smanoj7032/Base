@@ -32,7 +32,6 @@ APP_ID = your_app_id
 ### 1. Native Splash Screen API
 
 - Implemented using the latest Native Splash Screen API.
--
 
 Dependency: [androidx.core:core-splashscreen:1.0.1](https://mvnrepository.com/artifact/androidx.core/core-splashscreen)
 
