@@ -12,11 +12,10 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.R
 import com.manoj.baseproject.core.utils.extension.Drw
 import com.manoj.baseproject.core.utils.extension.hideKeyboard
 import com.manoj.baseproject.core.utils.picker.ItemModel
-import com.manoj.baseproject.core.utils.picker.ItemType
+import com.manoj.baseproject.core.utils.picker.MediaType
 import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
@@ -53,11 +52,11 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         }
         picker = PickerDialogHelper(
             this, false, baseContext, items = arrayListOf(
-                ItemModel(ItemType.ITEM_CAMERA, itemIcon = Drw.ic_camera_svg),
-                ItemModel(ItemType.ITEM_GALLERY, itemIcon = Drw.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_VIDEO, itemIcon = Drw.ic_camera_svg),
-                ItemModel(ItemType.ITEM_VIDEO_GALLERY, itemIcon = Drw.ic_gallery_svg),
-                ItemModel(ItemType.ITEM_FILES, itemIcon = Drw.ic_camera_svg)
+                ItemModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
+                ItemModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
+                ItemModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
+                ItemModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
+                ItemModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
             )
         )
         onCreateView(view, savedInstanceState)

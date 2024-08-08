@@ -1,7 +1,7 @@
 package com.manoj.baseproject.core.network.helper
 
 import android.net.Uri
-import com.manoj.baseproject.core.utils.picker.ItemType
+import com.manoj.baseproject.core.utils.picker.MediaType
 
 object SystemVariables {
     /**
@@ -30,6 +30,6 @@ object SystemVariables {
      * - `List<Uri>?`: A list of URIs for multiple selected media items, or `null` if no multiple items are selected.
      * Defaults to an empty function.
      */
-    var onPickerClosed: (ItemType, Uri?, List<Uri>?) -> Unit = { _, _, _ -> }
+    var onPickerClosed: (MediaType, Uri?, List<Uri>?) -> Unit = { _, _, _ -> }
 
 }
