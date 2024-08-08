@@ -31,6 +31,7 @@ import com.manoj.baseproject.core.utils.extension.set
 import com.manoj.baseproject.core.utils.permissionutils.runWithPermissions
 import com.manoj.baseproject.databinding.DialogPickerBinding
 import com.manoj.baseproject.databinding.ItemPickerGridBinding
+import java.io.File
 
 class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
@@ -160,11 +161,11 @@ class PickerDialogHelper(
 
     private fun openVideoCamera() = context.runWithPermissions(Manifest.permission.CAMERA) {
         fileName = (System.currentTimeMillis() / 1000).toString() + ".mp4"
-        val takeVideo = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-        takeVideo.putExtra(
-            MediaStore.EXTRA_OUTPUT,
-            Environment.getExternalStorageDirectory().absolutePath + "/" + fileName
-        )
+        val videoFile = File(context.cacheDir, fileName)
+        val takeVideo = Intent(MediaStore.ACTION_VIDEO_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, videoFile.getUriFromFile(context))
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        }
         recordVideo.launch(takeVideo)
     }
 
