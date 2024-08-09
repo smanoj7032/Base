@@ -19,8 +19,10 @@ import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
+import android.text.Editable
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
@@ -62,6 +64,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.textfield.TextInputEditText
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
@@ -629,4 +632,17 @@ fun BottomNavigationView.setMenuItemsVisibility(isVisible: Boolean, vararg itemI
     itemIds.forEach { itemId ->
         menu.findItem(itemId)?.isVisible = isVisible
     }
+}
+
+fun TextInputEditText.queryListener(onQueryChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            onQueryChanged(s.toString())
+        }
+
+    })
 }
