@@ -3,6 +3,7 @@ package com.manoj.baseproject.core.utils.extension
 import android.content.Context
 import android.text.TextUtils
 import android.util.Patterns
+import android.view.View
 import android.widget.EditText
 
 fun EditText.isValidEmail(): Boolean {
@@ -53,4 +54,8 @@ fun String.validate(
         }
     }?.let { return false }
     return true
+}
+
+fun View.showToast(message: String) {
+    this.context.showErrorToast(message)
 }

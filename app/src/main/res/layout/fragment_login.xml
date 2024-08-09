@@ -55,6 +55,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         app:endIconMode="clear_text"
+                        app:errorEnabled="true"
+                        app:errorTextAppearance="@style/ErrorTextAppearance"
                         app:shapeAppearance="@style/Rounded">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -74,6 +76,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="32dp"
                         app:endIconMode="password_toggle"
+                        app:errorEnabled="true"
+                        app:errorTextAppearance="@style/ErrorTextAppearance"
                         app:shapeAppearance="@style/Rounded">
 
                         <com.google.android.material.textfield.TextInputEditText

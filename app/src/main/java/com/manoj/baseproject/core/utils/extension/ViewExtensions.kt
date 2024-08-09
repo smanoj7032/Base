@@ -634,7 +634,7 @@ fun BottomNavigationView.setMenuItemsVisibility(isVisible: Boolean, vararg itemI
     }
 }
 
-fun TextInputEditText.queryListener(onQueryChanged: (String) -> Unit) {
+fun EditText.queryListener(onQueryChanged: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
 

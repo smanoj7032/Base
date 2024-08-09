@@ -11,15 +11,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.R
+import com.manoj.baseproject.core.network.helper.NetworkMonitor
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.hide
 import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showErrorToast
-import com.manoj.baseproject.core.utils.extension.slideIn
-import com.manoj.baseproject.core.utils.extension.slideOut
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -46,7 +44,16 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")
-            lifecycleScope.launch { apiCall() }
+            when (it) {
+                NetworkMonitor.NetworkState.Available -> {
+                    lifecycleScope.launch { apiCall() }
+                }
+
+                NetworkMonitor.NetworkState.Lost -> {
+                    onLoading(false)
+                }
+            }
+
         }
         onCreateView()
         setObserver()
