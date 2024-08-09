@@ -9,7 +9,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -42,7 +41,6 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -64,7 +62,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.textfield.TextInputEditText
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
@@ -398,19 +395,22 @@ fun EditText.getEditText(): String {
 
 fun EditText.findEmails(success: (String?, Array<String>?) -> Unit) {
     val emailList = this.text.split(";").map { it.trim() }
-    val validEmails = emailList.filter { it.isValidEmail() }
+    val validEmails = emailList.filter { isCorrectEmail(it) }
     if (this.text.isNotEmpty()) {
         if (validEmails.size == emailList.size) {
             success(null, validEmails.toTypedArray())
         } else {
-            val invalidEmails = emailList.filterNot { it.isValidEmail() }
+            val invalidEmails = emailList.filterNot { isCorrectEmail(it) }
             success("Invalid emails found: ${invalidEmails.joinToString(", ")}", null)
         }
     } else {
         success("Please enter emails.", null)
     }
 }
-
+fun isCorrectEmail(email:String): Boolean {
+    val emailPattern = Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")
+    return email.isNotEmpty() && email.matches(emailPattern)
+}
 fun String?.isValidEmail(): Boolean {
     return this?.isNotEmpty() == true && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }
