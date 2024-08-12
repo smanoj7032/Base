@@ -17,37 +17,21 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
     private val layoutResId: Int,
     private val variableId: Int,
     private val callbacks: Callbacks<B, M>? = null,
-) : PagingDataAdapter<M, BaseViewHolder<B>>(diffCallback) {
+) : PagingDataAdapter<M, BaseViewHolder<B, M>>(diffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<B> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<B, M> {
         val binding: B = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
             layoutResId,
             parent,
             false
         )
-        return BaseViewHolder(binding)
+        return BaseViewHolder(binding, variableId, callbacks)
     }
 
-    private fun setAnimation(viewToAnimate: View) {
-        val anim = ScaleAnimation(
-            0.0f,
-            1.0f,
-            0.0f,
-            1.0f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        )
-        anim.duration = 300
-        viewToAnimate.startAnimation(anim)
-    }
-
-    override fun onBindViewHolder(holder: BaseViewHolder<B>, position: Int) {
+    override fun onBindViewHolder(holder: BaseViewHolder<B, M>, position: Int) {
         getItem(position)?.let { item ->
-            holder.bindTo(variableId, item, onBind = { binding, beab -> })
-            holder.bindClickListener(item, callbacks)
+            holder.bind(item, position)
         }
     }
 
@@ -67,6 +51,9 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
         }
     }
 
+    private fun getItemAtPosition(position: Int): M? {
+        return getItem(position)
+    }
 
     fun attachLoadStateListener(
         onLoading: (Boolean) -> Unit,
@@ -93,5 +80,4 @@ open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
     override fun getItemViewType(position: Int): Int {
         return position
     }
-
 }

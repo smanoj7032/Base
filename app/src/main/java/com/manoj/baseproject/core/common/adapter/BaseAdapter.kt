@@ -14,15 +14,18 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
     private val layoutId: Int,
     private val variableId: Int, private val emptyView: View? = null,
     private val callbacks: Callbacks<Binding, Model>? = null,
-    private val onBind: ((Binding, Model) -> Unit)? = null
-) : RecyclerView.Adapter<BaseViewHolder<Binding>>() {
+    private val onBind: ((Binding, Model, Int) -> Unit)? = null
+) : RecyclerView.Adapter<BaseViewHolder<Binding, Model>>() {
 
     private var dataList: ArrayList<Model> = ArrayList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Binding> {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<Binding, Model> {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<Binding>(inflater, layoutId, parent, false)
-        return BaseViewHolder(binding)
+        return BaseViewHolder(binding, variableId, callbacks, onBind)
     }
 
     override fun getItemCount(): Int = dataList.size
@@ -105,10 +108,8 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
         notifyItemMoved(fromPosition, toPosition)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<Binding>, position: Int) {
-        val item = dataList[position]
-        holder.bindTo(variableId, item, onBind)
-        holder.bindClickListener(item, callbacks)
+    override fun onBindViewHolder(holder: BaseViewHolder<Binding, Model>, position: Int) {
+        holder.bind(dataList[position], position)
     }
 
     private fun setAnimation(viewToAnimate: View) {
@@ -132,7 +133,9 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
         diffResult.dispatchUpdatesTo(this)
         checkEmptyView()
     }
-    class DiffCallback<Model>(private val oldList: List<Model>, private val newList: List<Model>) : DiffUtil.Callback() {
+
+    class DiffCallback<Model>(private val oldList: List<Model>, private val newList: List<Model>) :
+        DiffUtil.Callback() {
 
         override fun getOldListSize() = oldList.size
 
@@ -146,6 +149,7 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
     }
+
     private fun checkEmptyView() {
         emptyView?.visibility = if (dataList.isEmpty()) View.VISIBLE else View.GONE
     }

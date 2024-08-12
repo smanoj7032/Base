@@ -84,7 +84,7 @@ class PickerDialogHelper(
                 pickerAdapter = BaseAdapter(
                     Lyt.item_picker_grid,
                     BR.bean,
-                    callbacks = clickListener, onBind = { binding, bean ->
+                    callbacks = clickListener, onBind = { binding, bean,position ->
                         initIcon(bean, binding)
                         initLabel(bean, binding)
                     }

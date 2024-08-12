@@ -5,19 +5,29 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 
-class BaseViewHolder<Binding : ViewDataBinding>(var binding: Binding) :
-    RecyclerView.ViewHolder(binding.root) {
-    fun <Model> bindTo(variableId: Int, model: Model, onBind: ((Binding, Model) -> Unit)? = null) {
-        binding.setVariable(variableId, model)
-        onBind?.invoke(binding, model)
-        binding.executePendingBindings()
-    }
+class BaseViewHolder<Binding : ViewDataBinding, Model>(
+    private val binding: Binding,
+    private val variableId: Int,
+    callbacks: Callbacks<Binding, Model>?,
+    private val onBind: ((Binding, Model, Int) -> Unit)? = null
+) : RecyclerView.ViewHolder(binding.root) {
+    private var currentModel: Model? = null
 
-    fun <Model> bindClickListener(model: Model, callbacks: Callbacks<Binding, Model>?) {
+    init {
         callbacks?.forEach { callback ->
-            binding.root.findViewById<View>(callback.id).setSingleClickListener {
-                callback.block(model, bindingAdapterPosition, binding)
+            binding.root.findViewById<View>(callback.id).setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    currentModel?.let { it1 -> callback.block(it1, position, binding) }
+                }
             }
         }
+    }
+
+    fun bind(model: Model, position: Int) {
+        currentModel = model
+        binding.setVariable(variableId, model)
+        onBind?.invoke(binding, model, position)
+        binding.executePendingBindings()
     }
 }
