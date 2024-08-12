@@ -112,19 +112,6 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
         holder.bind(dataList[position], position)
     }
 
-    private fun setAnimation(viewToAnimate: View) {
-        if (viewToAnimate.animation == null) {
-            val anim = ScaleAnimation(
-                0.0f, 1.0f,
-                0.0f, 1.0f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-            )
-            anim.duration = 300
-            viewToAnimate.startAnimation(anim)
-        }
-    }
-
     private fun updateList(newDataList: List<Model>) {
         val diffCallback = DiffCallback(dataList, newDataList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)

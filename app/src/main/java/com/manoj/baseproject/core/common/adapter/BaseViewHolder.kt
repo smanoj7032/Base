@@ -1,6 +1,8 @@
 package com.manoj.baseproject.core.common.adapter
 
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
@@ -29,5 +31,17 @@ class BaseViewHolder<Binding : ViewDataBinding, Model>(
         binding.setVariable(variableId, model)
         onBind?.invoke(binding, model, position)
         binding.executePendingBindings()
+    }
+    private fun setAnimation(viewToAnimate: View) {
+        if (viewToAnimate.animation == null) {
+            val anim = ScaleAnimation(
+                0.0f, 1.0f,
+                0.0f, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            )
+            anim.duration = 300
+            viewToAnimate.startAnimation(anim)
+        }
     }
 }
