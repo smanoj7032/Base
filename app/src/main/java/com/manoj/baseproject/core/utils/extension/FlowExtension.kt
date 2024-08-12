@@ -151,10 +151,10 @@ fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
             }
             .collect { response ->
                 when (response.apiStatus) {
-                    is ApiStatus.Success -> stateFlow.value = Result.Success(null)
-                    is ApiStatus.Created -> stateFlow.value = Result.Success(null)
-                    is ApiStatus.Accepted -> stateFlow.value = Result.Success(null)
-                    is ApiStatus.NoContent -> stateFlow.value = Result.Success(null)
+                    is ApiStatus.Success -> stateFlow.value = Result.Success()
+                    is ApiStatus.Created -> stateFlow.value = Result.Success()
+                    is ApiStatus.Accepted -> stateFlow.value = Result.Success()
+                    is ApiStatus.NoContent -> stateFlow.value = Result.Success()
                     is ApiStatus.BadRequest -> stateFlow.value =
                         Result.Error(response.message.toString())
 
