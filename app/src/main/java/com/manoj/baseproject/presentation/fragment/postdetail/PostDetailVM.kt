@@ -15,9 +15,7 @@ class PostDetailVM @javax.inject.Inject constructor(
     dispatchers: DispatchersProvider
 ) : BaseViewModel(dispatchers) {
 
-    val posts: MutableStateFlow<Result<Posts?>> =
-        MutableStateFlow(if (isInternetConnected) Result.Loading else Result.Error("Slow or no Internet Access"))
-
+    val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
     fun getPost(id: String) {
         launchOnIO { getPostUseCase.invoke(id, posts, this) }
     }

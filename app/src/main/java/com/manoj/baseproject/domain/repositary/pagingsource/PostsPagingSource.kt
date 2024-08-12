@@ -3,22 +3,18 @@ package com.manoj.baseproject.domain.repositary.pagingsource
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.manoj.baseproject.MyApplication
-import com.manoj.baseproject.core.utils.extension.executeApiCall
-import com.manoj.baseproject.core.utils.extension.parseException
+import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.data.api.ApiServices
 import com.manoj.baseproject.data.bean.Post
-import kotlinx.coroutines.flow.catch
-import com.manoj.baseproject.core.network.helper.Result
-import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
-import com.manoj.baseproject.data.bean.Posts
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.withContext
 
 
 class PostsPagingSource(
-    private val remote: ApiServices, private val appId: String
+    private val remote: ApiServices,
+    private val appId: String,
+    private val dispatchersProvider: DispatchersProvider
 ) : PagingSource<Int, Post>() {
-    val posts: MutableStateFlow<Result<Posts?>> = MutableStateFlow(Result.Loading)
+
     override fun getRefreshKey(state: PagingState<Int, Post>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
@@ -28,43 +24,17 @@ class PostsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Post> {
         val page = params.key ?: 1
         Log.d("Page---->>", "load: $page")
-        if (isInternetConnected) {
-            val response = executeApiCall { remote.getPosts(appId, page) }
-            var result: LoadResult<Int, Post> = LoadResult.Page(
-                data = emptyList(),
-                prevKey = null,
-                nextKey = null
+
+        return try {
+            val posts = withContext(dispatchersProvider.getIO()) { remote.getPosts(appId, page) }
+            LoadResult.Page(
+                data = posts.data,
+                prevKey = if (page == 1) null else page - 1,
+                nextKey = if (posts.data.isEmpty()) null else page + 1
             )
-
-            response.catch { exception ->
-                result = LoadResult.Error(
-                    Throwable(parseException(exception).ifEmpty { "Something went wrong" })
-                )
-            }.collect { state ->
-                when (state) {
-                    is Result.Success -> {
-                        result = LoadResult.Page(
-                            data = state.data?.data ?: emptyList(),
-                            prevKey = if (page == 1) null else page - 1,
-                            nextKey = if (state.data?.data.isNullOrEmpty()) null else page + 1
-                        )
-                    }
-
-                    is Result.Error -> {
-                        result = LoadResult.Error(
-                            Throwable(state.message.ifEmpty { "Something went wrong" })
-                        )
-                    }
-
-                    is Result.Loading -> {}
-                }
-            }
-
-            return result
-        } else {
-            return LoadResult.Error(Throwable("Check internet connection"))
+        } catch (e: Exception) {
+            LoadResult.Error(e)
         }
-
     }
-}
 
+}

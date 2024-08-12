@@ -13,16 +13,17 @@ interface ApiServices {
     suspend fun getPosts(
         @Header("app-id") token: String,
         @Query("page") page: Int?
-    ): Response<Posts>
+    ): Posts
 
     @GET("data/v1/post")
-   suspend  fun getPost(
+    suspend fun getPost(
         @Header("app-id") token: String,
         @Query("id") id: String?
-    ):Posts
-   @GET("data/v1/post")
-   suspend  fun getPostSingle(
+    ): Posts
+
+    @GET("data/v1/post")
+    suspend fun getPostSingle(
         @Header("app-id") token: String,
         @Query("id") id: String?
-    ):Response<Posts>
+    ): Response<Posts>
 }

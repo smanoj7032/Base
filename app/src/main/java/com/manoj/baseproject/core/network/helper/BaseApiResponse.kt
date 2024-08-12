@@ -2,7 +2,6 @@ package com.manoj.baseproject.core.network.helper
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import java.net.HttpURLConnection
 
 open class BaseApiResponse : Serializable {
     @SerializedName("code")
@@ -23,6 +22,8 @@ open class BaseApiResponse : Serializable {
                 '}'
     }
 
+    val apiStatus: ApiStatus
+        get() = getApiStatusFromCode(status)
     val isStatusOK: Boolean get() = status in 200..299
     val isStatusCreated: Boolean get() = status == 201
     val isStatusAccepted: Boolean get() = status == 202

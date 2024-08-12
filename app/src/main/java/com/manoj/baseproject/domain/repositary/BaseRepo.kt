@@ -8,6 +8,6 @@ import com.manoj.baseproject.data.bean.Posts
 import kotlinx.coroutines.flow.Flow
 
 interface BaseRepo {
-    suspend fun getPost(id:String): Flow<Result<Posts?>>
+    suspend fun getPost(id:String): Flow<Posts?>
     fun getPosts(): Flow<PagingData<Post>>
 }
