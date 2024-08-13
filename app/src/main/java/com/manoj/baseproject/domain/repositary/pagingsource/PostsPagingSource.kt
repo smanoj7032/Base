@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 
 class PostsPagingSource(
     private val remote: ApiServices,
-    private val appId: String,
     private val dispatchersProvider: DispatchersProvider
 ) : PagingSource<Int, Post>() {
 
@@ -26,7 +25,7 @@ class PostsPagingSource(
         Log.d("Page---->>", "load: $page")
 
         return try {
-            val posts = withContext(dispatchersProvider.getIO()) { remote.getPosts(appId, page) }
+            val posts = withContext(dispatchersProvider.getIO()) { remote.getPosts( page) }
             LoadResult.Page(
                 data = posts.data,
                 prevKey = if (page == 1) null else page - 1,

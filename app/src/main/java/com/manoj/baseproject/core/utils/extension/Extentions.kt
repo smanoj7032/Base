@@ -148,11 +148,6 @@ val Int.dp: Int
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-fun Any.toJson(): String {
-    val gson = Gson()
-    return gson.toJson(this)
-}
-
 fun Long.convertLongToTime(): String {
     val date = Date(this)
     val format = SimpleDateFormat("hh:mm:ss a", Locale.getDefault())

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.manoj.baseproject.BuildConfig
+import com.manoj.baseproject.core.network.helper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
 import com.manoj.baseproject.data.api.ApiServices
@@ -15,7 +16,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,10 +28,9 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesOkHttp(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor()
-        loggingInterceptor.apply { loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY }
-        return OkHttpClient.Builder().addInterceptor(loggingInterceptor)
+    fun providesOkHttp(headerInterceptor: HeaderInterceptor): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(headerInterceptor)
             .callTimeout(60, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS).build()
     }
@@ -46,7 +45,8 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesApiService(retrofit: Retrofit): ApiServices = retrofit.create(ApiServices::class.java)
+    fun providesApiService(retrofit: Retrofit): ApiServices =
+        retrofit.create(ApiServices::class.java)
 
     @Provides
     @Singleton
@@ -54,11 +54,11 @@ class ApplicationModule {
         return application.getSharedPreferences(application.packageName, MODE_PRIVATE)
     }
 
-
     @Provides
     fun provideDispatchersProvider(): DispatchersProvider {
         return DispatchersProviderImpl
     }
+
     @Singleton
     @Provides
     fun provideCoroutineScope(dispatchersProvider: DispatchersProvider): CoroutineScope {
