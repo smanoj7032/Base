@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.manoj.baseproject.BuildConfig
-import com.manoj.baseproject.core.network.helper.HeaderInterceptor
+import com.manoj.baseproject.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
 import com.manoj.baseproject.data.api.ApiServices

@@ -1,8 +1,7 @@
 package com.manoj.baseproject.presentation.fragment.postdetail
 
 import com.manoj.baseproject.core.common.base.BaseViewModel
-import com.manoj.baseproject.core.network.helper.Result
-import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
+import com.manoj.baseproject.core.network.helper.apihelper.Result
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.data.bean.Posts
 import com.manoj.baseproject.domain.usecase.GetPostUseCase

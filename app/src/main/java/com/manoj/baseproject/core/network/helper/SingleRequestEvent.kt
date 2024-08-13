@@ -1,6 +1,7 @@
 package com.manoj.baseproject.core.network.helper
 
 import androidx.lifecycle.LifecycleOwner
+import com.manoj.baseproject.core.network.helper.apihelper.Result
 
 class SingleRequestEvent<T> : SingleLiveEvent<Result<T?>>() {
 

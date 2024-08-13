@@ -1,4 +1,4 @@
-package com.manoj.baseproject.core.network.helper
+package com.manoj.baseproject.core.network.helper.apihelper
 
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable

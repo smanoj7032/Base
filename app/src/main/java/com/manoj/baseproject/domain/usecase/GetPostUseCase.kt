@@ -1,6 +1,6 @@
 package com.manoj.baseproject.domain.usecase
 
-import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.network.helper.apihelper.Result
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.extension.defaultEmitter
 import com.manoj.baseproject.data.bean.Posts

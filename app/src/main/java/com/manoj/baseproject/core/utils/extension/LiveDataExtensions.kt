@@ -3,10 +3,10 @@ package com.manoj.baseproject.core.utils.extension
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import com.manoj.baseproject.MyApplication
-import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.network.helper.apihelper.Result
 import com.manoj.baseproject.core.network.helper.SingleRequestEvent
-import com.manoj.baseproject.core.network.helper.DataResponse
-import com.manoj.baseproject.core.network.helper.BaseApiResponse
+import com.manoj.baseproject.core.network.helper.apihelper.DataResponse
+import com.manoj.baseproject.core.network.helper.apihelper.BaseApiResponse
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

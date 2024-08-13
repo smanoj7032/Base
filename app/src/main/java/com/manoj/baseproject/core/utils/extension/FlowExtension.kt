@@ -1,9 +1,9 @@
 package com.manoj.baseproject.core.utils.extension
 
-import com.manoj.baseproject.core.network.helper.ApiStatus
-import com.manoj.baseproject.core.network.helper.BaseApiResponse
-import com.manoj.baseproject.core.network.helper.DataResponse
-import com.manoj.baseproject.core.network.helper.Result
+import com.manoj.baseproject.core.network.helper.apihelper.ApiStatus
+import com.manoj.baseproject.core.network.helper.apihelper.BaseApiResponse
+import com.manoj.baseproject.core.network.helper.apihelper.DataResponse
+import com.manoj.baseproject.core.network.helper.apihelper.Result
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import kotlinx.coroutines.CoroutineScope
