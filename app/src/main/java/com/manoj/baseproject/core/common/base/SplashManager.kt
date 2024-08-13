@@ -13,11 +13,8 @@ class SplashManager(private val activity: AppCompatActivity, private val animati
     fun setupSplashScreen() {
         val splashScreen = activity.installSplashScreen()
         splashScreen.setOnExitAnimationListener { splashScreenView ->
-            val animation = CustomScreenAnimator().alphaAnimation(splashScreenView)
-
             val animatorSet = AnimatorSet().apply {
                 duration = animationDuration
-                playTogether(animation)
                 doOnEnd { splashScreenView.remove() }
             }
             animatorSet.start()
