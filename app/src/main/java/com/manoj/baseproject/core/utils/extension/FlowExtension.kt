@@ -35,28 +35,20 @@ fun <M> Flow<DataResponse<M>>.apiEmitter(
                 stateFlow.value = Result.Error(error)
             }
             .collect { response ->
-                when (response.apiStatus) {
-                    is ApiStatus.Success -> stateFlow.value = Result.Success(response.data)
-                    is ApiStatus.Created -> stateFlow.value = Result.Success(response.data)
-                    is ApiStatus.Accepted -> stateFlow.value = Result.Success(response.data)
-                    is ApiStatus.NoContent -> stateFlow.value = Result.Success(null)
-                    is ApiStatus.BadRequest -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Unauthorized -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Forbidden -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.NotFound -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.ServerError -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Unknown -> stateFlow.value = Result.Error("Unknown error occurred")
-                }
+                stateFlow.emit(
+                    when (response.apiStatus) {
+                        is ApiStatus.Success -> Result.Success(response.data)
+                        is ApiStatus.Created -> Result.Success(response.data)
+                        is ApiStatus.Accepted -> Result.Success(response.data)
+                        is ApiStatus.NoContent -> Result.Success(null)
+                        is ApiStatus.BadRequest -> Result.Error(response.message.toString())
+                        is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
+                        is ApiStatus.Forbidden -> Result.Error(response.message.toString())
+                        is ApiStatus.NotFound -> Result.Error(response.message.toString())
+                        is ApiStatus.ServerError -> Result.Error(response.message.toString())
+                        is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
+                    }
+                )
             }
     }
 }
@@ -75,28 +67,20 @@ fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
                 stateFlow.value = Result.Error(error)
             }
             .collect { response ->
-                when (response.apiStatus) {
-                    is ApiStatus.Success -> stateFlow.value = Result.Success()
-                    is ApiStatus.Created -> stateFlow.value = Result.Success()
-                    is ApiStatus.Accepted -> stateFlow.value = Result.Success()
-                    is ApiStatus.NoContent -> stateFlow.value = Result.Success()
-                    is ApiStatus.BadRequest -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Unauthorized -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Forbidden -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.NotFound -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.ServerError -> stateFlow.value =
-                        Result.Error(response.message.toString())
-
-                    is ApiStatus.Unknown -> stateFlow.value = Result.Error("Unknown error occurred")
-                }
+                stateFlow.emit(
+                    when (response.apiStatus) {
+                        is ApiStatus.Success -> Result.Success()
+                        is ApiStatus.Created -> Result.Success()
+                        is ApiStatus.Accepted -> Result.Success()
+                        is ApiStatus.NoContent -> Result.Success()
+                        is ApiStatus.BadRequest -> Result.Error(response.message.toString())
+                        is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
+                        is ApiStatus.Forbidden -> Result.Error(response.message.toString())
+                        is ApiStatus.NotFound -> Result.Error(response.message.toString())
+                        is ApiStatus.ServerError -> Result.Error(response.message.toString())
+                        is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
+                    }
+                )
             }
     }
 }
@@ -125,19 +109,19 @@ fun <B> Flow<B>.defaultEmitter(
 
 suspend fun <T> StateFlow<Result<T>>.customCollector(
     onLoading: (Boolean) -> Unit,
-    onSuccess: ((data: T?) -> Unit)?,
-    onError: ((throwable: String?, isShow: Boolean) -> Unit)?,
+    onSuccess: ((data: T?) -> Unit),
+    onError: ((throwable: String?, isShow: Boolean) -> Unit),
 ) {
     collect { state ->
         when (state) {
             is Result.Success -> {
-                onSuccess?.invoke(state.data)
+                onSuccess.invoke(state.data)
                 onLoading.invoke(false)
             }
 
             is Result.Error -> {
                 onLoading.invoke(false)
-                onError?.invoke(state.message, true)
+                onError.invoke(state.message, true)
             }
 
             is Result.Loading -> {

@@ -14,7 +14,7 @@ sealed interface ApiStatus {
 }
 
 fun getApiStatusFromCode(code: Int?) = when (code) {
-    in 200..299 -> ApiStatus.Success
+    200 -> ApiStatus.Success
     201 -> ApiStatus.Created
     202 -> ApiStatus.Accepted
     204 -> ApiStatus.NoContent
