@@ -50,7 +50,6 @@ fun <M> Flow<DataResponse<M>>.apiEmitter(
 }
 
 fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
-    data: M,
     stateFlow: MutableStateFlow<Result<M?>>,
     coroutineScope: CoroutineScope,
     dispatchersProvider: DispatchersProvider
