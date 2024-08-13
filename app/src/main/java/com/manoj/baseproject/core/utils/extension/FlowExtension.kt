@@ -26,62 +26,56 @@ fun <M> Flow<DataResponse<M>>.apiEmitter(
     dispatchersProvider: DispatchersProvider
 ) {
     coroutineScope.launch(dispatchersProvider.getIO()) {
-        this@apiEmitter
-            .onStart {
-                stateFlow.value = Result.Loading
-            }
-            .catch { throwable ->
-                val error = parseException(throwable)
-                stateFlow.value = Result.Error(error)
-            }
-            .collect { response ->
-                stateFlow.emit(
-                    when (response.apiStatus) {
-                        is ApiStatus.Success -> Result.Success(response.data)
-                        is ApiStatus.Created -> Result.Success(response.data)
-                        is ApiStatus.Accepted -> Result.Success(response.data)
-                        is ApiStatus.NoContent -> Result.Success(null)
-                        is ApiStatus.BadRequest -> Result.Error(response.message.toString())
-                        is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
-                        is ApiStatus.Forbidden -> Result.Error(response.message.toString())
-                        is ApiStatus.NotFound -> Result.Error(response.message.toString())
-                        is ApiStatus.ServerError -> Result.Error(response.message.toString())
-                        is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
-                    }
-                )
-            }
+        this@apiEmitter.onStart {
+            stateFlow.emit(Result.Loading)
+        }.catch { throwable ->
+            stateFlow.emit(Result.Error(parseException(throwable)))
+        }.collect { response ->
+            stateFlow.emit(
+                when (response.apiStatus) {
+                    is ApiStatus.Success -> Result.Success(response.data)
+                    is ApiStatus.Created -> Result.Success(response.data)
+                    is ApiStatus.Accepted -> Result.Success(response.data)
+                    is ApiStatus.NoContent -> Result.Success(null)
+                    is ApiStatus.BadRequest -> Result.Error(response.message.toString())
+                    is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
+                    is ApiStatus.Forbidden -> Result.Error(response.message.toString())
+                    is ApiStatus.NotFound -> Result.Error(response.message.toString())
+                    is ApiStatus.ServerError -> Result.Error(response.message.toString())
+                    is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
+                }
+            )
+        }
     }
 }
 
 fun <M> Flow<BaseApiResponse>.simpleApiEmitter(
-    data: M, stateFlow: MutableStateFlow<Result<M?>>, coroutineScope: CoroutineScope,
+    data: M,
+    stateFlow: MutableStateFlow<Result<M?>>,
+    coroutineScope: CoroutineScope,
     dispatchersProvider: DispatchersProvider
 ) {
     coroutineScope.launch(dispatchersProvider.getIO()) {
-        this@simpleApiEmitter
-            .onStart {
-                stateFlow.value = Result.Loading
-            }
-            .catch { throwable ->
-                val error = parseException(throwable)
-                stateFlow.value = Result.Error(error)
-            }
-            .collect { response ->
-                stateFlow.emit(
-                    when (response.apiStatus) {
-                        is ApiStatus.Success -> Result.Success()
-                        is ApiStatus.Created -> Result.Success()
-                        is ApiStatus.Accepted -> Result.Success()
-                        is ApiStatus.NoContent -> Result.Success()
-                        is ApiStatus.BadRequest -> Result.Error(response.message.toString())
-                        is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
-                        is ApiStatus.Forbidden -> Result.Error(response.message.toString())
-                        is ApiStatus.NotFound -> Result.Error(response.message.toString())
-                        is ApiStatus.ServerError -> Result.Error(response.message.toString())
-                        is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
-                    }
-                )
-            }
+        this@simpleApiEmitter.onStart {
+            stateFlow.emit(Result.Loading)
+        }.catch { throwable ->
+            stateFlow.emit(Result.Error(parseException(throwable)))
+        }.collect { response ->
+            stateFlow.emit(
+                when (response.apiStatus) {
+                    is ApiStatus.Success -> Result.Success()
+                    is ApiStatus.Created -> Result.Success()
+                    is ApiStatus.Accepted -> Result.Success()
+                    is ApiStatus.NoContent -> Result.Success()
+                    is ApiStatus.BadRequest -> Result.Error(response.message.toString())
+                    is ApiStatus.Unauthorized -> Result.Error(response.message.toString())
+                    is ApiStatus.Forbidden -> Result.Error(response.message.toString())
+                    is ApiStatus.NotFound -> Result.Error(response.message.toString())
+                    is ApiStatus.ServerError -> Result.Error(response.message.toString())
+                    is ApiStatus.Unknown -> Result.Error("Unknown error occurred")
+                }
+            )
+        }
     }
 }
 
@@ -92,16 +86,10 @@ fun <B> Flow<B>.defaultEmitter(
 ) {
     coroutineScope.launch(dispatchersProvider.getIO()) {
         if (isInternetConnected) {
-            this@defaultEmitter.onStart {
-                stateFlow.emit(Result.Loading)
-            }
-                .catch { throwable ->
-                    val error = parseException(throwable)
-                    stateFlow.emit(Result.Error(error))
-                }
-                .collect { data ->
-                    stateFlow.emit(Result.Success(data))
-                }
+            this@defaultEmitter
+                .onStart { stateFlow.emit(Result.Loading) }
+                .catch { stateFlow.emit(Result.Error(parseException(it))) }
+                .collect { stateFlow.emit(Result.Success(it)) }
         } else stateFlow.emit(Result.Error("No internet connection"))
     }
 }

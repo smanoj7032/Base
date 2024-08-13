@@ -9,7 +9,6 @@ import com.manoj.baseproject.data.local.SharedPrefManager
 import com.manoj.baseproject.domain.repositary.pagingsource.PostsPagingSource
 import com.manoj.baseproject.data.api.ApiServices
 import com.manoj.baseproject.domain.repositary.BaseRepo
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -18,7 +17,6 @@ import javax.inject.Inject
 class BaseRepoImpl @Inject constructor(
     private val apiService: ApiServices,
     private val sharedPrefManager: SharedPrefManager,
-    private val coroutineScope: CoroutineScope,
     private val dispatchersProvider: DispatchersProvider
 ) : BaseRepo {
 

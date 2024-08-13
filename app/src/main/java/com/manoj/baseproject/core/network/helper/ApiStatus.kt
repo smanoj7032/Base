@@ -1,5 +1,7 @@
 package com.manoj.baseproject.core.network.helper
 
+import java.net.HttpURLConnection.*
+
 sealed interface ApiStatus {
     data object Success : ApiStatus
     data object Created : ApiStatus
@@ -14,14 +16,14 @@ sealed interface ApiStatus {
 }
 
 fun getApiStatusFromCode(code: Int?) = when (code) {
-    200 -> ApiStatus.Success
-    201 -> ApiStatus.Created
-    202 -> ApiStatus.Accepted
-    204 -> ApiStatus.NoContent
-    400 -> ApiStatus.BadRequest
-    401 -> ApiStatus.Unauthorized
-    403 -> ApiStatus.Forbidden
-    404 -> ApiStatus.NotFound
+    HTTP_OK -> ApiStatus.Success
+    HTTP_CREATED -> ApiStatus.Created
+    HTTP_ACCEPTED -> ApiStatus.Accepted
+    HTTP_NO_CONTENT -> ApiStatus.NoContent
+    HTTP_BAD_REQUEST -> ApiStatus.BadRequest
+    HTTP_UNAUTHORIZED -> ApiStatus.Unauthorized
+    HTTP_FORBIDDEN -> ApiStatus.Forbidden
+    HTTP_NOT_FOUND -> ApiStatus.NotFound
     in 500..599 -> ApiStatus.ServerError
     else -> ApiStatus.Unknown
 }
