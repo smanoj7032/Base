@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.manoj.baseproject.BR
 import com.manoj.baseproject.core.utils.extension.Drw
 import com.manoj.baseproject.core.utils.extension.hideKeyboard
-import com.manoj.baseproject.core.utils.picker.ItemModel
+import com.manoj.baseproject.core.utils.picker.MediaModel
 import com.manoj.baseproject.core.utils.picker.MediaType
 import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.data.local.SharedPrefManager
@@ -52,11 +52,11 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         }
         picker = PickerDialogHelper(
             this, false, baseContext, items = arrayListOf(
-                ItemModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
-                ItemModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
-                ItemModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
-                ItemModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
-                ItemModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
+                MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
             )
         )
         onCreateView(view, savedInstanceState)

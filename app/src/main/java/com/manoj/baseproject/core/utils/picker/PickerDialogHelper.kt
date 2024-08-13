@@ -36,11 +36,11 @@ class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
     isMultiple: Boolean? = null,
     private var context: Context,
-    private var items: ArrayList<ItemModel>
+    private var items: ArrayList<MediaModel>
 ) {
 
     private var pickerDialog: BaseBottomSheetDialog<DialogPickerBinding>? = null
-    private var pickerAdapter: BaseAdapter<ItemPickerGridBinding, ItemModel>? = null
+    private var pickerAdapter: BaseAdapter<ItemPickerGridBinding, MediaModel>? = null
 
     private val REQUEST_PICK_PHOTO = 1102
     private val REQUEST_VIDEO = 1103
@@ -65,7 +65,7 @@ class PickerDialogHelper(
     }
 
     private fun setupPickerDialog() {
-        val clickListener = Callbacks<ItemPickerGridBinding, ItemModel>()
+        val clickListener = Callbacks<ItemPickerGridBinding, MediaModel>()
         clickListener.add(CallBackModel(Ids.cvItem) { model, position, binding ->
             when (model.type) {
                 MediaType.TAKE_PICTURE -> openCamera()
@@ -101,7 +101,7 @@ class PickerDialogHelper(
     }
 
 
-    private fun initIcon(item: ItemModel, icon: ItemPickerGridBinding) {
+    private fun initIcon(item: MediaModel, icon: ItemPickerGridBinding) {
         if (item.itemIcon == 0) {
             icon.icon set when (item.type) {
                 MediaType.CHOOSE_IMAGE -> Drw.ic_image
@@ -115,7 +115,7 @@ class PickerDialogHelper(
         }
     }
 
-    private fun initLabel(item: ItemModel, label: ItemPickerGridBinding) {
+    private fun initLabel(item: MediaModel, label: ItemPickerGridBinding) {
         if (item.itemLabel == "") {
             label.label set when (item.type) {
                 MediaType.CHOOSE_IMAGE -> Str.gallery

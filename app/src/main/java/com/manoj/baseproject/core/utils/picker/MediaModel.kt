@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ItemModel(
+data class MediaModel(
     val type: MediaType,
     val itemLabel: String = "",
     val itemIcon: Int = 0,

@@ -6,14 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
-import com.manoj.baseproject.core.network.helper.Constants.ALREADY_HAVE_ACCOUNT
-import com.manoj.baseproject.core.network.helper.Constants.REGISTER_HERE
-import com.manoj.baseproject.core.utils.extension.Clr
 import com.manoj.baseproject.core.utils.extension.Lyt
-import com.manoj.baseproject.core.utils.extension.Str
-import com.manoj.baseproject.core.utils.extension.setClickableText
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
-import com.manoj.baseproject.core.utils.extension.showToast
 import com.manoj.baseproject.core.utils.validator.isValidEmail
 import com.manoj.baseproject.core.utils.validator.isValidPassword
 import com.manoj.baseproject.core.utils.validator.setupFieldValidations

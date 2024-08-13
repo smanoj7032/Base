@@ -4,8 +4,6 @@ import com.manoj.baseproject.core.network.helper.NetworkMonitor
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.network.helper.SystemVariables.onNetworkChange
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton

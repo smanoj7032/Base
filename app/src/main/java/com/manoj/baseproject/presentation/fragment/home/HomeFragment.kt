@@ -4,14 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.R
-import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
-import com.manoj.baseproject.data.bean.Post
-import com.manoj.baseproject.databinding.FragmentHomeBinding
-import com.manoj.baseproject.databinding.ItemPostBinding
 import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.LoadMoreAdapter
 import com.manoj.baseproject.core.common.adapter.RVAdapterWithPaging
@@ -21,6 +15,10 @@ import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
+import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
+import com.manoj.baseproject.data.bean.Post
+import com.manoj.baseproject.databinding.FragmentHomeBinding
+import com.manoj.baseproject.databinding.ItemPostBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

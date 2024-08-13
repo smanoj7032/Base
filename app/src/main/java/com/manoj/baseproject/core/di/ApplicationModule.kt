@@ -55,8 +55,9 @@ class ApplicationModule {
     }
 
     @Provides
+    @Singleton
     fun provideDispatchersProvider(): DispatchersProvider {
-        return DispatchersProviderImpl
+        return DispatchersProviderImpl()
     }
 
     @Singleton

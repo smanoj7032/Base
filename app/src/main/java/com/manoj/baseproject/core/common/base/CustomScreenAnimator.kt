@@ -1,7 +1,6 @@
 package com.manoj.baseproject.core.common.base
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.graphics.Path
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator

@@ -2,14 +2,11 @@ package com.manoj.baseproject.presentation.fragment.postdetail
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.baseproject.BR
-import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.adapter.BaseAdapter
 import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.Callbacks
@@ -20,9 +17,7 @@ import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
-import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.customCollector
-import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentPostDetailBinding
 import com.manoj.baseproject.databinding.ItemPostBinding

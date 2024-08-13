@@ -5,7 +5,6 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
