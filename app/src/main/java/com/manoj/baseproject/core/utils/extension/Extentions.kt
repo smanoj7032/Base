@@ -26,6 +26,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.data.bean.PlaceDetails
@@ -254,4 +255,9 @@ fun FragmentActivity?.replaceFragment(
 inline fun <T> T?.checkNull(actionIfNull: () -> Unit, actionIfNotNull: (T) -> Unit) {
     if (this != null) actionIfNotNull(this)
     else actionIfNull()
+}
+
+fun <Data> Data.toJson(): String {
+    val gson: Gson = GsonBuilder().setPrettyPrinting().create()
+    return gson.toJson(this)
 }
