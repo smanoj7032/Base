@@ -13,7 +13,9 @@ import com.manoj.baseproject.core.utils.extension.Drw
 import kotlin.math.abs
 
 class RecyclerItemTouchHelper(
-    private val adapter: BaseAdapter<*, *>?
+    private val adapter: BaseAdapter<*, *>?,
+    private val dragAndDrop: Boolean = true,
+    private val swipeToDelete: Boolean = false
 ) : ItemTouchHelper.Callback() {
     private val paint = Paint()
     private val swipeThreshold = 0.9f
@@ -22,7 +24,8 @@ class RecyclerItemTouchHelper(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
     ): Int {
-        val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        val dragFlags =
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         val swipeFlags = ItemTouchHelper.LEFT
         return makeMovementFlags(dragFlags, swipeFlags)
     }
@@ -100,4 +103,7 @@ class RecyclerItemTouchHelper(
             }
         }
     }
+
+    override fun isItemViewSwipeEnabled(): Boolean = swipeToDelete
+    override fun isLongPressDragEnabled(): Boolean = dragAndDrop
 }

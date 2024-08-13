@@ -83,4 +83,9 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         parentActivity?.onError(msg, showErrorView)
         Log.e("Error-->>", msg)
     }
+
+    override fun onDestroy() {
+        onLoading(false)
+        super.onDestroy()
+    }
 }

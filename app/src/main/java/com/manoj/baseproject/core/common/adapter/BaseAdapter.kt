@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Collections
 
 class BaseAdapter<Binding : ViewDataBinding, Model>(
     private val layoutId: Int,
@@ -94,15 +95,7 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                dataList.add(i + 1, dataList.removeAt(i))
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                dataList.add(i - 1, dataList.removeAt(i))
-            }
-        }
+        Collections.swap(dataList,fromPosition,toPosition)
         notifyItemMoved(fromPosition, toPosition)
     }
 
