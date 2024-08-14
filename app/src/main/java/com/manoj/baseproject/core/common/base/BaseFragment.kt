@@ -68,15 +68,13 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     protected abstract fun setObserver()
     protected abstract suspend fun apiCall()
-
+    protected open fun getLoaderView(): ViewDataBinding? = binding
     override fun onPause() {
         super.onPause()
         activity?.hideKeyboard()
     }
 
-    fun onLoading(show: Boolean) {
-        parentActivity?.onLoading(show)
-    }
+    fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
 
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
         parentActivity?.onError(msg, showErrorView)

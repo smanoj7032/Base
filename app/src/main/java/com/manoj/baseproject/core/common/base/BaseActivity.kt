@@ -40,7 +40,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         if (isMain()) splashManager.setupSplashScreen()
         binding = DataBindingUtil.setContentView(this, getLayoutResource())
         binding.setVariable(BR.vm, getViewModel())
-        binding.lifecycleOwner = this
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")

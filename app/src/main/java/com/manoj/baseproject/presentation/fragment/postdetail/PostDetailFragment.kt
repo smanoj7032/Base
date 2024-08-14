@@ -100,8 +100,4 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
         Logger.d("ID--->>>", "$id")
         viewModel.getPost(id ?: "60d21b6767d0d8992e610ce8")
     }
-    override fun onDestroyView() {
-        onLoading(false)
-        super.onDestroyView()
-    }
 }

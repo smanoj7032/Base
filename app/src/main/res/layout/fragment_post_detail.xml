@@ -4,6 +4,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="show"
+            type="boolean" />
+
         <variable
             name="vm"
             type="com.manoj.baseproject.presentation.fragment.postdetail.PostDetailVM" />
@@ -12,13 +18,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_data_found"
-            android:gravity="center"
             android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:text="@string/no_data_found"
             android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -28,5 +35,14 @@
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{show?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
