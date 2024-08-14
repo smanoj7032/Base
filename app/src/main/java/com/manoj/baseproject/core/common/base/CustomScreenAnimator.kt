@@ -6,7 +6,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.splashscreen.SplashScreenViewProvider
 
-class CustomScreenAnimator {
+object CustomScreenAnimator {
 
      fun slideUpAnimation(splashScreenView: SplashScreenViewProvider): ObjectAnimator {
         return ObjectAnimator.ofFloat(
