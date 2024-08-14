@@ -27,7 +27,6 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     lateinit var binding: Binding
     private var isApiCallMade = true
     lateinit var picker: PickerDialogHelper
-
     val parentActivity: BaseActivity<*>?
         get() = activity as? BaseActivity<*>
 
@@ -82,10 +81,5 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
         parentActivity?.onError(msg, showErrorView)
         Log.e("Error-->>", msg)
-    }
-
-    override fun onDestroy() {
-        onLoading(false)
-        super.onDestroy()
     }
 }
