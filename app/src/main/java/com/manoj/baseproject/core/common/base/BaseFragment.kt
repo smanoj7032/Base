@@ -74,7 +74,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
         activity?.hideKeyboard()
     }
 
-    fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
+    protected fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
 
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
         parentActivity?.onError(msg, showErrorView)
