@@ -24,20 +24,12 @@ import kotlinx.coroutines.withContext
 open class BaseViewModel(dispatchers: DispatchersProvider) : ViewModel() {
     val TAG: String = this.javaClass.simpleName
     private var compositeDisposable = CompositeDisposable()
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
 
     val onClick: SingleActionEvent<View> = SingleActionEvent()
 
     override fun onCleared() {
         super.onCleared()
-        Logger.e("ViewModel: onCleared called", TAG)
-        onLoading(false)
         compositeDisposable.clear()
-    }
-
-    fun onLoading(isLoading: Boolean) {
-        _isLoading.value = isLoading
     }
 
     fun Disposable.addToCompositeDisposable() {

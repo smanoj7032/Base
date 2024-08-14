@@ -63,14 +63,12 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     protected abstract fun getViewModel(): BaseViewModel
     protected abstract fun onCreateView()
     protected abstract fun setObserver()
-    protected open fun getLoaderView(): ViewDataBinding? = null
+    protected open fun getLoaderView(): ViewDataBinding? = binding
     fun onError(errorMessage: String?, showErrorView: Boolean) {
         if (showErrorView) showErrorToast(errorMessage)
     }
 
-    fun onLoading(show: Boolean) {
-        getViewModel().onLoading(show)
-    }
+    fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
 
     private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"
 
