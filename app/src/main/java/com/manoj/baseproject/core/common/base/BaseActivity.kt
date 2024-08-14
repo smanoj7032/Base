@@ -15,8 +15,6 @@ import com.manoj.baseproject.core.network.helper.NetworkMonitor
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
-import com.manoj.baseproject.core.utils.extension.hide
-import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showErrorToast
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
@@ -28,6 +26,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     val container: FragmentContainerView by lazy { findViewById(Ids.container) }
     val btnRetry: Button by lazy { findViewById(Ids.btnRetry) }
     val tvErrorText: TextView by lazy { findViewById(Ids.tvErrorText) }
+    private val progressBar: View by lazy { findViewById(Ids.progress_bar) }
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
     lateinit var binding: Binding
     private val TIMER_ANIMATION: Long = 400
@@ -41,6 +40,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         if (isMain()) splashManager.setupSplashScreen()
         binding = DataBindingUtil.setContentView(this, getLayoutResource())
         binding.setVariable(BR.vm, getViewModel())
+        binding.lifecycleOwner = this
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")
@@ -53,7 +53,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
                     onLoading(false)
                 }
             }
-
         }
         onCreateView()
         setObserver()
@@ -64,23 +63,13 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     protected abstract fun getViewModel(): BaseViewModel
     protected abstract fun onCreateView()
     protected abstract fun setObserver()
-
-
-    protected open fun getLoaderView(): ViewDataBinding? {
-        return null
-    }
-
+    protected open fun getLoaderView(): ViewDataBinding? = null
     fun onError(errorMessage: String?, showErrorView: Boolean) {
         if (showErrorView) showErrorToast(errorMessage)
     }
 
     fun onLoading(show: Boolean) {
-        val progressBar: View = findViewById(Ids.progress_bar)
-        if (show) {
-            progressBar.show()
-        } else {
-            progressBar.hide()
-        }
+        getViewModel().onLoading(show)
     }
 
     private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"

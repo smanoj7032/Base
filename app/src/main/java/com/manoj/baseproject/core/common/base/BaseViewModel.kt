@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.network.helper.SingleActionEvent
+import com.manoj.baseproject.core.utils.Logger
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,18 +16,28 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainCoroutineDispatcher
 import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.android.HandlerDispatcher
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-open class BaseViewModel ( dispatchers: DispatchersProvider): ViewModel() {
+open class BaseViewModel(dispatchers: DispatchersProvider) : ViewModel() {
     val TAG: String = this.javaClass.simpleName
     private var compositeDisposable = CompositeDisposable()
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     val onClick: SingleActionEvent<View> = SingleActionEvent()
 
     override fun onCleared() {
         super.onCleared()
+        Logger.e("ViewModel: onCleared called", TAG)
+        onLoading(false)
         compositeDisposable.clear()
+    }
+
+    fun onLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading
     }
 
     fun Disposable.addToCompositeDisposable() {

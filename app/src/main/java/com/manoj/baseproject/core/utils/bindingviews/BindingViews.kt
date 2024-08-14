@@ -1,4 +1,4 @@
-package com.manoj.baseproject.core.network.glide
+package com.manoj.baseproject.core.utils.bindingviews
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
