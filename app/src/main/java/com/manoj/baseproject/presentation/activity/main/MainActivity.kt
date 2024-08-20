@@ -70,7 +70,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getLayoutResource() = Lyt.activity_main
 
 
-    override fun getViewModel() = viewModel
+    override fun getViewModel(): BaseViewModel = viewModel
 
 
     override fun onCreateView() {

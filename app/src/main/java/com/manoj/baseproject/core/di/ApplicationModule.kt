@@ -69,7 +69,6 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideLoadingStateManager(): LoadingStateManager {
-        return LoadingStateManager()
-    }
+    fun provideLoadingStateManager() = LoadingStateManager()
+
 }
