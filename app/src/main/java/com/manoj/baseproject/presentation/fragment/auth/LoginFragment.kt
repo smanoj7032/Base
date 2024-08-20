@@ -3,6 +3,7 @@ package com.manoj.baseproject.presentation.fragment.auth
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.manoj.baseproject.core.common.base.BaseFragment
 import com.manoj.baseproject.core.common.base.BaseViewModel
@@ -14,6 +15,7 @@ import com.manoj.baseproject.core.utils.validator.setupFieldValidations
 import com.manoj.baseproject.core.utils.validator.validateFields
 import com.manoj.baseproject.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>() {
@@ -48,6 +50,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun navigateToHome() {
         findNavController().navigate(LoginFragmentDirections.toHomeFragment())
-        sharedPrefManager.saveAccessToken("manoj")
+       lifecycleScope.launch {  dataStoreManager.saveAccessToken("manoj") }
     }
 }

@@ -1,14 +1,14 @@
 package com.manoj.baseproject.core.network.helper.apihelper
 
 import com.manoj.baseproject.BuildConfig
-import com.manoj.baseproject.data.local.SharedPrefManager
+import com.manoj.baseproject.data.local.DataStoreManager
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HeaderInterceptor @Inject constructor(private val sharedPrefManager: SharedPrefManager) :
+class HeaderInterceptor @Inject constructor(private val dataStoreManager: DataStoreManager) :
     Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()

@@ -15,4 +15,5 @@ object Constants {
     const val PASSWORD_LENGTH = "Password must contain at least 8 characters"
     const val ALREADY_HAVE_ACCOUNT = "Already have an account?"
     const val REGISTER_HERE = "Register here"
+    const val PREFERENCE_FILE_NAME = "com.manoj.baseproject.android.USER_PREFS"
 }

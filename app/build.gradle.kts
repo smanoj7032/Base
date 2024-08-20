@@ -212,7 +212,11 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
-
+    /**
+     * For Local Storage
+     */
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences.core)
     /**
      * Testing Libraries
      * - junit: Provides JUnit testing framework.

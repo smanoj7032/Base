@@ -3,6 +3,7 @@ package com.manoj.baseproject.presentation.activity.main
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.core.common.base.BaseActivity
@@ -14,6 +15,7 @@ import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.hide
+import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import com.manoj.baseproject.core.utils.extension.setupNavGraph
 import com.manoj.baseproject.core.utils.extension.show
@@ -22,6 +24,7 @@ import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.databinding.AlertSheetBinding
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -83,10 +86,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(Ids.container) as NavHostFragment
         navController = navHostFragment.navController
-        val startDestinationId = if (sharedPrefManager.getAccessToken()
-                .isNullOrEmpty()
-        ) Ids.loginFragment else Ids.homeFragment
-        navController.setupNavGraph(startDestinationId)
+
+        launchAndRepeatWithViewLifecycle {
+            viewModel.startDestination.collect { startDestinationId ->
+                navController.setupNavGraph(startDestinationId)
+            }
+        }
     }
 
     private fun setUpLogoutSheet() {
@@ -164,7 +169,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun navigateToLogin() {
         navController.navigate(HomeFragmentDirections.toLoginFragment())
-        sharedPrefManager.clearUser()
+        lifecycleScope.launch { dataStoreManager.clearUser() }
     }
 
     private fun isHome() = navController.currentDestination?.id == Ids.homeFragment
