@@ -98,10 +98,6 @@ dependencies {
      * AndroidX Core libraries
      * - core-ktx: Provides Kotlin extensions for Android core APIs.
      *   Why: Simplifies the use of core Android APIs with Kotlin.
-     */
-    implementation(libs.androidx.core.ktx)
-
-    /**
      * AndroidX UI libraries
      * - appcompat: Provides backward-compatible versions of Android UI components.
      *   Why: Ensures compatibility with older Android versions.
@@ -115,18 +111,14 @@ dependencies {
      *   Why: Adds a customizable splash screen for a better user experience.
      * - fragment-ktx: Provides Kotlin extensions for Android fragments.
      *   Why: Simplifies fragment operations with Kotlin.
+     */
+    implementation(libs.bundles.androidx.main)
+
+    /**
      * - navigation: Libraries for implementing navigation in Android apps.
      *   Why: Simplifies navigation and passing data between destinations.
-     */
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-
+     *   */
+    implementation(libs.bundles.navigation)
     /**
      * AndroidX Lifecycle libraries
      * - lifecycle-runtime-ktx: Kotlin extensions for Android lifecycle components.
@@ -138,10 +130,7 @@ dependencies {
      * - activity-ktx: Provides Kotlin extensions for Activity.
      *   Why: Enhances Activity API usage with Kotlin.
      */
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.activity.ktx)
+    implementation(libs.bundles.lifecycle.main)
 
     /**
      * Size Libraries
@@ -150,8 +139,7 @@ dependencies {
      * - ssp-android: A library for flexible sizes based on screen size.
      *   Why: Provides scalable size values for different screen sizes.
      */
-    implementation(libs.sdp.android)
-    implementation(libs.ssp.android)
+    implementation(libs.bundles.dimens)
 
     /**
      * Hilt for Dependency Injection
@@ -177,8 +165,7 @@ dependencies {
      * - paging-runtime-ktx: Kotlin extensions for runtime paging components.
      *   Why: Facilitates implementing paging in app's data layer.
      */
-    implementation(libs.androidx.paging.common.ktx)
-    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.bundles.paging)
 
     /**
      * Image Loading Library
@@ -196,9 +183,7 @@ dependencies {
      * - adapter-rxjava2: Retrofit adapter for RxJava2.
      *   Why: Integrates Retrofit with RxJava for network requests.
      */
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.adapter.rxjava2)
+    implementation(libs.bundles.rxjava)
 
     /**
      * Networking Libraries
@@ -209,14 +194,12 @@ dependencies {
      * - logging-interceptor: An OkHttp interceptor for logging HTTP requests and responses.
      *   Why: Logs network requests and responses for debugging purposes.
      */
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.bundles.square.retrofit2)
     implementation(libs.logging.interceptor)
     /**
      * For Local Storage
      */
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.bundles.datastore)
     /**
      * Testing Libraries
      * - junit: Provides JUnit testing framework.
@@ -227,6 +210,5 @@ dependencies {
      *   Why: Enables writing UI tests for Android.
      */
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.bundles.android.test)
 }
