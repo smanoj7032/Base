@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.core.common.base.BaseActivity
 import com.manoj.baseproject.core.common.base.BaseViewModel
+import com.manoj.baseproject.core.common.singletonholder.SingletonHolderNoArg
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
@@ -25,6 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
+    companion object : SingletonHolderNoArg<MainActivity>(::MainActivity)
+
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var logoutSheet: BaseBottomSheetDialog<AlertSheetBinding>
     private lateinit var navController: NavController
     private val listener =
@@ -56,20 +60,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             doubleBackToExitPressedOnce = System.currentTimeMillis()
         }
     }
-    private val viewModel: MainViewModel by viewModels()
+
 
     override suspend fun apiCall() {
         Logger.d("Api Call--->>", "Activity Called()")
     }
 
 
-    override fun getLayoutResource(): Int {
-        return Lyt.activity_main
-    }
+    override fun getLayoutResource() = Lyt.activity_main
 
-    override fun getViewModel(): BaseViewModel {
-        return viewModel
-    }
+
+    override fun getViewModel() = viewModel
+
 
     override fun onCreateView() {
         setupNavController()
@@ -165,5 +167,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         sharedPrefManager.clearUser()
     }
 
-    private fun isHome(): Boolean = navController.currentDestination?.id == Ids.homeFragment
+    private fun isHome() = navController.currentDestination?.id == Ids.homeFragment
 }

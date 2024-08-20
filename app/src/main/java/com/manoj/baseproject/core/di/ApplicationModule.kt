@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.manoj.baseproject.BuildConfig
+import com.manoj.baseproject.core.common.base.LoadingStateManager
 import com.manoj.baseproject.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
@@ -64,5 +65,11 @@ class ApplicationModule {
     @Provides
     fun provideCoroutineScope(dispatchersProvider: DispatchersProvider): CoroutineScope {
         return CoroutineScope(dispatchersProvider.getIO() + SupervisorJob())
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoadingStateManager(): LoadingStateManager {
+        return LoadingStateManager()
     }
 }
