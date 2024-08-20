@@ -1,7 +1,11 @@
 package com.manoj.baseproject.presentation.fragment.postdetail
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,6 +22,8 @@ import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.customCollector
+import com.manoj.baseproject.core.utils.extension.showToast
+import com.manoj.baseproject.core.utils.picker.performCrop
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentPostDetailBinding
 import com.manoj.baseproject.databinding.ItemPostBinding
@@ -30,19 +36,30 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     private lateinit var postAdapter: BaseAdapter<ItemPostBinding, Post>
     private var updatePos: Int? = null
     private lateinit var item: Post
+    private lateinit var cropImageLauncher: ActivityResultLauncher<Intent>
+
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
+        cropImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val croppedImageUri = result.data?.data
+                    updatePos?.let {
+                        postAdapter.updateItem(
+                            item.copy(owner = item.owner.copy(picture = croppedImageUri.toString())),
+                            it
+                        )
+                    }
+                } else {
+                    showToast("Error")
+                }
+            }
         setAdapter()
         setPickerListener()
     }
 
     private fun setPickerListener() {
         SystemVariables.onPickerClosed = { itemType, uri, uris ->
-            updatePos?.let {
-                postAdapter.updateItem(
-                    item.copy(owner = item.owner.copy(picture = uri.toString())),
-                    it
-                )
-            }
+            requireActivity().performCrop(uri, cropImageLauncher)
             Logger.e("onPickerClosed", "$itemType")
         }
     }

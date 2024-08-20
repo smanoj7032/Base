@@ -1,5 +1,6 @@
 package com.manoj.baseproject.core.utils.picker
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -12,9 +13,12 @@ import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.LayoutRes
 import androidx.core.content.FileProvider
+import androidx.fragment.app.FragmentActivity
 import com.manoj.baseproject.R
+import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Str
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -194,4 +198,54 @@ fun Uri.getFilePathFromUri(context: Context): String? {
         }
     }
 }
+/**
+ * Crops an image using the Google Photos app and returns the URI of the cropped image.
+ *
+ * This function helps in cropping an image selected by the user. It utilizes the
+ * Google Photos app to perform the cropping. The cropped image is saved to a file,
+ * and the URI of the cropped image file is returned.
+ *
+ * @param srcImageUri The URI of the source image to be cropped.
+ * @param cropImageLauncher The ActivityResultLauncher to launch the crop intent.
+ * @return The URI of the cropped image, or null if the cropping fails.
+ *
+ * @throws ActivityNotFoundException if the Google Photos app is not found on the device.
+ *
+ * Usage:
+ * 1. Ensure you have an ActivityResultLauncher<Intent> initialized in your fragment or activity.
+ * 2. Call this function, passing the URI of the image you want to crop and the ActivityResultLauncher.
+ * 3. Handle the result in the ActivityResultCallback provided to the launcher.
+ *
+ * Example:
+ * ```
+ * private val cropImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+ *     if (result.resultCode == Activity.RESULT_OK) {
+ *         val croppedImageUri = result.data?.data
+ *         // Handle the cropped image URI here
+ *     }
+ * }
+ *
+ * val srcImageUri = ... // Get the source image URI
+ * val croppedImageUri = performCrop(srcImageUri, cropImageLauncher)
+ * ```
+ */
+fun FragmentActivity.performCrop(
+    srcImageUri: Uri?,
+    cropImageLauncher: ActivityResultLauncher<Intent>
+): Uri? {
+    var croppedImageUri: Uri? = null
+    try {
+        val cropIntent = Intent("com.android.camera.action.CROP")
+        cropIntent.setDataAndType(srcImageUri, "image/*")
+        cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        cropIntent.setPackage("com.google.android.apps.photos")
 
+        val croppedImageFile = getMakeFile(this, ".png")
+        croppedImageUri = Uri.fromFile(croppedImageFile)
+        cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, croppedImageUri)
+        cropImageLauncher.launch(cropIntent)
+    } catch (e: ActivityNotFoundException) {
+        Logger.e("TAG", "performCrop error $e")
+    }
+    return croppedImageUri
+}
