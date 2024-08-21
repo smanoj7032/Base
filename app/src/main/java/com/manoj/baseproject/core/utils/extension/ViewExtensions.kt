@@ -26,11 +26,11 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.util.Patterns
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -48,6 +48,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -62,8 +63,9 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.manoj.baseproject.R
-import com.manoj.baseproject.core.common.toast.CustomToastStyle
 import com.manoj.baseproject.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.baseproject.core.utils.SingleClickListener
 import com.manoj.baseproject.data.bean.PlaceDetails
@@ -483,7 +485,7 @@ fun View.setSingleClickListener(listener: (v: View) -> Unit) {
             if (isInternetConnected) {
                 listener(v)
             } else {
-                v.context.showErrorToast(context.getString(Str.slow_or_no_internet_access))
+                v.context.showToast(context.getString(Str.slow_or_no_internet_access))
             }
         }
     })
@@ -514,49 +516,6 @@ fun Context.displayDialog(
     val alert = dialogBuilder.create()
     alert.show()
 
-}
-
-fun Context.showToast(style: CustomToastStyle, message: String) {
-    val inflater = LayoutInflater.from(this)
-    val layout = inflater.inflate(Lyt.custom_toast, null)
-
-    val imageView: ImageView = layout.findViewById(Ids.custom_toast_image)
-    val messageTextView: TextView = layout.findViewById(Ids.custom_toast_text)
-    val descriptionTextView: TextView = layout.findViewById(Ids.custom_toast_description)
-    val relativeLayout: View = layout.findViewById(Ids.motion_toast_view)
-
-    descriptionTextView.text = message
-
-    when (style) {
-        CustomToastStyle.SUCCESS -> {
-            imageView.setImageResource(Drw.ic_check_green)
-            messageTextView.text = getString(Str.text_success)
-            relativeLayout.backgroundTintList = getColorStateList(Clr.success_color)
-        }
-
-        CustomToastStyle.ERROR -> {
-            imageView.setImageResource(Drw.ic_error_)
-            messageTextView.text = getString(Str.text_error)
-            relativeLayout.backgroundTintList = getColorStateList(Clr.error_color)
-        }
-
-        CustomToastStyle.INFO -> {
-            messageTextView.text = getString(Str.text_info)
-            imageView.setImageResource(Drw.ic_info_yellow)
-            relativeLayout.backgroundTintList = getColorStateList(Clr.custom_warning_color)
-        }
-
-        CustomToastStyle.DELETE -> {
-            imageView.setImageResource(Drw.ic_info_blue)
-            messageTextView.text = getString(Str.text_warning)
-            relativeLayout.backgroundTintList = getColorStateList(Clr.info_color)
-        }
-    }
-
-    val toast = Toast(this)
-    toast.duration = Toast.LENGTH_SHORT
-    toast.view = layout
-    toast.show()
 }
 
 fun NavController.setupNavGraph(startDestinationId: Int) {
@@ -645,4 +604,52 @@ fun EditText.queryListener(onQueryChanged: (String) -> Unit) {
         }
 
     })
+}
+
+fun Activity.hideKeyboard() {
+    val manager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    manager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+}
+
+fun Context.showToast(message: String?) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+fun View.showSnackBar(message: String) {
+    Snackbar.make(this, message, Snackbar.LENGTH_LONG).also {
+        it.view.setBackgroundColor(ContextCompat.getColor(this.context, Clr.black))
+        it.show()
+    }
+}
+
+fun RecyclerView.setLinearLayoutManger() {
+    this.layoutManager = LinearLayoutManager(this.context)
+}
+
+fun Fragment.showSheet(sheet: BottomSheetDialogFragment) {
+    sheet.show(this.childFragmentManager, sheet.tag)
+}
+
+fun FragmentActivity.showSheet(sheet: BottomSheetDialogFragment) {
+    sheet.show(this.supportFragmentManager, sheet.tag)
+}
+fun <T> Activity.getNewIntent(s: Class<T>): Intent {
+    val intent = Intent(this, s)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    return intent
+}
+
+fun <T> Activity.startNewActivity(s: Class<T>, killCurrent: Boolean = false) {
+    val intent = Intent(this, s)
+    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    startActivity(intent)
+    if (killCurrent) finish()
+}
+
+fun Activity.showSuccessToast(message: String) {
+    showToast(message)
+}
+
+fun Context.showErrorToast(errorMessage: String?) = errorMessage?.let {
+    showToast(errorMessage)
 }

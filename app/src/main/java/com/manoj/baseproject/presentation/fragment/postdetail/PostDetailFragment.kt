@@ -50,7 +50,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
                         )
                     }
                 } else {
-                    showToast("Error")
+                    baseContext.showToast("Error")
                 }
             }
         setAdapter()
