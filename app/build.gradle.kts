@@ -96,7 +96,6 @@ android {
 dependencies {
     implementation(libs.bundles.androidx.main)
     implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.bundles.lifecycle.main)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.places)

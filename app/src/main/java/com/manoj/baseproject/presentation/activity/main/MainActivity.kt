@@ -144,8 +144,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
 
             ivLogout.setSingleClickListener {
-                if (isHome()) logoutSheet.show()
-                else logoutSheet.dismiss()
+                navigateToLogin()
+             /*   if (isHome()) logoutSheet.show()
+                else logoutSheet.dismiss()*/
             }
         }
 

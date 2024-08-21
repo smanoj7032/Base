@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.manoj.baseproject.BuildConfig
-import com.manoj.baseproject.core.common.base.LoadingStateManager
 import com.manoj.baseproject.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
@@ -30,12 +29,10 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun providesOkHttp(headerInterceptor: HeaderInterceptor): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(headerInterceptor)
-            .callTimeout(60, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(60, TimeUnit.SECONDS).build()
-    }
+    fun providesOkHttp(headerInterceptor: HeaderInterceptor): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(headerInterceptor)
+        .callTimeout(60, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(60, TimeUnit.SECONDS).build()
 
     @Provides
     @Singleton
@@ -52,24 +49,17 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun provideSharedPref(application: Application): SharedPreferences {
-        return application.getSharedPreferences(application.packageName, MODE_PRIVATE)
-    }
+    fun provideSharedPref(application: Application): SharedPreferences =
+        application.getSharedPreferences(application.packageName, MODE_PRIVATE)
 
     @Provides
     @Singleton
     fun provideDispatchersProvider(): DispatchersProvider = DispatchersProviderImpl()
 
-
     @Singleton
     @Provides
     fun provideCoroutineScope(dispatchersProvider: DispatchersProvider): CoroutineScope =
         CoroutineScope(dispatchersProvider.getIO() + SupervisorJob())
-
-
-    @Provides
-    @Singleton
-    fun provideLoadingStateManager(): LoadingStateManager = LoadingStateManager()
 
     @Provides
     @Singleton
