@@ -1,23 +1,18 @@
 package com.manoj.baseproject.core.di
 
 import android.app.Application
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.google.gson.Gson
 import com.manoj.baseproject.BuildConfig
 import com.manoj.baseproject.core.common.base.LoadingStateManager
 import com.manoj.baseproject.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
-import com.manoj.baseproject.core.utils.extension.dataStore
 import com.manoj.baseproject.data.api.ApiServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
@@ -75,12 +70,6 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideLoadingStateManager(): LoadingStateManager = LoadingStateManager()
-
-    @Provides
-    @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return context.dataStore
-    }
 
     @Provides
     @Singleton

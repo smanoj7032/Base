@@ -15,9 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,8 +45,6 @@ typealias Dmn = R.dimen
 typealias Lyt = R.layout
 typealias Drw = R.drawable
 typealias Anm = R.anim
-
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.PREFERENCE_FILE_NAME)
 
 fun SharedPreferences.saveValue(key: String, value: Any?) {
     when (value) {

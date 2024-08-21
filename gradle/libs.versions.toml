@@ -15,25 +15,14 @@ kotlin = "1.9.23"
 #=================================
 #===== Android dependencies ======
 #=================================
-coreKtx = "1.13.1"
-appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.1"
-constraintlayout = "2.1.4"
-activityKtx = "1.9.1"
-pagingCommonKtx = "3.3.2"
 pagingRuntimeKtx = "3.3.2"
 coreSplashscreen = "1.0.1"
-fragmentKtx = "1.8.2"
 navigationFragmentKtx = "2.7.7"
-navigationUiKtx = "2.7.7"
-datastorePreferences = "1.1.1"
-datastorePreferencesCore = "1.1.1"
 
 #=============================
 #===== Android Lifecycle =====
 #=============================
-lifecycleRuntimeKtx = "2.8.4"
 lifecycleLivedataKtx = "2.8.4"
 lifecycleViewmodelKtx = "2.8.4"
 
@@ -65,24 +54,13 @@ espressoCore = "3.6.1"
 #===== Android dependencies ======
 #=================================
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
-androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
-androidx-paging-common-ktx = { group = "androidx.paging", name = "paging-common-ktx", version.ref = "pagingCommonKtx" }
-androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
-androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
-androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
-androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastorePreferencesCore" }
+androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 
 #=============================
 #===== Android Lifecycle =====
 #=============================
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
@@ -109,37 +87,12 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
-
 [bundles]
-androidx-main = ["material",
-    "androidx-core-ktx",
-    "androidx-appcompat",
-    "androidx-constraintlayout",
-    "androidx-activity",
-    "androidx-activity-ktx",
-    "androidx-core-splashscreen",
-    "androidx-fragment-ktx",
-]
-navigation = [
-    "androidx-navigation-ui-ktx",
-    "androidx-navigation-fragment-ktx"
-]
-
-lifecycle-main = [
-    "androidx-lifecycle-runtime-ktx",
-    "androidx-lifecycle-livedata-ktx",
-    "androidx-lifecycle-viewmodel-ktx",
-]
+androidx-main = ["material", "androidx-core-splashscreen", ]
+lifecycle-main = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-viewmodel-ktx", ]
 dimens = ["ssp-android", "sdp-android"]
-
-datastore = ["androidx-datastore-preferences", "androidx-datastore-preferences-core"]
-
 rxjava = ["rxjava", "rxandroid", ]
-
 square-retrofit2 = ["retrofit", "converter-gson", "adapter-rxjava2"]
-
-paging = ["androidx-paging-common-ktx", "androidx-paging-runtime-ktx"]
-
 android-test = ["androidx-espresso-core", "androidx-junit"]
 
 #===================#===================#===================#===================
@@ -153,5 +106,5 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroid" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-androidx-navigation = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationUiKtx" }
+androidx-navigation = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationFragmentKtx" }
 

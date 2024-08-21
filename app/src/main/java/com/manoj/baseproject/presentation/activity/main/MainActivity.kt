@@ -86,12 +86,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(Ids.container) as NavHostFragment
         navController = navHostFragment.navController
-
-        launchAndRepeatWithViewLifecycle {
-            viewModel.startDestination.collect { startDestinationId ->
-                navController.setupNavGraph(startDestinationId)
-            }
-        }
+        navController.setupNavGraph(
+            if (sharedPrefManager.getAccessToken()
+                    .isNullOrEmpty()
+            ) Ids.loginFragment else Ids.homeFragment
+        )
     }
 
     private fun setUpLogoutSheet() {
@@ -169,7 +168,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun navigateToLogin() {
         navController.navigate(HomeFragmentDirections.toLoginFragment())
-        lifecycleScope.launch { dataStoreManager.clearUser() }
+        sharedPrefManager.clearUser()
     }
 
     private fun isHome() = navController.currentDestination?.id == Ids.homeFragment

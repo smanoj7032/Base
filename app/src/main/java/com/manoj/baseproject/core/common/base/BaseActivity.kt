@@ -16,7 +16,7 @@ import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.showErrorToast
-import com.manoj.baseproject.data.local.DataStoreManager
+import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
     private val TIMER_ANIMATION: Long = 400
 
     @Inject
-    lateinit var dataStoreManager: DataStoreManager
+    lateinit var sharedPrefManager: SharedPrefManager
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {

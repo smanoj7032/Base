@@ -17,12 +17,12 @@ import com.manoj.baseproject.core.utils.extension.hideKeyboard
 import com.manoj.baseproject.core.utils.picker.MediaModel
 import com.manoj.baseproject.core.utils.picker.MediaType
 import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
-import com.manoj.baseproject.data.local.DataStoreManager
+import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     val TAG: String = this.javaClass.simpleName
-    lateinit var dataStoreManager: DataStoreManager
+    lateinit var sharedPrefManager: SharedPrefManager
     lateinit var baseContext: Context
     lateinit var binding: Binding
     private var isApiCallMade = true
@@ -46,9 +46,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentActivity?.let {
-            dataStoreManager = it.dataStoreManager
-        }
+        parentActivity?.let { sharedPrefManager = it.sharedPrefManager }
         picker = PickerDialogHelper(
             this, false, baseContext, items = arrayListOf(
                 MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),

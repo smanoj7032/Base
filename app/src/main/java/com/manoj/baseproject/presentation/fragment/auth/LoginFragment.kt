@@ -50,6 +50,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>() {
 
     private fun navigateToHome() {
         findNavController().navigate(LoginFragmentDirections.toHomeFragment())
-       lifecycleScope.launch {  dataStoreManager.saveAccessToken("manoj") }
+        sharedPrefManager.saveAccessToken("manoj")
     }
 }
