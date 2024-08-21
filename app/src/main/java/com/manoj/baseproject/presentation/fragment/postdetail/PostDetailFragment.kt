@@ -26,14 +26,14 @@ import com.manoj.baseproject.core.utils.extension.showToast
 import com.manoj.baseproject.core.utils.picker.performCrop
 import com.manoj.baseproject.data.bean.Post
 import com.manoj.baseproject.databinding.FragmentPostDetailBinding
-import com.manoj.baseproject.databinding.ItemPostBinding
+import com.manoj.baseproject.databinding.ItemPostDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     private val viewModel: PostDetailVM by viewModels()
-    private lateinit var postAdapter: BaseAdapter<ItemPostBinding, Post>
+    private lateinit var postAdapter: BaseAdapter<ItemPostDetailBinding, Post>
     private var updatePos: Int? = null
     private lateinit var item: Post
     private lateinit var cropImageLauncher: ActivityResultLauncher<Intent>
@@ -91,14 +91,14 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
     }
 
     private fun setAdapter() {
-        val clickListener = Callbacks<ItemPostBinding, Post>()
+        val clickListener = Callbacks<ItemPostDetailBinding, Post>()
         clickListener.add(CallBackModel(Ids.ivProfile) { model, position, binding ->
             updatePos = position
             item = model
             picker.show()
         })
         postAdapter =
-            BaseAdapter(Lyt.item_post, BR.bean, binding.emptyView, callbacks = clickListener)
+            BaseAdapter(Lyt.item_post_detail, BR.bean, binding.emptyView, callbacks = clickListener)
         binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
         binding.rvPosts.adapter = postAdapter
         val itemTouchHelper = ItemTouchHelper(
