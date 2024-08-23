@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /** ENJOY CODING */
-abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
+    abstract val viewModel: VM
     val emptyView: View by lazy { findViewById(Ids.emptyView) }
     val container: FragmentContainerView by lazy { findViewById(Ids.container) }
     val btnRetry: Button by lazy { findViewById(Ids.btnRetry) }
@@ -39,7 +40,7 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (isMain()) splashManager.setupSplashScreen()
         binding = DataBindingUtil.setContentView(this, getLayoutResource())
-        binding.setVariable(BR.vm, getViewModel())
+        binding.setVariable(BR.vm, viewModel)
         lifecycleScope.launch { apiCall() }
         SystemVariables.onNetworkChange = {
             Logger.e("onNetworkChange", "Activity------>> $it")
@@ -59,7 +60,6 @@ abstract class BaseActivity<Binding : ViewDataBinding> : AppCompatActivity() {
 
     protected abstract suspend fun apiCall()
     protected abstract fun getLayoutResource(): Int
-    protected abstract fun getViewModel(): BaseViewModel
     protected abstract fun onCreateView()
     protected abstract fun setObserver()
     protected open fun getLoaderView(): ViewDataBinding? = binding

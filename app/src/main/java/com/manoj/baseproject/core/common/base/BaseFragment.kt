@@ -20,15 +20,16 @@ import com.manoj.baseproject.core.utils.picker.PickerDialogHelper
 import com.manoj.baseproject.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
 
-abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
+abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fragment() {
     val TAG: String = this.javaClass.simpleName
     lateinit var sharedPrefManager: SharedPrefManager
     lateinit var baseContext: Context
     lateinit var binding: Binding
+    abstract val viewModel: VM
     private var isApiCallMade = true
     lateinit var picker: PickerDialogHelper
-    val parentActivity: BaseActivity<*>?
-        get() = activity as? BaseActivity<*>
+    val parentActivity: BaseActivity<*, *>?
+        get() = activity as? BaseActivity<*, *>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,7 +41,7 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     ): View? {
         val layout: Int = getLayoutResource()
         binding = DataBindingUtil.inflate(layoutInflater, layout, container, false)
-        binding.setVariable(BR.vm, getViewModel())
+        binding.setVariable(BR.vm, viewModel)
         return binding.root
     }
 
@@ -62,7 +63,6 @@ abstract class BaseFragment<Binding : ViewDataBinding> : Fragment() {
     }
 
     protected abstract fun getLayoutResource(): Int
-    protected abstract fun getViewModel(): BaseViewModel
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     protected abstract fun setObserver()
     protected abstract suspend fun apiCall()

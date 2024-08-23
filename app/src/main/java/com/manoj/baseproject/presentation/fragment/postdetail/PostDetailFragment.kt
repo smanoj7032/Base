@@ -16,7 +16,6 @@ import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.Callbacks
 import com.manoj.baseproject.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.baseproject.core.common.base.BaseFragment
-import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
@@ -31,8 +30,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
-    private val viewModel: PostDetailVM by viewModels()
+class PostDetailFragment : BaseFragment<FragmentPostDetailBinding,PostDetailVM>() {
+    override val viewModel: PostDetailVM by viewModels()
     private lateinit var postAdapter: BaseAdapter<ItemPostDetailBinding, Post>
     private var updatePos: Int? = null
     private lateinit var item: Post
@@ -66,10 +65,6 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding>() {
 
     override fun getLayoutResource(): Int {
         return Lyt.fragment_post_detail
-    }
-
-    override fun getViewModel(): BaseViewModel {
-        return viewModel
     }
 
     override fun setObserver() {

@@ -3,10 +3,8 @@ package com.manoj.baseproject.presentation.fragment.auth
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.manoj.baseproject.core.common.base.BaseFragment
-import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import com.manoj.baseproject.core.utils.validator.isValidEmail
@@ -15,18 +13,16 @@ import com.manoj.baseproject.core.utils.validator.setupFieldValidations
 import com.manoj.baseproject.core.utils.validator.validateFields
 import com.manoj.baseproject.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class LoginFragment : BaseFragment<FragmentLoginBinding>() {
-    private val viewModel: LoginViewModel by viewModels()
+class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
+    override val viewModel by viewModels<LoginViewModel>()
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
         initView()
     }
 
     override fun getLayoutResource(): Int = Lyt.fragment_login
 
-    override fun getViewModel(): BaseViewModel = viewModel
     override fun setObserver() {
 
     }

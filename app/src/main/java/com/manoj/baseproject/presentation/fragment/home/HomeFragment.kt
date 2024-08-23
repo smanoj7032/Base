@@ -10,7 +10,6 @@ import com.manoj.baseproject.core.common.adapter.CallBackModel
 import com.manoj.baseproject.core.common.adapter.LoadMoreAdapter
 import com.manoj.baseproject.core.common.adapter.RVAdapterWithPaging
 import com.manoj.baseproject.core.common.base.BaseFragment
-import com.manoj.baseproject.core.common.base.BaseViewModel
 import com.manoj.baseproject.core.network.helper.SystemVariables
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
@@ -22,8 +21,8 @@ import com.manoj.baseproject.databinding.ItemPostBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding>() {
-    private val viewModel: HomeVM by viewModels()
+class HomeFragment : BaseFragment<FragmentHomeBinding,HomeVM>() {
+    override val viewModel: HomeVM by viewModels()
     private lateinit var postsAdapter: RVAdapterWithPaging<Post, ItemPostBinding>
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
         setPagingAdapter()
@@ -31,7 +30,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
     override fun getLayoutResource(): Int = Lyt.fragment_home
 
-    override fun getViewModel(): BaseViewModel = viewModel
     override fun setObserver() {
         launchAndRepeatWithViewLifecycle {
             viewModel.posts.collect {

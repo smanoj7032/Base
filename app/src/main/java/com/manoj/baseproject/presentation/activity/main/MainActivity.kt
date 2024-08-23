@@ -3,19 +3,16 @@ package com.manoj.baseproject.presentation.activity.main
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.core.common.base.BaseActivity
-import com.manoj.baseproject.core.common.base.BaseViewModel
-import com.manoj.baseproject.core.common.singletonholder.SingletonHolderNoArg
 import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.core.common.singletonholder.SingletonHolderNoArg
 import com.manoj.baseproject.core.utils.Logger
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.hide
-import com.manoj.baseproject.core.utils.extension.launchAndRepeatWithViewLifecycle
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import com.manoj.baseproject.core.utils.extension.setupNavGraph
 import com.manoj.baseproject.core.utils.extension.show
@@ -24,14 +21,12 @@ import com.manoj.baseproject.databinding.ActivityMainBinding
 import com.manoj.baseproject.databinding.AlertSheetBinding
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     companion object : SingletonHolderNoArg<MainActivity>(::MainActivity)
 
-    private val viewModel: MainViewModel by viewModels()
     private lateinit var logoutSheet: BaseBottomSheetDialog<AlertSheetBinding>
     private lateinit var navController: NavController
     private val listener =
@@ -71,10 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     override fun getLayoutResource() = Lyt.activity_main
-
-
-    override fun getViewModel(): BaseViewModel = viewModel
-
+    override val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView() {
         setupNavController()
@@ -145,8 +137,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             ivLogout.setSingleClickListener {
                 navigateToLogin()
-             /*   if (isHome()) logoutSheet.show()
-                else logoutSheet.dismiss()*/
+                /*   if (isHome()) logoutSheet.show()
+                   else logoutSheet.dismiss()*/
             }
         }
 

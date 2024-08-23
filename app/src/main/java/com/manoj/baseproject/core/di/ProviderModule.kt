@@ -7,7 +7,6 @@ import com.google.gson.Gson
 import com.manoj.baseproject.BuildConfig
 import com.manoj.baseproject.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.baseproject.core.utils.dispatchers.DispatchersProvider
-import com.manoj.baseproject.core.utils.dispatchers.DispatchersProviderImpl
 import com.manoj.baseproject.data.api.ApiServices
 import dagger.Module
 import dagger.Provides
@@ -25,7 +24,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ApplicationModule {
+class ProviderModule {
 
     @Provides
     @Singleton
@@ -51,10 +50,6 @@ class ApplicationModule {
     @Singleton
     fun provideSharedPref(application: Application): SharedPreferences =
         application.getSharedPreferences(application.packageName, MODE_PRIVATE)
-
-    @Provides
-    @Singleton
-    fun provideDispatchersProvider(): DispatchersProvider = DispatchersProviderImpl()
 
     @Singleton
     @Provides
