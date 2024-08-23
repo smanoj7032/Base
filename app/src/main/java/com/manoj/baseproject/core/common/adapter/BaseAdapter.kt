@@ -49,11 +49,10 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
     fun getItem(position: Int): Model = dataList[position]
 
     fun clearList() {
+        val oldSize = dataList.size
         dataList.clear()
-        checkEmptyView()
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, oldSize)
     }
-
     fun removeItem(i: Int) {
         if (i in 0 until dataList.size) {
             dataList.removeAt(i)
