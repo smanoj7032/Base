@@ -44,4 +44,12 @@
     <!--    Dark Toast bg-->
     <color name="dark_bg_color">#2F3032</color>
     <color name="sahes_gray_600">#929597</color>
+
+    <color name="material_dialog_title_text_color">@android:color/primary_text_light</color>
+    <color name="material_dialog_message_text_color">@android:color/secondary_text_light</color>
+
+    <color name="material_dialog_positive_button_text_color">@color/white</color>
+    <color name="material_dialog_negative_button_text_color">#1E88E5</color>
+
+    <color name="material_dialog_positive_button_color">@color/colorPrimary</color>
 </resources>

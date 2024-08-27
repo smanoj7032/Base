@@ -13,7 +13,7 @@
     <string name="todo">TODO</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Logout?</string>
     <string name="username">Username</string>
     <string name="dashboard">Dashboard</string>
     <string name="post_detail">Post Detail</string>

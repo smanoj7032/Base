@@ -6,9 +6,15 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.manoj.baseproject.core.common.base.BaseActivity
-import com.manoj.baseproject.core.common.basedialogs.BaseBottomSheetDialog
+import com.manoj.baseproject.core.common.basedialogs.AbstractDialog
+import com.manoj.baseproject.core.common.basedialogs.BottomSheetMaterialDialog
+import com.manoj.baseproject.core.common.basedialogs.MaterialDialog
+import com.manoj.baseproject.core.common.basedialogs.interfaces.DialogInterface
+import com.manoj.baseproject.core.common.basedialogs.model.DialogButton
+import com.manoj.baseproject.core.common.basedialogs.model.TextAlignment
 import com.manoj.baseproject.core.common.singletonholder.SingletonHolderNoArg
 import com.manoj.baseproject.core.utils.Logger
+import com.manoj.baseproject.core.utils.extension.Drw
 import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
@@ -18,7 +24,6 @@ import com.manoj.baseproject.core.utils.extension.setupNavGraph
 import com.manoj.baseproject.core.utils.extension.show
 import com.manoj.baseproject.core.utils.extension.showSuccessToast
 import com.manoj.baseproject.databinding.ActivityMainBinding
-import com.manoj.baseproject.databinding.AlertSheetBinding
 import com.manoj.baseproject.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,12 +32,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     companion object : SingletonHolderNoArg<MainActivity>(::MainActivity)
 
-    private lateinit var logoutSheet: BaseBottomSheetDialog<AlertSheetBinding>
+    private var logoutSheet: BottomSheetMaterialDialog? = null
+
+    private var logoutDialog: MaterialDialog? = null
     private lateinit var navController: NavController
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
             Logger.d("Destination", "$destination")
-            logoutSheet.dismiss()
+            logoutSheet?.dismiss()
             when (destination.id) {
                 Ids.loginFragment -> setTitle(getString(Str.login), isMain = false, isBack = false)
 
@@ -86,21 +93,64 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun setUpLogoutSheet() {
-        logoutSheet = BaseBottomSheetDialog(this, Lyt.alert_sheet, onBind = { binding ->
-            with(binding) {
-                vTop.title = getString(Str.logout)
-                tvMessage.text = getString(Str.are_you_sure_want_to_logout)
-                btnOk.setSingleClickListener {
-                    navigateToLogin()
-                    logoutSheet.dismiss()
-                }
-                btnClose.setSingleClickListener { logoutSheet.dismiss() }
-            }
-        })
+        logoutSheet = BottomSheetMaterialDialog.Builder(
+            this
+        )
+            .setTitle(getString(Str.logout), TextAlignment.CENTER)
+            .setMessage(getString(Str.are_you_sure_want_to_logout), TextAlignment.CENTER)
+            .setCancelable(false)
+            .setPositiveButton(
+               DialogButton( "Logout",
+                   Drw.ic_delete,
+                   object : AbstractDialog.OnClickListener {
+                       override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                           navigateToLogin()
+                           dialogInterface.dismiss()
+                       }
+                   }))
+            .setNegativeButton(
+               DialogButton(
+                   "Cancel",
+                   Drw.ic_close,
+                   object : AbstractDialog.OnClickListener {
+                       override fun onClick(dialogInterface: DialogInterface, which: Int) {
+                           dialogInterface.dismiss()
+                       }
+                }))
+            .build();
+
     }
 
     private fun initViews() {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        logoutDialog = MaterialDialog.Builder(this)
+            .setTitle(getString(Str.logout), TextAlignment.START)
+            .setMessage(
+                getString(Str.are_you_sure_want_to_logout),
+                TextAlignment.START
+            )
+            .setCancelable(false)
+            .setPositiveButton(
+                DialogButton("Logout",
+                    Drw.ic_delete,
+                    object : AbstractDialog.OnClickListener {
+                        override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                            navigateToLogin()
+                            dialogInterface.dismiss()
+                        }
+                    })
+            )
+            .setNegativeButton(
+                DialogButton(
+                    "Cancel",
+                    Drw.ic_close,
+                    object : AbstractDialog.OnClickListener {
+                        override fun onClick(dialogInterface: DialogInterface, which: Int) {
+                            dialogInterface.dismiss()
+                        }
+                    })
+            )
+            .build()
     }
 
     override fun setObserver() {
@@ -136,9 +186,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
             ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
 
             ivLogout.setSingleClickListener {
-                navigateToLogin()
-                /*   if (isHome()) logoutSheet.show()
-                   else logoutSheet.dismiss()*/
+                   if (isHome()) logoutSheet?.show()
+                   else logoutSheet?.dismiss()
             }
         }
 
