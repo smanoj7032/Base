@@ -238,7 +238,7 @@ fun FragmentActivity.performCrop(
         val cropIntent = Intent("com.android.camera.action.CROP")
         cropIntent.setDataAndType(srcImageUri, "image/*")
         cropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        cropIntent.setPackage("com.google.android.apps.photos")
+        /*cropIntent.setPackage("com.google.android.apps.photos")*/
 
         val croppedImageFile = getMakeFile(this, ".png")
         croppedImageUri = Uri.fromFile(croppedImageFile)
