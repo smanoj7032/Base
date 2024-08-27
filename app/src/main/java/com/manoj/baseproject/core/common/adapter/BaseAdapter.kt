@@ -53,13 +53,15 @@ class BaseAdapter<Binding : ViewDataBinding, Model>(
         dataList.clear()
         notifyItemRangeRemoved(0, oldSize)
     }
-    fun removeItem(i: Int) {
-        if (i in 0 until dataList.size) {
-            dataList.removeAt(i)
-            notifyItemRemoved(i)
-            notifyItemRangeChanged(i, dataList.size)
-        }
-        checkEmptyView()
+    fun removeItem(i: Int?) {
+       i?.let {
+           if (i in 0 until dataList.size) {
+               dataList.removeAt(i)
+               notifyItemRemoved(i)
+               notifyItemRangeChanged(i, dataList.size)
+           }
+           checkEmptyView()
+       }
     }
 
     fun addItemAt(position: Int, model: Model) {

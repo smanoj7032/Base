@@ -17,7 +17,7 @@ open class BaseBottomSheetDialog<Binding : ViewDataBinding>(
     context: Context,
     @LayoutRes private val layoutRes: Int,
     private val onBind: (binding: Binding) -> Unit
-) : BottomSheetDialog(context, R.style.BottomSheetDialogTheme) {
+) : BottomSheetDialog(context, R.style.BaseBottomSheetDialogTheme) {
 
     private lateinit var binding: Binding
 

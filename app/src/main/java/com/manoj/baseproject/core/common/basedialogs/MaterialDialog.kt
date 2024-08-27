@@ -2,6 +2,8 @@ package com.manoj.baseproject.core.common.basedialogs
 
 import android.app.Activity
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.basedialogs.model.DialogButton
 import com.manoj.baseproject.core.common.basedialogs.model.DialogMessage
 import com.manoj.baseproject.core.common.basedialogs.model.DialogTitle
@@ -22,7 +24,7 @@ class MaterialDialog private constructor(
 
     init {
         // Init Dialog
-        val builder = AlertDialog.Builder(activity)
+        val builder = MaterialAlertDialogBuilder(activity, R.style.MaterialDialog)
 
         val inflater = activity.layoutInflater
         val dialogView = createView(inflater, null)

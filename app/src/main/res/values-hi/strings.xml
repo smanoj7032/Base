@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">बेस प्रोजेक्ट</string>
+    <string name="provider_authority_suffix" translatable="false">.provider</string>
+
+    <string name="dialog_permission_title">अनुमति आवश्यक</string>
+    <string name="dialog_permission_default_message">डिफ़ॉल्ट संदेश</string>
+    <string name="dialog_permission_button_positive">ठीक है</string>
+    <string name="photo">फोटो लें</string>
+    <string name="gallery">गैलरी खोलें</string>
+    <string name="video">वीडियो रिकॉर्ड करें</string>
+    <string name="vgallery">वीडियो चुनें</string>
+    <string name="file">फ़ाइल चुनें</string>
+    <string name="todo">करना है</string>
+    <string name="password">पासवर्ड</string>
+    <string name="login">लॉगिन</string>
+    <string name="logout_title">लॉगआउट?</string>
+    <string name="logout">लॉगआउट</string>
+    <string name="delete_title">हटाएं?</string>
+    <string name="delete">हटाएं</string>
+    <string name="username">उपयोगकर्ता नाम</string>
+    <string name="dashboard">डैशबोर्ड</string>
+    <string name="post_detail">पोस्ट विवरण</string>
+
+    <string name="text_warning">चेतावनी</string>
+    <string name="text_success">सफलता</string>
+    <string name="text_error">त्रुटि</string>
+    <string name="text_info">जानकारी</string>
+    <string name="text_no_internet">कोई इंटरनेट कनेक्शन नहीं</string>
+    <string name="text_mock_description">लोरम इप्सम केवल प्रिंटिंग का डमी टेक्स्ट है</string>
+    <string name="retry">पुनः प्रयास करें</string>
+    <string name="oppps_please_try_again">उफ़! कृपया पुनः प्रयास करें!</string>
+    <string name="slow_or_no_internet_access">धीमा या कोई इंटरनेट एक्सेस नहीं</string>
+    <string name="are_you_sure_want_to_logout">क्या आप वाकई लॉगआउट करना चाहते हैं?</string>
+    <string name="are_you_sure_want_to_delete">क्या आप वाकई हटाना चाहते हैं?</string>
+    <string name="close">बंद करें</string>
+    <string name="cancel">रद्द करें</string>
+    <string name="ok">ठीक</string>
+    <string name="no_data_found">कोई डेटा नहीं मिला</string>
+    <string name="please_wait">कृपया प्रतीक्षा करें</string>
+
+    <string name="forgot_password">पासवर्ड भूल गए?</string>
+    <string name="already_have_account"><![CDATA[पहले से खाता है? यहाँ रजिस्टर करें]]></string>
+    <string name="register_here">यहां पंजीकरण करें</string>
+    <string name="description">विवरण</string>
+</resources>

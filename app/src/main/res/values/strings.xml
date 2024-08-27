@@ -13,7 +13,10 @@
     <string name="todo">TODO</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="logout">Logout?</string>
+    <string name="logout_title">Logout?</string>
+    <string name="logout">Logout</string>
+    <string name="delete_title">Delete?</string>
+    <string name="delete">Delete</string>
     <string name="username">Username</string>
     <string name="dashboard">Dashboard</string>
     <string name="post_detail">Post Detail</string>
@@ -28,7 +31,9 @@
     <string name="oppps_please_try_again">Oppps! please try again!</string>
     <string name="slow_or_no_internet_access">Slow or No Internet Access</string>
     <string name="are_you_sure_want_to_logout">Are you sure want to logout?</string>
+    <string name="are_you_sure_want_to_delete">Are you sure want to delete?</string>
     <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
     <string name="ok">Ok</string>
     <string name="no_data_found">No data found</string>
     <string name="please_wait">Please wait</string>
@@ -37,4 +42,5 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="already_have_account"><![CDATA[Already have an account? Register here]]></string>
     <string name="register_here">Register here</string>
+    <string name="description">Description</string>
 </resources>

@@ -16,13 +16,13 @@
     <color name="Black">#000</color>
     <color name="colorDark">#2E2E2D</color>
 
-    <!--TEXT COLOR-->
-    <color name="textColor">@color/black</color>
+    <!--Text Color-->
+    <color name="textColor">@color/white</color>
     <color name="solidButtonTextColor">@color/white</color>
     <color name="headingTextColor">@color/white</color>
 
     <!--Card Color-->
-    <color name="cardBackgroundColor">@color/white</color>
+    <color name="cardBackgroundColor">@color/colorDark</color>
 
     <!--    Background Colors-->
     <color name="warning_color">#FBC02D</color>
@@ -30,6 +30,7 @@
     <color name="success_color">#17B978</color>
     <color name="info_color">#0340DA</color>
     <color name="delete_color">#0288D1</color>
+
 
     <!--    Dark Toast bg-->
     <color name="dark_bg_color">#2F3032</color>

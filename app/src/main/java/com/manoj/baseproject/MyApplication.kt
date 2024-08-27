@@ -19,7 +19,6 @@ class MyApplication : Application() {
 
     fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         instance = this
         networkObserver.observeNetworkChanges()
 

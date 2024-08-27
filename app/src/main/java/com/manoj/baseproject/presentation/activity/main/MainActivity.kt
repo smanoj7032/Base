@@ -19,6 +19,8 @@ import com.manoj.baseproject.core.utils.extension.Ids
 import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.core.utils.extension.Str
 import com.manoj.baseproject.core.utils.extension.hide
+import com.manoj.baseproject.core.utils.extension.logoutDialog
+import com.manoj.baseproject.core.utils.extension.logoutSheet
 import com.manoj.baseproject.core.utils.extension.setSingleClickListener
 import com.manoj.baseproject.core.utils.extension.setupNavGraph
 import com.manoj.baseproject.core.utils.extension.show
@@ -34,7 +36,6 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private var logoutSheet: BottomSheetMaterialDialog? = null
 
-    private var logoutDialog: MaterialDialog? = null
     private lateinit var navController: NavController
     private val listener =
         NavController.OnDestinationChangedListener { controller, destination, arguments ->
@@ -93,64 +94,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun setUpLogoutSheet() {
-        logoutSheet = BottomSheetMaterialDialog.Builder(
-            this
-        )
-            .setTitle(getString(Str.logout), TextAlignment.CENTER)
-            .setMessage(getString(Str.are_you_sure_want_to_logout), TextAlignment.CENTER)
-            .setCancelable(false)
-            .setPositiveButton(
-               DialogButton( "Logout",
-                   Drw.ic_delete,
-                   object : AbstractDialog.OnClickListener {
-                       override fun onClick(dialogInterface: DialogInterface, i: Int) {
-                           navigateToLogin()
-                           dialogInterface.dismiss()
-                       }
-                   }))
-            .setNegativeButton(
-               DialogButton(
-                   "Cancel",
-                   Drw.ic_close,
-                   object : AbstractDialog.OnClickListener {
-                       override fun onClick(dialogInterface: DialogInterface, which: Int) {
-                           dialogInterface.dismiss()
-                       }
-                }))
-            .build();
+        logoutSheet = logoutSheet { navigateToLogin() }
 
     }
 
     private fun initViews() {
         onBackPressedDispatcher.addCallback(onBackPressedCallback)
-        logoutDialog = MaterialDialog.Builder(this)
-            .setTitle(getString(Str.logout), TextAlignment.START)
-            .setMessage(
-                getString(Str.are_you_sure_want_to_logout),
-                TextAlignment.START
-            )
-            .setCancelable(false)
-            .setPositiveButton(
-                DialogButton("Logout",
-                    Drw.ic_delete,
-                    object : AbstractDialog.OnClickListener {
-                        override fun onClick(dialogInterface: DialogInterface, i: Int) {
-                            navigateToLogin()
-                            dialogInterface.dismiss()
-                        }
-                    })
-            )
-            .setNegativeButton(
-                DialogButton(
-                    "Cancel",
-                    Drw.ic_close,
-                    object : AbstractDialog.OnClickListener {
-                        override fun onClick(dialogInterface: DialogInterface, which: Int) {
-                            dialogInterface.dismiss()
-                        }
-                    })
-            )
-            .build()
     }
 
     override fun setObserver() {
@@ -174,21 +123,18 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private fun setTitle(title: String?, isBack: Boolean = false, isMain: Boolean) =
         with(binding.header) {
-            /*  if (isBack) ivBack.show() else binding.header.ivBack.hide()*/
             ivBack.isVisible = isBack
-            if (isMain) {/*ivProfile.show()*/
+            if (isMain) {
                 ivLogout.show()
-                ivLogout.setSingleClickListener {}
-            } else {/*ivProfile.hide()*/
-                ivLogout.hide()
-            }
+                ivLogout.setSingleClickListener {
+                    if (isHome()) logoutSheet?.show()
+                    else logoutSheet?.dismiss()
+                }
+            } else ivLogout.hide()
+
             tvTitle.text = title
             ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
 
-            ivLogout.setSingleClickListener {
-                   if (isHome()) logoutSheet?.show()
-                   else logoutSheet?.dismiss()
-            }
         }
 
     /** override fun dispatchTouchEvent(event: MotionEvent): Boolean {

@@ -6,10 +6,8 @@ import android.content.res.TypedArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.google.android.material.button.MaterialButton
 import com.manoj.baseproject.R
 import com.manoj.baseproject.core.common.basedialogs.interfaces.DialogInterface
 import com.manoj.baseproject.core.common.basedialogs.interfaces.OnCancelListener
@@ -19,8 +17,6 @@ import com.manoj.baseproject.core.common.basedialogs.model.DialogButton
 import com.manoj.baseproject.core.common.basedialogs.model.DialogMessage
 import com.manoj.baseproject.core.common.basedialogs.model.DialogTitle
 import com.manoj.baseproject.core.common.basedialogs.model.TextAlignment
-import com.manoj.baseproject.core.utils.extension.Ids
-import com.manoj.baseproject.core.utils.extension.Lyt
 import com.manoj.baseproject.databinding.LayoutAlertDialogBinding
 
 abstract class AbstractDialog(

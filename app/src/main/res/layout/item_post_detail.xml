@@ -15,11 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
-        app:rippleColor="@color/rippleColor"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="@dimen/_10sdp"
-        app:cardElevation="@dimen/_5sdp"
+        style="@style/CardViewStyle"
         app:contentPadding="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout

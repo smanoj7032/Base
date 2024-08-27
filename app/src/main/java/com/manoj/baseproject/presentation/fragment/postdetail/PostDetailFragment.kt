@@ -97,7 +97,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding,PostDetailVM>(
         binding.rvPosts.layoutManager = LinearLayoutManager(baseContext)
         binding.rvPosts.adapter = postAdapter
         val itemTouchHelper = ItemTouchHelper(
-            RecyclerItemTouchHelper(postAdapter, swipeToDelete = true)
+            RecyclerItemTouchHelper(postAdapter, swipeToDelete = true, activity = requireActivity())
         )
         itemTouchHelper.attachToRecyclerView(binding.rvPosts)
     }

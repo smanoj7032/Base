@@ -1,5 +1,6 @@
 package com.manoj.baseproject.core.common.adapter
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -9,26 +10,35 @@ import android.graphics.RectF
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.manoj.baseproject.core.common.basedialogs.MaterialDialog
+import com.manoj.baseproject.core.utils.extension.Clr
 import com.manoj.baseproject.core.utils.extension.Drw
+import com.manoj.baseproject.core.utils.extension.deleteDialog
 import kotlin.math.abs
 
 class RecyclerItemTouchHelper(
     private val adapter: BaseAdapter<*, *>?,
     private val dragAndDrop: Boolean = true,
-    private val swipeToDelete: Boolean = false
+    private val swipeToDelete: Boolean = false,
+    private val activity: Activity? = null,
 ) : ItemTouchHelper.Callback() {
     private val paint = Paint()
     private val swipeThreshold = 0.9f
+    private var deletePos: Int? = null
+    private val deleteDialog: MaterialDialog? by lazy {
+        activity?.deleteDialog(onPositiveAction = { adapter?.removeItem(deletePos) },
+            onNegativeAction = { deletePos?.let { adapter?.notifyItemChanged(it) } })
+    }
 
     override fun getMovementFlags(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder
+        recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder
     ): Int {
         val dragFlags =
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         val swipeFlags = ItemTouchHelper.LEFT
         return makeMovementFlags(dragFlags, swipeFlags)
     }
+
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -57,7 +67,7 @@ class RecyclerItemTouchHelper(
 
             val swipeThreshold = itemView.width * this.swipeThreshold
 
-            paint.color = Color.GREEN
+            paint.color = viewHolder.itemView.context.getColor(Clr.colorPrimary)
             val background = RectF(
                 itemView.right.toFloat() + dX,
                 itemView.top.toFloat(),
@@ -79,7 +89,7 @@ class RecyclerItemTouchHelper(
             }
 
             if (abs(dX) > swipeThreshold) {
-                paint.color = Color.GREEN
+                paint.color = viewHolder.itemView.context.getColor(Clr.colorPrimary)
                 val bg = RectF(
                     itemView.right.toFloat() + dX,
                     itemView.top.toFloat(),
@@ -97,8 +107,10 @@ class RecyclerItemTouchHelper(
             val itemView = viewHolder.itemView
             val swipeThreshold = itemView.width * this.swipeThreshold
             if (abs(viewHolder.itemView.translationX) > swipeThreshold) {
-                adapter?.removeItem(viewHolder.bindingAdapterPosition)
+                deletePos = viewHolder.bindingAdapterPosition
+                deleteDialog?.show()
             } else {
+                deletePos = null
                 adapter?.notifyItemChanged(viewHolder.bindingAdapterPosition)
             }
         }
