@@ -118,8 +118,13 @@
 
 
     <!--DIALOGS-->
-    <style name="MaterialDialog">
-        <item name="android:textColor">@color/textColor</item>
+    <style name="MaterialDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/DialogCorners</item>
+    </style>
+
+    <style name="DialogCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
     <!-- Theme for Dialog Title -->

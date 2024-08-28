@@ -52,12 +52,13 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
 
     private fun setPickerListener() {
         SystemVariables.onPickerClosed = { itemType, uri, uris ->
-            when (itemType) {
+            /*when (itemType) {
                 MediaType.TAKE_PICTURE, MediaType.CHOOSE_IMAGE ->
                     requireActivity().performCrop(uri, cropImageLauncher)
 
                 else -> updateItem(uri.toString())
-            }
+            }*/
+            updateItem(uri.toString())
             Logger.e("onPickerClosed", "$itemType")
         }
     }
