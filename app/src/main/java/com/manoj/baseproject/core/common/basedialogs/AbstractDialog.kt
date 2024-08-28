@@ -79,76 +79,10 @@ abstract class AbstractDialog(
         negativeButton?.icon?.let { iconResId ->
             binding.buttonNegative.icon = ContextCompat.getDrawable(activity, iconResId)
         }
-        /*applyStyle()*/
+
         return binding.root
     }
 
-    private fun applyStyle() {
-        // Apply Styles
-        val a: TypedArray = activity.theme.obtainStyledAttributes(R.styleable.MaterialDialog)
-
-        try {
-            // Set Dialog Background
-            binding.root.setBackgroundColor(
-                a.getColor(
-                    R.styleable.MaterialDialog_material_dialog_background,
-                    ContextCompat.getColor(activity, R.color.white)
-                )
-            )
-
-            // Set Title Text Color
-            binding.vTop.tvTitle.setTextColor(
-                a.getColor(
-                    R.styleable.MaterialDialog_material_dialog_title_text_color,
-                    ContextCompat.getColor(activity, R.color.material_dialog_title_text_color)
-                )
-            )
-
-            // Set Message Text Color
-            binding.textViewMessage.setTextColor(
-                a.getColor(
-                    R.styleable.MaterialDialog_material_dialog_message_text_color,
-                    ContextCompat.getColor(activity, R.color.material_dialog_message_text_color)
-                )
-            )
-
-            // Set Positive Button Icon Tint
-            val positiveButtonTint = a.getColorStateList(
-                R.styleable.MaterialDialog_material_dialog_positive_button_text_color
-            ) ?: ContextCompat.getColorStateList(
-                activity,
-                R.color.material_dialog_positive_button_text_color
-            )
-            binding.buttonPositive.apply {
-                setTextColor(positiveButtonTint)
-                iconTint = positiveButtonTint
-            }
-
-            // Set Negative Button Icon & Text Tint
-            val negativeButtonTint = a.getColorStateList(
-                R.styleable.MaterialDialog_material_dialog_negative_button_text_color
-            ) ?: ContextCompat.getColorStateList(
-                activity,
-                R.color.material_dialog_negative_button_text_color
-            )
-            binding.buttonNegative.apply {
-                iconTint = negativeButtonTint
-                setTextColor(negativeButtonTint)
-            }
-
-            // Set Positive Button Background Tint
-            val backgroundTint = a.getColorStateList(
-                R.styleable.MaterialDialog_material_dialog_positive_button_color
-            ) ?: ContextCompat.getColorStateList(
-                activity,
-                R.color.material_dialog_positive_button_color
-            )
-            binding.buttonPositive.backgroundTintList = backgroundTint
-            binding.buttonNegative.rippleColor = backgroundTint?.withAlpha(75)
-        } finally {
-            a.recycle()
-        }
-    }
 
     /**
      * Displays the Dialog
