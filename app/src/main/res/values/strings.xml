@@ -44,4 +44,6 @@
     <string name="register_here">Register here</string>
     <string name="description">Description</string>
     <string name="loading">Loading</string>
+    <string name="login_with">Login with</string>
+    <string name="or">OR</string>
 </resources>

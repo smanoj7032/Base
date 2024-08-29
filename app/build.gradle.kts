@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "com.manoj.baseproject"
+    namespace = "com.manoj.base"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.manoj.baseproject"
+        applicationId = "com.manoj.base"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -26,8 +26,10 @@ android {
         val localPropertiesFile = project.rootProject.file("apikeys.properties")
         properties.load(localPropertiesFile.inputStream())
         val apiKey: String = properties.getProperty("APP_ID") ?: ""
+        val webClientId: String = properties.getProperty("web_client_id") ?: ""
 
         this.buildConfigField("String", "APP_ID", apiKey)
+        this.buildConfigField("String", "web_client_id", webClientId)
         this.buildConfigField("String", "BASE_URL", "\"https://dummyapi.io/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -97,6 +99,7 @@ dependencies {
     implementation(libs.bundles.androidx.main)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.hilt.android)
+    implementation(libs.bundles.google.signin)
     kapt(libs.hilt.android.compiler)
     implementation(libs.places)
     implementation(libs.androidx.paging.runtime.ktx)

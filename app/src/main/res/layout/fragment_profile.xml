@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bean"
+            type="com.manoj.base.core.common.sociallogin.googlelogin.GoogleSignInManager.UserData" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_screen">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/fl_image"
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    app:srcCompat="@drawable/bg_image" />
+
+                <ImageView
+                    android:id="@+id/ivProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    placeHolder="@drawable/bg_image"
+                    setImageUrl="@{bean.profilePictureUrl}"
+                    android:padding="@dimen/_3sdp" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/TextView.Medium"
+                android:text="@{bean.name}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/fl_image"
+                tools:text="Name" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                style="@style/TextView.Thin"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@{bean.email}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_name"
+                tools:text="Email" />
+
+
+            <LinearLayout
+                android:id="@+id/ll_main"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/tv_email" />
+
+            <TextView
+                android:id="@+id/tv_version"
+                style="@style/TextView.Light"
+                android:layout_marginBottom="@dimen/_15sdp"
+                android:text="Version"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_main" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

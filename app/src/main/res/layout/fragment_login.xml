@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="android.view.View" />
 
         <variable
             name="show"
             type="boolean" />
+
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.fragment.auth.LoginViewModel" />
+            type="com.manoj.base.presentation.fragment.auth.LoginViewModel" />
     </data>
 
     <ScrollView
@@ -100,18 +102,25 @@
                         android:layout_marginBottom="16dp"
                         android:text="@string/login" />
 
+                    <include
+                        android:id="@+id/socialLogin"
+                        layout="@layout/layout_social_login" />
+
                 </LinearLayout>
 
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="@{show?View.VISIBLE:View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </com.google.android.material.card.MaterialCardView>
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{show?View.VISIBLE:View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -7,7 +7,7 @@
 
         <variable
             name="bean"
-            type="com.manoj.baseproject.core.utils.picker.MediaModel" />
+            type="com.manoj.base.core.utils.picker.MediaModel" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

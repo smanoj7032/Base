@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17934010864",
+    "project_id": "base-1766b",
+    "storage_bucket": "base-1766b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17934010864:android:2fe1bcc2c17cedc647b535",
+        "android_client_info": {
+          "package_name": "com.manoj.base"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-J17EkrkM8gT32yy1atPfgR-8F0GKO3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,7 +11,7 @@
             type="boolean" />
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.fragment.home.HomeVM" />
+            type="com.manoj.base.presentation.fragment.home.HomeVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:id="@+id/v_main"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_or"
+            style="@style/TextView.Thin"
+            android:paddingVertical="@dimen/_10sdp"
+            android:text="@string/or"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_login_with"
+            style="@style/TextView.Light"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:text="@string/login_with"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_or" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/sahes_gray_600"
+            app:layout_constraintBottom_toBottomOf="@id/tv_login_with"
+            app:layout_constraintEnd_toStartOf="@id/tv_login_with"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_login_with" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/sahes_gray_600"
+            app:layout_constraintBottom_toBottomOf="@id/tv_login_with"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_login_with"
+            app:layout_constraintTop_toTopOf="@id/tv_login_with" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:flow_horizontalGap="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:constraint_referenced_ids="iv_google"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_with"/>
+
+        <ImageView
+            android:id="@+id/iv_google"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_login_with"
+            android:src="@drawable/ic_google" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -7,7 +7,7 @@
 
         <variable
             name="bean"
-            type="com.manoj.baseproject.data.bean.Post" />
+            type="com.manoj.base.data.bean.Post" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

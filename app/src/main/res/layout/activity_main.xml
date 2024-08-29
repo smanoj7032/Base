@@ -13,7 +13,7 @@
 
         <variable
             name="vm"
-            type="com.manoj.baseproject.presentation.activity.main.MainViewModel" />
+            type="com.manoj.base.presentation.activity.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,11 +51,12 @@
                 app:navGraph="@navigation/main_graph" />
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/detail_nav_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:id="@+id/profileFragmentContainer"
+                android:name="com.manoj.base.presentation.fragment.profile.ProfileFragment"
                 android:layout_width="@dimen/_300sdp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
+
 
         </androidx.slidingpanelayout.widget.SlidingPaneLayout>
 

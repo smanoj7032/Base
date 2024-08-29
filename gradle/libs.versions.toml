@@ -48,6 +48,8 @@ converterGson = "2.11.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+credentials = "1.2.2"
+googleid = "1.1.1"
 
 [libraries]
 #=================================
@@ -86,6 +88,9 @@ glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "gl
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentials" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
 
 [bundles]
 androidx-main = ["material", "androidx-core-splashscreen", ]
@@ -93,6 +98,7 @@ lifecycle-main = ["androidx-lifecycle-livedata-ktx", "androidx-lifecycle-viewmod
 dimens = ["ssp-android", "sdp-android"]
 rxjava = ["rxjava", "rxandroid", ]
 square-retrofit2 = ["retrofit", "converter-gson", "adapter-rxjava2"]
+google-signin = ["googleid", "androidx-credentials", "androidx-credentials-play-services-auth"]
 android-test = ["androidx-espresso-core", "androidx-junit"]
 
 #===================#===================#===================#===================
