@@ -506,7 +506,7 @@ fun View.setSingleClickListener(listener: (v: View) -> Unit) {
 }
 
 fun ImageView.loadImage(uri: Uri?) {
-    Glide.with(this.context).load(uri).circleCrop()
+    Glide.with(this.context).load(uri)
         .placeholder(Drw.ic_image).error(Drw.ic_image)
         .into(this)
 }
