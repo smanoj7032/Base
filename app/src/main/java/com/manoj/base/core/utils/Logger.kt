@@ -3,7 +3,7 @@ package com.manoj.base.core.utils
 import android.util.Log
 
 object Logger {
-    private var TAG = "CORTEX"
+    private var TAG = "BASE"
     var isDebug = true
     fun setTAG(tag: String) {
         TAG = tag
