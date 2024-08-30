@@ -47,6 +47,9 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -66,6 +69,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.manoj.base.R
+import com.manoj.base.core.network.helper.Constants
 import com.manoj.base.core.network.helper.SystemVariables.isInternetConnected
 import com.manoj.base.core.utils.SingleClickListener
 import com.manoj.base.data.bean.PlaceDetails
@@ -409,10 +413,12 @@ fun EditText.findEmails(success: (String?, Array<String>?) -> Unit) {
         success("Please enter emails.", null)
     }
 }
-fun isCorrectEmail(email:String): Boolean {
+
+fun isCorrectEmail(email: String): Boolean {
     val emailPattern = Regex("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")
     return email.isNotEmpty() && email.matches(emailPattern)
 }
+
 fun String?.isValidEmail(): Boolean {
     return this?.isNotEmpty() == true && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 }
@@ -633,6 +639,7 @@ fun Fragment.showSheet(sheet: BottomSheetDialogFragment) {
 fun FragmentActivity.showSheet(sheet: BottomSheetDialogFragment) {
     sheet.show(this.supportFragmentManager, sheet.tag)
 }
+
 fun <T> Activity.getNewIntent(s: Class<T>): Intent {
     val intent = Intent(this, s)
     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -653,3 +660,5 @@ fun Activity.showSuccessToast(message: String) {
 fun Context.showErrorToast(errorMessage: String?) = errorMessage?.let {
     showToast(errorMessage)
 }
+
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.PREFERENCE_FILE_NAME)

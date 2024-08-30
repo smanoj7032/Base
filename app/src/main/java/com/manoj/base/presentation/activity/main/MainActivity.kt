@@ -19,7 +19,6 @@ import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
 import com.manoj.base.core.utils.extension.logoutSheet
 import com.manoj.base.core.utils.extension.setSingleClickListener
-import com.manoj.base.core.utils.extension.setupNavGraph
 import com.manoj.base.core.utils.extension.showToast
 import com.manoj.base.databinding.ActivityMainBinding
 import com.manoj.base.presentation.activity.main.backpress.BackPressHandler
@@ -34,15 +33,12 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
     companion object : SingletonHolderNoArg<MainActivity>(::MainActivity)
 
-
     private var logoutSheet: BottomSheetMaterialDialog? = null
-    private lateinit var navigationListener: NavigationListener
+    private var navigationListener: NavigationListener? = null
 
     private lateinit var navController: NavController
 
-    override suspend fun apiCall() {
-        Logger.d("Api Call--->>", "Activity Called()")
-    }
+    override suspend fun apiCall() { Logger.d("Api Call--->>", "Activity Called()") }
 
 
     override fun getLayoutResource() = Lyt.activity_main
@@ -58,12 +54,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(Ids.container) as NavHostFragment
         navController = navHostFragment.navController
-        navController.setupNavGraph(
-            if (sharedPrefManager.getAccessToken()
-                    .isNullOrEmpty()
-            ) Ids.loginFragment else Ids.homeFragment
-        )
-        navigationListener = NavigationListener(this, binding, logoutSheet)
+        navigationListener=NavigationListener(this,binding,logoutSheet)
     }
 
     private fun setUpLogoutSheet() {
@@ -73,25 +64,24 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                     GoogleSignInManager.GoogleSignInParams(
                         this@MainActivity,
                         credentialManager,
-                        viewModel.dispatchers
+                        viewModel.dispatchers,
+                        dataStoreManager
                     )
-                )
-                    .signOut().collect {
-                        when (it) {
-                            is Result.Success -> {
-                                navigateToLogin()
-                                onLoading(false)
-                            }
-
-                            is Result.Error -> {
-                                showToast(it.message)
-                                onLoading(false)
-                            }
-
-                            is Result.Loading -> onLoading(true)
-
+                ).signOut().collect {
+                    when (it) {
+                        is Result.Success -> {
+                            navigateToLogin()
+                            onLoading(false)
                         }
+
+                        is Result.Error -> {
+                            showToast(it.message)
+                            onLoading(false)
+                        }
+
+                        is Result.Loading -> onLoading(true)
                     }
+                }
             }
         }
     }
@@ -101,16 +91,11 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
         supportFragmentManager.registerFragmentLifecycleCallbacks(object :
             FragmentManager.FragmentLifecycleCallbacks() {
             override fun onFragmentViewCreated(
-                fm: FragmentManager,
-                f: Fragment,
-                v: View,
-                savedInstanceState: Bundle?
+                fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?
             ) {
                 super.onFragmentViewCreated(fm, f, v, savedInstanceState)
                 binding.slidingpanelayout.lockMode =
                     if (f is LoginFragment) SlidingPaneLayout.LOCK_MODE_LOCKED else SlidingPaneLayout.LOCK_MODE_UNLOCKED
-
-
             }
         }, true)
 
@@ -119,9 +104,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     }
 
-    override fun setObserver() {
-
-    }
+    override suspend fun setObserver() {}
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
@@ -130,19 +113,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        navController.addOnDestinationChangedListener(navigationListener)
+        navigationListener?.let { navController.addOnDestinationChangedListener(it) }
     }
 
     override fun onPause() {
-        navController.removeOnDestinationChangedListener(navigationListener)
         super.onPause()
+        navigationListener?.let { navController.removeOnDestinationChangedListener(it) }
     }
 
 
-    private fun navigateToLogin() {
+    private fun navigateToLogin() =
         navController.navigate(HomeFragmentDirections.toLoginFragment())
-        sharedPrefManager.clearUser()
-    }
 
-    private fun isHome() = navController.currentDestination?.id == Ids.homeFragment
 }

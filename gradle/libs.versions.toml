@@ -19,6 +19,8 @@ material = "1.12.0"
 pagingRuntimeKtx = "3.3.2"
 coreSplashscreen = "1.0.1"
 navigationFragmentKtx = "2.7.7"
+datastorePreferences = "1.1.1"
+
 
 #=============================
 #===== Android Lifecycle =====
@@ -59,6 +61,9 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
+androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastorePreferences" }
+
 
 #=============================
 #===== Android Lifecycle =====
@@ -100,6 +105,7 @@ rxjava = ["rxjava", "rxandroid", ]
 square-retrofit2 = ["retrofit", "converter-gson", "adapter-rxjava2"]
 google-signin = ["googleid", "androidx-credentials", "androidx-credentials-play-services-auth"]
 android-test = ["androidx-espresso-core", "androidx-junit"]
+datastore = ["androidx-datastore-preferences", "androidx-datastore-preferences-core"]
 
 #===================#===================#===================#===================
 #===================#===================#===================#===================

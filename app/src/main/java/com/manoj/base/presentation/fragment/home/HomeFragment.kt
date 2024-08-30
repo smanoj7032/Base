@@ -30,7 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeVM>() {
 
     override fun getLayoutResource(): Int = Lyt.fragment_home
 
-    override fun setObserver() {
+    override suspend fun setObserver() {
         launchAndRepeatWithViewLifecycle {
             viewModel.posts.collect {
                 postsAdapter.submitData(it)

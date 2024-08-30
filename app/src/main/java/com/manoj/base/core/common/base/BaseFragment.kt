@@ -12,17 +12,19 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.base.BR
+import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.hideKeyboard
 import com.manoj.base.core.utils.picker.MediaModel
 import com.manoj.base.core.utils.picker.MediaType
 import com.manoj.base.core.utils.picker.PickerDialogHelper
-import com.manoj.base.data.local.SharedPrefManager
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fragment() {
+    @Inject
+    lateinit var dispatchersProvider: DispatchersProvider
     val TAG: String = this.javaClass.simpleName
-    lateinit var sharedPrefManager: SharedPrefManager
     lateinit var baseContext: Context
     lateinit var binding: Binding
     abstract val viewModel: VM
@@ -47,7 +49,6 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        parentActivity?.let { sharedPrefManager = it.sharedPrefManager }
         picker = PickerDialogHelper(
             this, false, baseContext, items = arrayListOf(
                 MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
@@ -58,13 +59,14 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
             )
         )
         onCreateView(view, savedInstanceState)
-        setObserver()
+
         lifecycleScope.launch { apiCall() }
+        viewLifecycleOwner.lifecycleScope.launch { setObserver() }
     }
 
     protected abstract fun getLayoutResource(): Int
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
-    protected abstract fun setObserver()
+    protected abstract suspend fun setObserver()
     protected abstract suspend fun apiCall()
     protected open fun getLoaderView(): ViewDataBinding? = binding
     override fun onPause() {

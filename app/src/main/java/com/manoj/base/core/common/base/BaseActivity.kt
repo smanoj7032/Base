@@ -15,9 +15,10 @@ import com.manoj.base.BR
 import com.manoj.base.core.network.helper.NetworkMonitor
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
+import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.showErrorToast
-import com.manoj.base.data.local.SharedPrefManager
+import com.manoj.base.data.local.DataStoreManager
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,11 +35,12 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
     private val TIMER_ANIMATION: Long = 400
 
     @Inject
-    lateinit var sharedPrefManager: SharedPrefManager
-
-    @Inject
     lateinit var credentialManager: CredentialManager
 
+    @Inject
+    lateinit var dataStoreManager: DataStoreManager
+    @Inject
+    lateinit var dispatchersProvider: DispatchersProvider
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,13 +62,13 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
             }
         }
         onCreateView()
-        setObserver()
+        lifecycleScope.launch { setObserver() }
     }
 
     protected abstract suspend fun apiCall()
     protected abstract fun getLayoutResource(): Int
     protected abstract fun onCreateView()
-    protected abstract fun setObserver()
+    protected abstract suspend fun setObserver()
     protected open fun getLoaderView(): ViewDataBinding? = binding
     fun onError(errorMessage: String?, showErrorView: Boolean) {
         if (showErrorView) showErrorToast(errorMessage)

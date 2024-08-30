@@ -5,10 +5,13 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.credentials.CredentialManager
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.google.gson.Gson
 import com.manoj.base.BuildConfig
 import com.manoj.base.core.network.helper.apihelper.HeaderInterceptor
 import com.manoj.base.core.utils.dispatchers.DispatchersProvider
+import com.manoj.base.core.utils.extension.dataStore
 import com.manoj.base.data.api.ApiServices
 import dagger.Module
 import dagger.Provides
@@ -68,4 +71,9 @@ class ProviderModule {
     fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager =
         CredentialManager.create(context)
 
+    @Provides
+    @Singleton
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return context.dataStore
+    }
 }

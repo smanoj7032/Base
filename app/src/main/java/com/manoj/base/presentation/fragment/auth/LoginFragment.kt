@@ -2,11 +2,9 @@ package com.manoj.base.presentation.fragment.auth
 
 import android.os.Bundle
 import android.view.View
-import androidx.credentials.CredentialManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.manoj.base.core.common.base.BaseFragment
 import com.manoj.base.core.common.sociallogin.googlelogin.GoogleSignInManager
 import com.manoj.base.core.network.helper.apihelper.Result
@@ -21,7 +19,6 @@ import com.manoj.base.databinding.FragmentLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
@@ -33,16 +30,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     override fun getLayoutResource(): Int = Lyt.fragment_login
 
-    override fun setObserver() {
-
+    override suspend fun setObserver() {
+        viewModel.accessToken.collect { if (!it.isNullOrEmpty()) navigateToHome() }
     }
 
-    override suspend fun apiCall() {
-
-    }
+    override suspend fun apiCall() {}
 
     private fun initView() = with(binding) {
-        btnLogin.setSingleClickListener { login() }
+        btnLogin.setSingleClickListener { socialLogin() }
         socialLogin.ivGoogle.setSingleClickListener { socialLogin() }
         setupFieldValidations(usernameTextInputLayout to { it.isValidEmail() },
             passwordTextInputLayout to { it.isValidPassword() })
@@ -50,35 +45,35 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     private fun login() = with(binding) {
         if (validateFields(usernameTextInputLayout, passwordTextInputLayout)) {
-            navigateToHome(viewModel.fieldEmail.get())
+            navigateToHome()
         }
     }
 
-    private fun socialLogin() = lifecycleScope.launch {
-        GoogleSignInManager.getInstance(
-            GoogleSignInManager.GoogleSignInParams(
-                requireContext(), parentActivity?.credentialManager, viewModel.dispatchers
+    private fun socialLogin() {
+        lifecycleScope.launch {
+            val googleSignInManager = GoogleSignInManager.getInstance(
+                GoogleSignInManager.GoogleSignInParams(
+                    requireActivity(), // Using activity context
+                    parentActivity?.credentialManager,
+                    dispatchersProvider,
+                    parentActivity?.dataStoreManager
+                )
             )
-        ).signInWithGoogle().collectLatest {
-                when (it) {
-                    is Result.Success -> {
-                        navigateToHome(it.data?.email)
-                        sharedPrefManager.saveUser(it.data)
-                        onLoading(false)
-                    }
 
+            googleSignInManager.signInWithGoogle().collectLatest { result ->
+                when (result) {
+                    is Result.Success -> onLoading(false)
                     is Result.Error -> {
-                        requireContext().showToast(it.message)
+                        requireContext().showToast(result.message)
                         onLoading(false)
                     }
-
                     is Result.Loading -> onLoading(true)
                 }
             }
+        }
     }
 
-    private fun navigateToHome(userData: String? = null) {
+    private fun navigateToHome() {
         findNavController().navigate(LoginFragmentDirections.toHomeFragment())
-        sharedPrefManager.saveAccessToken(userData)
     }
 }

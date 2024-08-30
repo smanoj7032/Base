@@ -100,6 +100,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.hilt.android)
     implementation(libs.bundles.google.signin)
+    implementation(libs.bundles.datastore)
     kapt(libs.hilt.android.compiler)
     implementation(libs.places)
     implementation(libs.androidx.paging.runtime.ktx)

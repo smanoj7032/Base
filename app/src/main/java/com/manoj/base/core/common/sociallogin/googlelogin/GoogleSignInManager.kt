@@ -18,6 +18,7 @@ import com.manoj.base.core.common.singletonholder.SingletonHolder
 import com.manoj.base.core.network.helper.apihelper.Result
 import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.utils.extension.toJson
+import com.manoj.base.data.local.DataStoreManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -30,19 +31,20 @@ import kotlin.coroutines.CoroutineContext
 class GoogleSignInManager(
     private val context: Context,
     private val credentialManager: CredentialManager?,
-    private val dispatchersProvider: DispatchersProvider
+    private val dispatchersProvider: DispatchersProvider,
+    private val dataStoreManager: DataStoreManager?
 ) {
     data class GoogleSignInParams(
         val context: Context,
         val credentialManager: CredentialManager?,
-        val dispatchersProvider: DispatchersProvider
+        val dispatchersProvider: DispatchersProvider, val dataStoreManager: DataStoreManager?
     )
 
     companion object : SingletonHolder<GoogleSignInManager, GoogleSignInParams>({
         GoogleSignInManager(
             it.context,
             it.credentialManager,
-            it.dispatchersProvider
+            it.dispatchersProvider, it.dataStoreManager
         )
     })
 
@@ -96,25 +98,26 @@ class GoogleSignInManager(
     /**
      * Handles the sign-in result and returns a Result.
      */
-    private fun handleSignIn(result: GetCredentialResponse?): Result<UserData> {
+    private suspend fun handleSignIn(result: GetCredentialResponse?): Result<UserData> {
         return when (val credential = result?.credential) {
             is CustomCredential -> handleCustomCredential(credential)
             else -> Result.Error("Unexpected type of credential")
         }
     }
 
-    private fun handleCustomCredential(credential: CustomCredential): Result<UserData> {
+    private suspend fun handleCustomCredential(credential: CustomCredential): Result<UserData> {
         return if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             try {
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                Result.Success(
-                    UserData(
-                        googleIdTokenCredential.data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID"),
-                        googleIdTokenCredential.displayName,
-                        googleIdTokenCredential.profilePictureUri.toString(),
-                        googleIdTokenCredential.idToken
-                    )
+                val user = UserData(
+                    googleIdTokenCredential.data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID"),
+                    googleIdTokenCredential.displayName,
+                    googleIdTokenCredential.profilePictureUri.toString(),
+                    googleIdTokenCredential.idToken
                 )
+                dataStoreManager?.saveUser(user)
+                dataStoreManager?.saveAccessToken(googleIdTokenCredential.toString())
+                Result.Success(user)
             } catch (e: GoogleIdTokenParsingException) {
                 Result.Error("Received an invalid Google ID token response: ${e.message}")
             }
@@ -134,6 +137,7 @@ class GoogleSignInManager(
         try {
             val result =
                 credentialManager?.clearCredentialState(createClearCredentialStateRequest())
+            dataStoreManager?.clearUser()
             emit(Result.Success(result.toJson()))
         } catch (e: ClearCredentialException) {
             emit(Result.Error(e.message.toString()))

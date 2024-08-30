@@ -55,5 +55,6 @@ class NavigationListener(
             } else ivLogout.hide()
 
             tvTitle.text = title
+            if (title.equals(activity.getString(Str.login))) binding.slidingpanelayout.close()
         }
 }

@@ -64,8 +64,7 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
     private fun updateItem(uri: String) {
         updatePos?.let {
             postAdapter.updateItem(
-                item.copy(owner = item.owner.copy(picture = uri)),
-                it
+                item.copy(owner = item.owner.copy(picture = uri)), it
             )
         }
     }
@@ -74,22 +73,18 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
         return Lyt.fragment_post_detail
     }
 
-    override fun setObserver() {
-        lifecycleScope.launch {
-            viewModel.posts.customCollector(
-                onLoading = ::onLoading,
-                onSuccess = {
-                    val arrayList: ArrayList<Post> = it?.data as ArrayList
-                    arrayList.addAll(it.data)
-                    arrayList.addAll(it.data)
-                    arrayList.addAll(it.data)
-                    arrayList.addAll(it.data)
-                    postAdapter.list = arrayList
+    override suspend fun setObserver() {
+        viewModel.posts.customCollector(
+            onLoading = ::onLoading, onSuccess = {
+                val arrayList: ArrayList<Post> = it?.data as ArrayList
+                arrayList.addAll(it.data)
+                arrayList.addAll(it.data)
+                arrayList.addAll(it.data)
+                arrayList.addAll(it.data)
+                postAdapter.list = arrayList
 
-                },
-                onError = ::onError
-            )
-        }
+            }, onError = ::onError
+        )
     }
 
     private fun setAdapter() {
