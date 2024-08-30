@@ -9,7 +9,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 
 
-open class RVAdapterWithPaging<M : Any, B : ViewDataBinding>(
+open class BaseAdapterWithPaging<M : Any, B : ViewDataBinding>(
     diffCallback: DiffUtil.ItemCallback<M>,
     private val layoutResId: Int,
     private val variableId: Int,

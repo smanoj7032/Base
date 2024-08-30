@@ -6,7 +6,7 @@ import com.manoj.base.data.bean.Post
 import com.manoj.base.data.bean.Posts
 import kotlinx.coroutines.flow.Flow
 
-interface BaseRepo {
+interface RemoteDataSource {
     suspend fun getPost(id:String): Flow<Posts?>
     fun getPosts(): Flow<PagingData<Post>>
 }

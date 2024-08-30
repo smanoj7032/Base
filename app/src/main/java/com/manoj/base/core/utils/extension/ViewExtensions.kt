@@ -41,6 +41,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -359,7 +361,19 @@ fun Context.initializePlaces(apiKey: String) {
     }
 }
 
-fun AppCompatActivity.openPlaceSearchBox() {
+fun AppCompatActivity.openPlaceSearchBox(placeSearchLauncher: ActivityResultLauncher<Intent>) {
+
+    /**
+     *  Initialize the launcher like this in your activity
+     * placeSearchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+     *     handlePlaceSearchResult(result, onPlaceSelected = { place ->
+     *          Handle the selected place
+     *     }, callback = { placeDetails ->
+     *          Handle the callback
+     *     })
+     *
+     */
+
     val fields = listOf(
         Place.Field.ID,
         Place.Field.NAME,
@@ -369,29 +383,23 @@ fun AppCompatActivity.openPlaceSearchBox() {
     )
 
     val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this)
-    startActivityForResult(intent, 1)
+    placeSearchLauncher.launch(intent)
 }
 
 fun AppCompatActivity.handlePlaceSearchResult(
-    requestCode: Int,
-    resultCode: Int,
-    data: Intent,
+    result: ActivityResult,
     onPlaceSelected: (Place) -> Unit,
     callback: (PlaceDetails?) -> Unit
 ) {
-    if (requestCode == 1) {
-        when (resultCode) {
-            Activity.RESULT_OK -> {
-                val place = data.let { Autocomplete.getPlaceFromIntent(it) }
-                onPlaceSelected(place)
-                getPlaceDetails(this, place.id, callback)
-            }
-
-            AutocompleteActivity.RESULT_ERROR -> {
-                val status = data.let { Autocomplete.getStatusFromIntent(it) }
-                Log.i("PlacesAPI", status.toString())
-            }
-        }
+    if (result.resultCode == Activity.RESULT_OK) {
+        val data = result.data ?: return
+        val place = Autocomplete.getPlaceFromIntent(data)
+        onPlaceSelected(place)
+        getPlaceDetails(this, place.id, callback)
+    } else if (result.resultCode == AutocompleteActivity.RESULT_ERROR) {
+        val data = result.data ?: return
+        val status = Autocomplete.getStatusFromIntent(data)
+        Log.i("PlacesAPI", status.toString())
     }
 }
 

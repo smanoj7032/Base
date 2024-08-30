@@ -52,10 +52,6 @@ class ProviderModule {
     fun providesApiService(retrofit: Retrofit): ApiServices =
         retrofit.create(ApiServices::class.java)
 
-    @Provides
-    @Singleton
-    fun provideSharedPref(application: Application): SharedPreferences =
-        application.getSharedPreferences(application.packageName, MODE_PRIVATE)
 
     @Singleton
     @Provides

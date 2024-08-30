@@ -1,6 +1,5 @@
 package com.manoj.base.presentation.fragment.home
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -9,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.manoj.base.BR
 import com.manoj.base.core.common.adapter.CallBackModel
 import com.manoj.base.core.common.adapter.LoadMoreAdapter
-import com.manoj.base.core.common.adapter.RVAdapterWithPaging
+import com.manoj.base.core.common.adapter.BaseAdapterWithPaging
 import com.manoj.base.core.common.base.BaseFragment
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
@@ -28,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
     override val viewModel: HomeVM by viewModels()
-    private lateinit var postsAdapter: RVAdapterWithPaging<Post, ItemPostBinding>
+    private lateinit var postsAdapter: BaseAdapterWithPaging<Post, ItemPostBinding>
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
         setPagingAdapter()
     }
@@ -64,7 +63,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
     }
 
     private fun setPagingAdapter() {
-        val diffCallback = RVAdapterWithPaging.createDiffCallback<Post> { oldItem, newItem ->
+        val diffCallback = BaseAdapterWithPaging.createDiffCallback<Post> { oldItem, newItem ->
             return@createDiffCallback oldItem.id == newItem.id
         }
         val footerAdapter = LoadMoreAdapter { postsAdapter.retry() }
@@ -79,7 +78,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
                 else 1
             }
         }*/
-        postsAdapter = RVAdapterWithPaging(
+        postsAdapter = BaseAdapterWithPaging(
             diffCallback,
             Lyt.item_post,
             BR.bean,

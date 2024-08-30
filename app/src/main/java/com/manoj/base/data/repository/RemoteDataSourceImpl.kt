@@ -6,16 +6,16 @@ import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.data.bean.Posts
 import com.manoj.base.domain.repositary.pagingsource.PostsPagingSource
 import com.manoj.base.data.api.ApiServices
-import com.manoj.base.domain.repositary.BaseRepo
+import com.manoj.base.domain.repositary.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
-class BaseRepoImpl @Inject constructor(
+class RemoteDataSourceImpl @Inject constructor(
     private val apiService: ApiServices,
     private val dispatchersProvider: DispatchersProvider
-) : BaseRepo {
+) : RemoteDataSource {
 
 
     override fun getPosts() = Pager(config = PagingConfig(

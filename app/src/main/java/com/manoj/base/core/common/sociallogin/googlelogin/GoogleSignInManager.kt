@@ -1,6 +1,8 @@
 package com.manoj.base.core.common.sociallogin.googlelogin
 
 import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -52,15 +54,12 @@ class GoogleSignInManager(
         val googleSignRequest = createGoogleSignInRequest()
 
         try {
-            // Asynchronously request credentials using the CredentialManager
             val result = credentialManager?.getCredential(
                 request = googleSignRequest,
                 context = context
             )
-            // Emit success if the sign-in is successful
             emit(handleSignIn(result))
         } catch (e: GetCredentialException) {
-            // Emit failure if an exception is encountered
             emit(Result.Error("Unexpected type of credential: ${e.message}"))
         }
     }.onStart { emit(Result.Loading) }
@@ -78,7 +77,7 @@ class GoogleSignInManager(
         return GetGoogleIdOption.Builder()
             .setFilterByAuthorizedAccounts(false).setRequestVerifiedPhoneNumber(true)
             .setServerClientId(BuildConfig.web_client_id)
-            .setAutoSelectEnabled(true)
+            .setAutoSelectEnabled(false)
             .setNonce(hashedNonce)
             .build()
     }
@@ -144,6 +143,11 @@ class GoogleSignInManager(
     private fun createClearCredentialStateRequest(): ClearCredentialStateRequest =
         ClearCredentialStateRequest()
 
+    fun getAddGoogleAccountIntent(): Intent {
+        val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
+        intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
+        return intent
+    }
 }
 
 
