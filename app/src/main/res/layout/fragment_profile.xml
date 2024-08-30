@@ -35,10 +35,10 @@
 
                 <ImageView
                     android:id="@+id/ivProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     placeHolder="@drawable/bg_image"
                     setImageUrl="@{bean.profilePictureUrl}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:padding="@dimen/_3sdp" />
 
             </FrameLayout>
@@ -55,8 +55,8 @@
             <TextView
                 android:id="@+id/tv_email"
                 style="@style/TextView.Thin"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:text="@{bean.email}"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_name"
                 tools:text="Email" />
@@ -72,14 +72,15 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_email" />
 
             <TextView
-                android:id="@+id/tv_version"
+                android:id="@+id/tv_phone"
                 style="@style/TextView.Light"
                 android:layout_marginBottom="@dimen/_15sdp"
-                android:text="Version"
+                android:text="@{bean.phone}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_main" />
+                app:layout_constraintTop_toBottomOf="@id/ll_main"
+                tools:text="Phone Number" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

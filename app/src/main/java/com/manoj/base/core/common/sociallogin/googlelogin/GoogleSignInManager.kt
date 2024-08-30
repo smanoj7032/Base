@@ -1,8 +1,6 @@
 package com.manoj.base.core.common.sociallogin.googlelogin
 
 import android.content.Context
-import android.content.Intent
-import android.provider.Settings
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
@@ -19,14 +17,12 @@ import com.manoj.base.core.network.helper.apihelper.Result
 import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.utils.extension.toJson
 import com.manoj.base.data.local.DataStoreManager
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import java.security.MessageDigest
 import java.util.UUID
-import kotlin.coroutines.CoroutineContext
 
 class GoogleSignInManager(
     private val context: Context,
@@ -80,7 +76,7 @@ class GoogleSignInManager(
     private fun createGoogleIdOption(): GetGoogleIdOption {
         val hashedNonce = generateNonce()
         return GetGoogleIdOption.Builder()
-            .setFilterByAuthorizedAccounts(false)
+            .setFilterByAuthorizedAccounts(false).setRequestVerifiedPhoneNumber(true)
             .setServerClientId(BuildConfig.web_client_id)
             .setAutoSelectEnabled(true)
             .setNonce(hashedNonce)
@@ -113,7 +109,7 @@ class GoogleSignInManager(
                     googleIdTokenCredential.data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID"),
                     googleIdTokenCredential.displayName,
                     googleIdTokenCredential.profilePictureUri.toString(),
-                    googleIdTokenCredential.idToken
+                    googleIdTokenCredential.phoneNumber
                 )
                 dataStoreManager?.saveUser(user)
                 dataStoreManager?.saveAccessToken(googleIdTokenCredential.toString())
@@ -130,7 +126,7 @@ class GoogleSignInManager(
         val email: String?,
         val name: String?,
         val profilePictureUrl: String?,
-        val idToken: String?,
+        val phone: String?,
     )
 
     fun signOut(): Flow<Result<String>> = flow {
