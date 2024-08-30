@@ -1,5 +1,6 @@
 package com.manoj.base.presentation.fragment.home
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,16 +13,20 @@ import com.manoj.base.core.common.adapter.RVAdapterWithPaging
 import com.manoj.base.core.common.base.BaseFragment
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
+import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
 import com.manoj.base.core.utils.extension.launchAndRepeatWithViewLifecycle
+import com.manoj.base.core.utils.picker.MediaModel
+import com.manoj.base.core.utils.picker.MediaType
+import com.manoj.base.core.utils.picker.PickerDialogHelper
 import com.manoj.base.data.bean.Post
 import com.manoj.base.databinding.FragmentHomeBinding
 import com.manoj.base.databinding.ItemPostBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<FragmentHomeBinding,HomeVM>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
     override val viewModel: HomeVM by viewModels()
     private lateinit var postsAdapter: RVAdapterWithPaging<Post, ItemPostBinding>
     override fun onCreateView(view: View, saveInstanceState: Bundle?) {
@@ -41,8 +46,16 @@ class HomeFragment : BaseFragment<FragmentHomeBinding,HomeVM>() {
     }
 
     private fun setPickerListener() {
-        SystemVariables.onPickerClosed = { itemType, uri, uris ->
-            Logger.e("onPickerClosed", "$itemType")
+        picker = PickerDialogHelper(
+            this, false, baseContext, items = arrayListOf(
+                MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
+            )
+        ) { mediaType, uri, uris ->
+            Logger.e("onPickerClosed", "$mediaType")
         }
     }
 

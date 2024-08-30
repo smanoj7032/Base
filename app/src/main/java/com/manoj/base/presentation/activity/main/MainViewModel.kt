@@ -20,9 +20,20 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     getPostsUseCase: GetPostsUseCase,
-    val dispatchers: DispatchersProvider,
+    val dispatchers: DispatchersProvider, dataStoreManager: DataStoreManager
 ) : BaseViewModel(dispatchers) {
     val posts: Flow<PagingData<Post>> = getPostsUseCase.invoke().cachedIn(viewModelScope)
 
+    private val _accessToken = MutableStateFlow<String?>(null)
+    val accessToken: StateFlow<String?> get() = _accessToken
 
+    init {
+        launchOnIO { _accessToken.value = dataStoreManager.getToken() }
+    }
+
+    private fun observeAccessToken(dataStoreManager: DataStoreManager) {
+        dataStoreManager.accessTokenFlow
+            .onEach { token -> _accessToken.value = token }
+            .launchIn(viewModelScope)
+    }
 }

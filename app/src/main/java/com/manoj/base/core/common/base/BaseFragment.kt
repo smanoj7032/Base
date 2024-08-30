@@ -49,15 +49,6 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        picker = PickerDialogHelper(
-            this, false, baseContext, items = arrayListOf(
-                MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
-                MediaModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
-                MediaModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
-                MediaModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
-                MediaModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
-            )
-        )
         onCreateView(view, savedInstanceState)
 
         lifecycleScope.launch { apiCall() }

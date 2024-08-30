@@ -19,6 +19,7 @@ import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
 import com.manoj.base.core.utils.extension.logoutSheet
 import com.manoj.base.core.utils.extension.setSingleClickListener
+import com.manoj.base.core.utils.extension.setupNavGraph
 import com.manoj.base.core.utils.extension.showToast
 import com.manoj.base.databinding.ActivityMainBinding
 import com.manoj.base.presentation.activity.main.backpress.BackPressHandler
@@ -35,26 +36,27 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private var logoutSheet: BottomSheetMaterialDialog? = null
     private var navigationListener: NavigationListener? = null
-
     private lateinit var navController: NavController
 
-    override suspend fun apiCall() { Logger.d("Api Call--->>", "Activity Called()") }
+    override suspend fun apiCall() {
+        Logger.d("Api Call--->>", "Activity Called()")
+    }
 
 
     override fun getLayoutResource() = Lyt.activity_main
     override val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView() {
-        setupNavController()
         initViews()
         setUpLogoutSheet()
     }
 
-    private fun setupNavController() {
+    private fun setupNavController(startDestinationId: Int) {
         val navHostFragment =
             supportFragmentManager.findFragmentById(Ids.container) as NavHostFragment
         navController = navHostFragment.navController
-        navigationListener=NavigationListener(this,binding,logoutSheet)
+        navController.setupNavGraph(startDestinationId)
+        navigationListener = NavigationListener(this, binding, logoutSheet)
     }
 
     private fun setUpLogoutSheet() {
@@ -70,8 +72,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
                 ).signOut().collect {
                     when (it) {
                         is Result.Success -> {
-                            navigateToLogin()
                             onLoading(false)
+                            navigateToLogin()
                         }
 
                         is Result.Error -> {
@@ -104,7 +106,9 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     }
 
-    override suspend fun setObserver() {}
+    override suspend fun setObserver() {
+        viewModel.accessToken.collect { setupNavController(if (it != null) Ids.homeFragment else Ids.loginFragment) }
+    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()

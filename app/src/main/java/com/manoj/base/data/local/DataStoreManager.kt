@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,6 +46,10 @@ class DataStoreManager @Inject constructor(
     val accessTokenFlow: Flow<String?> = dataStore.data.map { preferences ->
         preferences[ACCESS_TOKEN_KEY]
     }
+
+    suspend fun getToken(): String? = dataStore.data.map { preferences ->
+        preferences[ACCESS_TOKEN_KEY]
+    }.first()
 
     /**Login Platform*/
     suspend fun saveLoginPlatform(loginUsing: String) {

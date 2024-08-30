@@ -2,6 +2,7 @@ package com.manoj.base.presentation.fragment.postdetail
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -18,10 +19,14 @@ import com.manoj.base.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.base.core.common.base.BaseFragment
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
+import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
 import com.manoj.base.core.utils.extension.customCollector
 import com.manoj.base.core.utils.extension.showToast
+import com.manoj.base.core.utils.picker.MediaModel
+import com.manoj.base.core.utils.picker.MediaType
+import com.manoj.base.core.utils.picker.PickerDialogHelper
 import com.manoj.base.data.bean.Post
 import com.manoj.base.databinding.FragmentPostDetailBinding
 import com.manoj.base.databinding.ItemPostDetailBinding
@@ -49,15 +54,24 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
     }
 
     private fun setPickerListener() {
-        SystemVariables.onPickerClosed = { itemType, uri, uris ->
+        picker = PickerDialogHelper(
+            this, false, baseContext, items = arrayListOf(
+                MediaModel(MediaType.TAKE_PICTURE, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_IMAGE, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.RECORD_VIDEO, itemIcon = Drw.ic_camera_svg),
+                MediaModel(MediaType.CHOOSE_VIDEO, itemIcon = Drw.ic_gallery_svg),
+                MediaModel(MediaType.SELECT_FILES, itemIcon = Drw.ic_camera_svg)
+            )
+        ) { mediaType, uri, uris ->
+            Logger.e("onPickerClosed", "$mediaType")
             /*when (itemType) {
-                MediaType.TAKE_PICTURE, MediaType.CHOOSE_IMAGE ->
-                    requireActivity().performCrop(uri, cropImageLauncher)
+            MediaType.TAKE_PICTURE, MediaType.CHOOSE_IMAGE ->
+                requireActivity().performCrop(uri, cropImageLauncher)
 
-                else -> updateItem(uri.toString())
-            }*/
+            else -> updateItem(uri.toString())
+        }*/
             updateItem(uri.toString())
-            Logger.e("onPickerClosed", "$itemType")
+            Logger.e("onPickerClosed", "$mediaType")
         }
     }
 

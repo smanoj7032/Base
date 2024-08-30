@@ -30,9 +30,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
     override fun getLayoutResource(): Int = Lyt.fragment_login
 
-    override suspend fun setObserver() {
-        viewModel.accessToken.collect { if (!it.isNullOrEmpty()) navigateToHome() }
-    }
+    override suspend fun setObserver() {}
 
     override suspend fun apiCall() {}
 
@@ -62,7 +60,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
 
             googleSignInManager.signInWithGoogle().collectLatest { result ->
                 when (result) {
-                    is Result.Success -> onLoading(false)
+                    is Result.Success -> {
+                        onLoading(false)
+                        navigateToHome()
+                    }
                     is Result.Error -> {
                         requireContext().showToast(result.message)
                         onLoading(false)

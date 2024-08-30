@@ -15,21 +15,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     dispatchers: DispatchersProvider,
-    dataStoreManager: DataStoreManager
 ) : BaseViewModel(dispatchers) {
 
     val fieldEmail by lazy { ObservableField("base@yopmail.com") }
     val fieldPass by lazy { ObservableField("Mind@123") }
-    private val _accessToken = MutableStateFlow<String?>(null)
-    val accessToken: StateFlow<String?> get() = _accessToken
 
-    init {
-        observeAccessToken(dataStoreManager)
-    }
-
-    private fun observeAccessToken(dataStoreManager: DataStoreManager) {
-        dataStoreManager.accessTokenFlow
-            .onEach { token -> _accessToken.value = token }
-            .launchIn(viewModelScope)
-    }
 }

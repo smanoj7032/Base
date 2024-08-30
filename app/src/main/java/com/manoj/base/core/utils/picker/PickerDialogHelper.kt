@@ -19,7 +19,6 @@ import com.manoj.base.core.common.adapter.CallBackModel
 import com.manoj.base.core.common.adapter.Callbacks
 import com.manoj.base.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.base.core.common.basedialogs.BaseBottomSheetDialog
-import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
@@ -36,7 +35,8 @@ class PickerDialogHelper(
     resultCaller: ActivityResultCaller,
     isMultiple: Boolean? = null,
     private var context: Context,
-    private var items: ArrayList<MediaModel>
+    private var items: ArrayList<MediaModel>,
+   private val onPickerClosed: ((MediaType, Uri?, List<Uri>?) -> Unit)? = null
 ) {
 
     private var pickerDialog: BaseBottomSheetDialog<DialogPickerBinding>? = null
@@ -84,7 +84,7 @@ class PickerDialogHelper(
                 pickerAdapter = BaseAdapter(
                     Lyt.item_picker_grid,
                     BR.bean,
-                    callbacks = clickListener, onBind = { binding, bean,position ->
+                    callbacks = clickListener, onBind = { binding, bean, position ->
                         initIcon(bean, binding)
                         initLabel(bean, binding)
                     }
@@ -212,7 +212,7 @@ class PickerDialogHelper(
             return
         }
         val uri = data.data ?: return
-        SystemVariables.onPickerClosed(MediaType.CHOOSE_IMAGE, uri, null)
+        onPickerClosed?.invoke(MediaType.CHOOSE_IMAGE, uri, null)
         pickerDialog?.dismiss()
     }
 
@@ -221,7 +221,7 @@ class PickerDialogHelper(
             return
         }
         val uri = data.data ?: return
-        SystemVariables.onPickerClosed(MediaType.CHOOSE_VIDEO, uri, null)
+        onPickerClosed?.invoke(MediaType.CHOOSE_VIDEO, uri, null)
         pickerDialog?.dismiss()
     }
 
@@ -230,7 +230,7 @@ class PickerDialogHelper(
             return
         }
         val uri = data.data ?: return
-        SystemVariables.onPickerClosed(MediaType.SELECT_FILES, uri, null)
+        onPickerClosed?.invoke(MediaType.SELECT_FILES, uri, null)
         pickerDialog?.dismiss()
     }
 
@@ -243,14 +243,14 @@ class PickerDialogHelper(
             takePhoto =
                 it.registerForActivityResult(ActivityResultContracts.TakePicture()) { isSaved ->
                     if (isSaved) {
-                        SystemVariables.onPickerClosed(MediaType.TAKE_PICTURE, uri, null)
+                        onPickerClosed?.invoke(MediaType.TAKE_PICTURE, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
             chooseImage =
                 it.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                     uri.let { tempUri ->
-                        SystemVariables.onPickerClosed(MediaType.CHOOSE_IMAGE, uri, null)
+                        onPickerClosed?.invoke(MediaType.CHOOSE_IMAGE, uri, null)
                         pickerDialog?.dismiss()
 
                     }
@@ -258,18 +258,18 @@ class PickerDialogHelper(
             recordVideo =
                 it.registerForActivityResult(ActivityResultContracts.CaptureVideo()) { result ->
                     if (result) {
-                        SystemVariables.onPickerClosed(MediaType.RECORD_VIDEO, uri, null)
+                        onPickerClosed?.invoke(MediaType.RECORD_VIDEO, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { result ->
-                    SystemVariables.onPickerClosed(MediaType.CHOOSE_VIDEO, result, null)
+                    onPickerClosed?.invoke(MediaType.CHOOSE_VIDEO, result, null)
                     pickerDialog?.dismiss()
                 }
             selectFile =
                 it.registerForActivityResult(ActivityResultContracts.OpenDocument()) { result ->
-                    SystemVariables.onPickerClosed(MediaType.SELECT_FILES, result, null)
+                    onPickerClosed?.invoke(MediaType.SELECT_FILES, result, null)
                     pickerDialog?.dismiss()
                 }
         }
@@ -280,7 +280,7 @@ class PickerDialogHelper(
             takePhoto =
                 it.registerForActivityResult(ActivityResultContracts.TakePicture()) { isSaved ->
                     if (isSaved) {
-                        SystemVariables.onPickerClosed(MediaType.TAKE_PICTURE, uri, null)
+                        onPickerClosed?.invoke(MediaType.TAKE_PICTURE, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
@@ -291,7 +291,7 @@ class PickerDialogHelper(
                     )
                 ) { uri ->
                     uri.let { tempUri ->
-                        SystemVariables.onPickerClosed(MediaType.CHOOSE_IMAGE, null, tempUri)
+                        onPickerClosed?.invoke(MediaType.CHOOSE_IMAGE, null, tempUri)
                         pickerDialog?.dismiss()
 
                     }
@@ -299,18 +299,18 @@ class PickerDialogHelper(
             recordVideo =
                 it.registerForActivityResult(ActivityResultContracts.CaptureVideo()) { result ->
                     if (result) {
-                        SystemVariables.onPickerClosed(MediaType.RECORD_VIDEO, uri, null)
+                        onPickerClosed?.invoke(MediaType.RECORD_VIDEO, uri, null)
                         pickerDialog?.dismiss()
                     }
                 }
             chooseVideo =
                 it.registerForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(10)) { result ->
-                    SystemVariables.onPickerClosed(MediaType.CHOOSE_VIDEO, null, result)
+                    onPickerClosed?.invoke(MediaType.CHOOSE_VIDEO, null, result)
                     pickerDialog?.dismiss()
                 }
             selectFile =
                 it.registerForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { result ->
-                    SystemVariables.onPickerClosed(MediaType.SELECT_FILES, null, result)
+                    onPickerClosed?.invoke(MediaType.SELECT_FILES, null, result)
                     pickerDialog?.dismiss()
                 }
         }
