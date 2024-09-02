@@ -17,12 +17,14 @@ import com.manoj.base.core.common.adapter.CallBackModel
 import com.manoj.base.core.common.adapter.Callbacks
 import com.manoj.base.core.common.adapter.RecyclerItemTouchHelper
 import com.manoj.base.core.common.base.BaseFragment
+import com.manoj.base.core.network.helper.NetworkMonitor
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
 import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
 import com.manoj.base.core.utils.extension.customCollector
+import com.manoj.base.core.utils.extension.hide
 import com.manoj.base.core.utils.extension.showToast
 import com.manoj.base.core.utils.picker.MediaModel
 import com.manoj.base.core.utils.picker.MediaType
@@ -51,6 +53,11 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
             }
         setAdapter()
         setPickerListener()
+        SystemVariables.onNetworkChange = {
+            if (it == NetworkMonitor.NetworkState.Available) {
+                getPost()
+            }
+        }
     }
 
     private fun setPickerListener() {
@@ -120,10 +127,6 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
 
     override suspend fun apiCall() {
         Logger.d("Api Call--->>", "Fragment Called()")
-        getPost()
-    }
-
-    override fun onRetry() {
         getPost()
     }
 

@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.manoj.base.BR
 import com.manoj.base.core.network.helper.NetworkMonitor
 import com.manoj.base.core.network.helper.SystemVariables
@@ -31,12 +32,10 @@ import javax.inject.Inject
 /** ENJOY CODING */
 abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
     abstract val viewModel: VM
-    val emptyView: View by lazy { findViewById(Ids.emptyView) }
     val container: FragmentContainerView by lazy { findViewById(Ids.container) }
-    val btnRetry: Button by lazy { findViewById(Ids.btnRetry) }
-    private var onRetryClick: (() -> Unit)? = null
 
-    val tvErrorText: TextView by lazy { findViewById(Ids.tvErrorText) }
+    val tvErrorText: TextView by lazy { findViewById(Ids.tvError) }
+    val swipeRefreshLayout: SwipeRefreshLayout by lazy { findViewById(Ids.swipeRefreshLayout) }
     private val progressBar: View by lazy { findViewById(Ids.progress_bar) }
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
     lateinit var binding: Binding
@@ -47,6 +46,7 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
 
     @Inject
     lateinit var dataStoreManager: DataStoreManager
+
     @Inject
     lateinit var dispatchersProvider: DispatchersProvider
 
@@ -57,20 +57,11 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
         binding = DataBindingUtil.setContentView(this, getLayoutResource())
         binding.setVariable(BR.vm, viewModel)
         lifecycleScope.launch { apiCall() }
-        SystemVariables.onNetworkChange = {
-            Logger.e("onNetworkChange", "Activity------>> $it")
-            when (it) {
-                NetworkMonitor.NetworkState.Available -> {
-                    lifecycleScope.launch { apiCall() }
-                }
-
-                NetworkMonitor.NetworkState.Lost -> {
-                    onLoading(false)
-                }
-            }
-        }
         onCreateView()
         lifecycleScope.launch { setObserver() }
+        swipeRefreshLayout.setOnRefreshListener {
+            swipeRefreshLayout.isRefreshing = false
+        }
     }
 
     protected abstract suspend fun apiCall()
@@ -79,31 +70,14 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
     protected abstract suspend fun setObserver()
     protected open fun getLoaderView(): ViewDataBinding? = binding
     fun onError(errorMessage: String?, showErrorView: Boolean) {
-        if (showErrorView) {
-            emptyView.show()
-            tvErrorText.text = errorMessage
-        } else emptyView.hide()
+        tvErrorText.visibility=View.VISIBLE
+        tvErrorText.text = errorMessage
     }
 
-    fun setupRetryButton(onRetryClick: () -> Unit) {
-        this.onRetryClick = onRetryClick
-        btnRetry.setOnClickListener {
-            if (SystemVariables.isInternetConnected) {
-                this.onRetryClick?.invoke()
-                emptyView.hide()
-            } else {
-                showToast(getString(Str.slow_or_no_internet_access))
-            }
-        }
+    fun onLoading(show: Boolean) {
+        getLoaderView()?.setVariable(BR.show, show)
+        tvErrorText.visibility=View.GONE
     }
-
-    // Optionally, clear the listener to avoid memory leaks
-    fun clearRetryButtonListener() {
-        btnRetry.setOnClickListener(null)
-        onRetryClick = null
-    }
-
-    fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
 
     private fun isMain(): Boolean = this.javaClass.simpleName == "MainActivity"
 

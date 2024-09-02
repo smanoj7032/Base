@@ -68,7 +68,9 @@ open class BaseAdapterWithPaging<M : Any, B : ViewDataBinding>(
                     else -> null
                 }
                 errorState?.let {
-                    onError(it.error.message, true)
+                    if (itemCount < 1) {
+                        onError(it.error.message, true)
+                    }
                 }
             }
         }

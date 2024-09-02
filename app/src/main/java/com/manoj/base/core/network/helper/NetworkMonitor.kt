@@ -77,7 +77,7 @@ class NetworkMonitor @Inject constructor(
         if (previousState != NetworkState.Lost) {
             channel.trySend(NetworkState.Lost).isSuccess
             previousState = NetworkState.Lost
-            context.showErrorToast(context.getString(Str.slow_or_no_internet_access))
+            //context.showErrorToast(context.getString(Str.slow_or_no_internet_access))
             Logger.d("Network state changed to: Lost")
         }
     }

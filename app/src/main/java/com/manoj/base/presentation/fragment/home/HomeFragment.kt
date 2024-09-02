@@ -11,11 +11,13 @@ import com.manoj.base.core.common.adapter.CallBackModel
 import com.manoj.base.core.common.adapter.LoadMoreAdapter
 import com.manoj.base.core.common.adapter.BaseAdapterWithPaging
 import com.manoj.base.core.common.base.BaseFragment
+import com.manoj.base.core.network.helper.NetworkMonitor
 import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
 import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Ids
 import com.manoj.base.core.utils.extension.Lyt
+import com.manoj.base.core.utils.extension.hide
 import com.manoj.base.core.utils.extension.launchAndRepeatWithViewLifecycle
 import com.manoj.base.core.utils.picker.MediaModel
 import com.manoj.base.core.utils.picker.MediaType
@@ -37,7 +39,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
 
     override suspend fun setObserver() {
         collectPosts()
-        SystemVariables.onNetworkChange = { postsAdapter.retry() }
         setPickerListener()
     }
 
@@ -47,7 +48,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
                 postsAdapter.submitData(it)
             }
         }
-        parentActivity?.emptyView?.isVisible = false
+        SystemVariables.onNetworkChange = {
+            if (it == NetworkMonitor.NetworkState.Available) {
+                postsAdapter.retry()
+            }
+        }
     }
 
     private fun setPickerListener() {
@@ -66,10 +71,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
 
     override suspend fun apiCall() {
 
-    }
-
-    override fun onRetry() {
-        collectPosts()
     }
 
     private fun setPagingAdapter() {

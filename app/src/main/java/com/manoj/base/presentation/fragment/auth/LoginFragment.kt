@@ -33,7 +33,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override suspend fun setObserver() {}
 
     override suspend fun apiCall() {}
-    override fun onRetry() {}
 
     private fun initView() = with(binding) {
         btnLogin.setSingleClickListener { socialLogin() }
@@ -65,10 +64,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
                         onLoading(false)
                         navigateToHome()
                     }
+
                     is Result.Error -> {
                         requireContext().showToast(result.message)
                         onLoading(false)
                     }
+
                     is Result.Loading -> onLoading(true)
                 }
             }

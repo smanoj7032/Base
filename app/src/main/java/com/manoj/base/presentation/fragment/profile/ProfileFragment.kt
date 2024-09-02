@@ -57,8 +57,4 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileVM>() {
     override suspend fun apiCall() {
 
     }
-
-    override fun onRetry() {
-
-    }
 }

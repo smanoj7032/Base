@@ -7,13 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.manoj.base.BR
+import com.manoj.base.core.network.helper.NetworkMonitor
+import com.manoj.base.core.network.helper.SystemVariables
+import com.manoj.base.core.utils.Logger
 import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.utils.extension.Drw
+import com.manoj.base.core.utils.extension.hide
 import com.manoj.base.core.utils.extension.hideKeyboard
 import com.manoj.base.core.utils.picker.MediaModel
 import com.manoj.base.core.utils.picker.MediaType
@@ -50,7 +55,6 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onCreateView(view, savedInstanceState)
-        parentActivity?.setupRetryButton { onRetry()}
         lifecycleScope.launch { apiCall() }
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
     }
@@ -59,22 +63,20 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     protected abstract suspend fun setObserver()
     protected abstract suspend fun apiCall()
-    protected abstract  fun onRetry()
+
     protected open fun getLoaderView(): ViewDataBinding? = binding
     override fun onPause() {
         super.onPause()
         activity?.hideKeyboard()
     }
 
-    protected fun onLoading(show: Boolean) = getLoaderView()?.setVariable(BR.show, show)
+    protected fun onLoading(show: Boolean) {
+        parentActivity?.tvErrorText?.visibility=View.GONE
+        getLoaderView()?.setVariable(BR.show, show)
+    }
 
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
         parentActivity?.onError(msg, showErrorView)
         Log.e("Error-->>", msg)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        parentActivity?.clearRetryButtonListener()
     }
 }
