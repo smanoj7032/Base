@@ -2,6 +2,7 @@ package com.manoj.base.presentation.fragment.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,13 +36,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
     override fun getLayoutResource(): Int = Lyt.fragment_home
 
     override suspend fun setObserver() {
+        collectPosts()
+        SystemVariables.onNetworkChange = { postsAdapter.retry() }
+        setPickerListener()
+    }
+
+    private fun collectPosts() {
         launchAndRepeatWithViewLifecycle {
             viewModel.posts.collect {
                 postsAdapter.submitData(it)
             }
         }
-        SystemVariables.onNetworkChange = { postsAdapter.retry() }
-        setPickerListener()
+        parentActivity?.emptyView?.isVisible = false
     }
 
     private fun setPickerListener() {
@@ -60,6 +66,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeVM>() {
 
     override suspend fun apiCall() {
 
+    }
+
+    override fun onRetry() {
+        collectPosts()
     }
 
     private fun setPagingAdapter() {

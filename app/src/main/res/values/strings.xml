@@ -16,6 +16,7 @@
     <string name="logout_title">Logout?</string>
     <string name="logout">Logout</string>
     <string name="delete_title">Delete?</string>
+    <string name="error_title">Error?</string>
     <string name="delete">Delete</string>
     <string name="username">Username</string>
     <string name="dashboard">Dashboard</string>

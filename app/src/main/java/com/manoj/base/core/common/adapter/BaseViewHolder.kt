@@ -5,6 +5,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.manoj.base.core.utils.extension.setSingleClickListener
 
 class BaseViewHolder<Binding : ViewDataBinding, Model>(
     private val binding: Binding,

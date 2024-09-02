@@ -20,7 +20,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "11.01.2001"
 
         val properties = Properties()
         val localPropertiesFile = project.rootProject.file("apikeys.properties")
@@ -101,6 +101,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.bundles.google.signin)
     implementation(libs.bundles.datastore)
+    implementation(libs.androidx.swiperefreshlayout)
     kapt(libs.hilt.android.compiler)
     implementation(libs.places)
     implementation(libs.androidx.paging.runtime.ktx)

@@ -104,6 +104,7 @@ suspend fun <T> StateFlow<Result<T>>.customCollector(
             is Result.Success -> {
                 onSuccess.invoke(state.data)
                 onLoading.invoke(false)
+                onError.invoke(null, false)
             }
 
             is Result.Error -> {
@@ -112,6 +113,7 @@ suspend fun <T> StateFlow<Result<T>>.customCollector(
             }
 
             is Result.Loading -> {
+                onError.invoke(null, false)
                 onLoading.invoke(true)
             }
         }

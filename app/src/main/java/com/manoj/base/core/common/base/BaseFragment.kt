@@ -50,7 +50,7 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onCreateView(view, savedInstanceState)
-
+        parentActivity?.setupRetryButton { onRetry()}
         lifecycleScope.launch { apiCall() }
         viewLifecycleOwner.lifecycleScope.launch { setObserver() }
     }
@@ -59,6 +59,7 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
     protected abstract fun onCreateView(view: View, saveInstanceState: Bundle?)
     protected abstract suspend fun setObserver()
     protected abstract suspend fun apiCall()
+    protected abstract  fun onRetry()
     protected open fun getLoaderView(): ViewDataBinding? = binding
     override fun onPause() {
         super.onPause()
@@ -70,5 +71,10 @@ abstract class BaseFragment<Binding : ViewDataBinding, VM : BaseViewModel> : Fra
     fun onError(errorMessage: String?, showErrorView: Boolean) = errorMessage?.let { msg ->
         parentActivity?.onError(msg, showErrorView)
         Log.e("Error-->>", msg)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        parentActivity?.clearRetryButtonListener()
     }
 }

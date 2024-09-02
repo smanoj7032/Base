@@ -123,6 +123,10 @@ class PostDetailFragment : BaseFragment<FragmentPostDetailBinding, PostDetailVM>
         getPost()
     }
 
+    override fun onRetry() {
+        getPost()
+    }
+
     private fun getPost() = arguments?.let {
         val id = PostDetailFragmentArgs.fromBundle(it).id
         Logger.d("ID--->>>", "$id")

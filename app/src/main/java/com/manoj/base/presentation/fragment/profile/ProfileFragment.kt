@@ -1,12 +1,10 @@
 package com.manoj.base.presentation.fragment.profile
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.manoj.base.core.common.base.BaseFragment
-import com.manoj.base.core.network.helper.SystemVariables
 import com.manoj.base.core.utils.Logger
 import com.manoj.base.core.utils.extension.Drw
 import com.manoj.base.core.utils.extension.Lyt
@@ -57,6 +55,10 @@ class ProfileFragment : BaseFragment<FragmentProfileBinding, ProfileVM>() {
     }
 
     override suspend fun apiCall() {
+
+    }
+
+    override fun onRetry() {
 
     }
 }

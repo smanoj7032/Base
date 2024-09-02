@@ -33,6 +33,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>() {
     override suspend fun setObserver() {}
 
     override suspend fun apiCall() {}
+    override fun onRetry() {}
 
     private fun initView() = with(binding) {
         btnLogin.setSingleClickListener { socialLogin() }
