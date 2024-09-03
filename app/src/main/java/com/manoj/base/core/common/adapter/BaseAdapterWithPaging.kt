@@ -75,8 +75,4 @@ open class BaseAdapterWithPaging<M : Any, B : ViewDataBinding>(
             }
         }
     }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
 }
