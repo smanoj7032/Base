@@ -21,10 +21,7 @@ class RemoteDataSourceImpl @Inject constructor(
     override fun getPosts() = Pager(config = PagingConfig(
         pageSize = 30, initialLoadSize = 2 * 30,
     ), pagingSourceFactory = {
-        PostsPagingSource(
-            apiService, dispatchersProvider
-        )
-    }).flow
+        PostsPagingSource(apiService, dispatchersProvider) }).flow
 
 
     override suspend fun getPost(id: String): Flow<Posts?> {
