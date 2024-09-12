@@ -13,7 +13,7 @@
 
         <variable
             name="vm"
-            type="com.manoj.base.presentation.fragment.auth.LoginViewModel" />
+            type="com.manoj.base.presentation.fragment.onboarding.login.LoginViewModel" />
     </data>
 
     <ScrollView

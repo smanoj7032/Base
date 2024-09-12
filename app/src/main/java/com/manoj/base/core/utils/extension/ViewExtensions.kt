@@ -7,6 +7,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -387,9 +388,7 @@ fun AppCompatActivity.openPlaceSearchBox(placeSearchLauncher: ActivityResultLaun
 }
 
 fun AppCompatActivity.handlePlaceSearchResult(
-    result: ActivityResult,
-    onPlaceSelected: (Place) -> Unit,
-    callback: (PlaceDetails?) -> Unit
+    result: ActivityResult, onPlaceSelected: (Place) -> Unit, callback: (PlaceDetails?) -> Unit
 ) {
     if (result.resultCode == Activity.RESULT_OK) {
         val data = result.data ?: return
@@ -506,27 +505,20 @@ fun View.setSingleClickListener(listener: (v: View) -> Unit) {
 }
 
 fun ImageView.loadImage(uri: Uri?) {
-    Glide.with(this.context).load(uri)
-        .placeholder(Drw.ic_image).error(Drw.ic_image)
-        .into(this)
+    Glide.with(this.context).load(uri).placeholder(Drw.ic_image).error(Drw.ic_image).into(this)
 }
 
 fun Context.displayDialog(
-    title: String?,
-    message: String?,
-    onPositiveClick: () -> Unit
+    title: String?, message: String?, onPositiveClick: () -> Unit
 ) {
 
     val dialogBuilder = android.app.AlertDialog.Builder(this)
     dialogBuilder.setTitle(title)
-    dialogBuilder.setMessage(message)
-        .setCancelable(false)
-        .setPositiveButton("Yes") { _, _ ->
-            onPositiveClick()
-        }
-        .setNegativeButton("No") { dialog, _ ->
-            dialog.dismiss()
-        }
+    dialogBuilder.setMessage(message).setCancelable(false).setPositiveButton("Yes") { _, _ ->
+        onPositiveClick()
+    }.setNegativeButton("No") { dialog, _ ->
+        dialog.dismiss()
+    }
     val alert = dialogBuilder.create()
     alert.show()
 
@@ -670,3 +662,66 @@ fun Context.showErrorToast(errorMessage: String?) = errorMessage?.let {
 }
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = Constants.PREFERENCE_FILE_NAME)
+
+
+fun Context.openPdf(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(Uri.parse(url), "application/pdf")
+        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+    }
+
+    try {
+        this.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        openLink(url)
+    }
+}
+
+fun Context.openLink(url: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.data = Uri.parse(url)
+    startActivity(intent)
+}
+
+fun Activity.callPhone(phone: String) {
+    val intent = Intent(Intent.ACTION_DIAL)
+    intent.data = Uri.parse("tel:${phone}")
+    startActivity(intent)
+}
+
+fun Context.sendEmail(
+    userMail: String,
+    subject: String = "",
+    body: String = ""
+) {
+    // Create an intent to open Gmail directly
+    val gmailIntent = Intent(Intent.ACTION_SENDTO).apply {
+        data = Uri.parse("mailto:$userMail") // Only email apps should handle this
+        putExtra(Intent.EXTRA_EMAIL, arrayOf(userMail)) // Pre-fill recipient
+        putExtra(Intent.EXTRA_SUBJECT, subject) // Pre-fill subject
+        putExtra(Intent.EXTRA_TEXT, body) // Pre-fill email body
+    }
+
+    // Attempt to open Gmail directly
+    gmailIntent.setPackage("com.google.android.gm")
+
+    try {
+        // Check if Gmail is available and start the activity
+        startActivity(gmailIntent)
+    } catch (e: ActivityNotFoundException) {
+        // Fallback to open any available email client
+        val fallbackIntent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:") // Only email apps should handle this
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(userMail)) // Pre-fill recipient
+            putExtra(Intent.EXTRA_SUBJECT, subject) // Pre-fill subject
+            putExtra(Intent.EXTRA_TEXT, body) // Pre-fill email body
+        }
+
+        try {
+            startActivity(fallbackIntent)
+        } catch (ex: ActivityNotFoundException) {
+            // No email clients available
+            Toast.makeText(this, "No email client available", Toast.LENGTH_SHORT).show()
+        }
+    }
+}

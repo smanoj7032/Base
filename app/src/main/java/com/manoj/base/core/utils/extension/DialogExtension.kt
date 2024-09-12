@@ -102,3 +102,35 @@ fun Activity.deleteDialog(
         )
         .build()
 }
+
+
+fun Activity.commonDialog(
+    onPositiveAction: () -> Unit): MaterialDialog {
+    return MaterialDialog.Builder(this)
+        .setTitle(getString(Str.profile), TextAlignment.START)
+        .setMessage(
+            getString(Str.info),
+            TextAlignment.START
+        )
+        .setCancelable(false)
+        .setPositiveButton(
+            DialogButton(getString(Str.source_code),
+                null,
+                object : AbstractDialog.OnClickListener {
+                    override fun onClick(dialogInterface: DialogInterface, i: Int) {
+                        dialogInterface.dismiss()
+                        onPositiveAction.invoke()
+                    }
+                })
+        ).setNegativeButton(
+            DialogButton(
+                getString(Str.cancel),
+                Drw.ic_close,
+                object : AbstractDialog.OnClickListener {
+                    override fun onClick(dialogInterface: DialogInterface, which: Int) {
+                        dialogInterface.dismiss()
+                    }
+                })
+        )
+        .build()
+}

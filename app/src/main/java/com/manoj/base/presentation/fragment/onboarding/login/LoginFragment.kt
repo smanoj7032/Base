@@ -1,4 +1,4 @@
-package com.manoj.base.presentation.fragment.auth
+package com.manoj.base.presentation.fragment.onboarding.login
 
 import android.os.Bundle
 import android.view.View

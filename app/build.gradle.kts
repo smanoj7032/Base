@@ -27,9 +27,19 @@ android {
         properties.load(localPropertiesFile.inputStream())
         val apiKey: String = properties.getProperty("APP_ID") ?: ""
         val webClientId: String = properties.getProperty("web_client_id") ?: ""
+        val cv: String = properties.getProperty("cv") ?: ""
+        val mail: String = properties.getProperty("mail") ?: ""
+        val phone: String = properties.getProperty("phone") ?: ""
+        val linkedIn: String = properties.getProperty("linked_in") ?: ""
+        val github: String = properties.getProperty("github") ?: ""
 
         this.buildConfigField("String", "APP_ID", apiKey)
         this.buildConfigField("String", "web_client_id", webClientId)
+        this.buildConfigField("String", "cv", cv)
+        this.buildConfigField("String", "mail", mail)
+        this.buildConfigField("String", "phone", phone)
+        this.buildConfigField("String", "linkedIn", linkedIn)
+        this.buildConfigField("String", "github", github)
         this.buildConfigField("String", "BASE_URL", "\"https://dummyapi.io/\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

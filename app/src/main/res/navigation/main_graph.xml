@@ -6,8 +6,23 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
+        android:id="@+id/starterFragment"
+        android:name="com.manoj.base.presentation.fragment.onboarding.starter.StarterFragment"
+        android:label="Starter"
+        tools:layout="@layout/fragment_starter">
+        <action
+            android:id="@+id/toLoginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popUpTo="@+id/navigation_graph"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+    </fragment>
+
+    <fragment
         android:id="@+id/loginFragment"
-        android:name="com.manoj.base.presentation.fragment.auth.LoginFragment"
+        android:name="com.manoj.base.presentation.fragment.onboarding.login.LoginFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_login">
         <action
@@ -42,6 +57,14 @@
             app:popExitAnim="@anim/enter_from_right"
             app:popUpTo="@+id/navigation_graph" />
 
+        <action
+            android:id="@+id/toProfileFragmentScreen"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+
     </fragment>
 
     <fragment
@@ -55,6 +78,10 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
-
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.manoj.base.presentation.fragment.profile.ProfileFragment"
+        android:label="Feed"
+        tools:layout="@layout/fragment_profile"></fragment>
 
 </navigation>

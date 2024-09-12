@@ -42,4 +42,5 @@
     <color name="material_dialog_negative_button_text_color">#1E88E5</color>
 
     <color name="material_dialog_positive_button_color">@color/colorPrimary</color>
+    <color name="profile_bg">#F2F2F2</color>
 </resources>

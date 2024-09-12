@@ -1,15 +1,9 @@
-package com.manoj.base.presentation.fragment.auth
+package com.manoj.base.presentation.fragment.onboarding.login
 
 import androidx.databinding.ObservableField
-import androidx.lifecycle.viewModelScope
 import com.manoj.base.core.utils.dispatchers.DispatchersProvider
 import com.manoj.base.core.common.base.BaseViewModel
-import com.manoj.base.data.local.DataStoreManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel

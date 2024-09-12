@@ -1,14 +1,9 @@
 package com.manoj.base.presentation.activity.main
 
-import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.manoj.base.core.common.base.BaseActivity
 import com.manoj.base.core.common.basedialogs.BottomSheetMaterialDialog
 import com.manoj.base.core.common.singletonholder.SingletonHolderNoArg
@@ -24,7 +19,6 @@ import com.manoj.base.core.utils.extension.showToast
 import com.manoj.base.databinding.ActivityMainBinding
 import com.manoj.base.presentation.activity.main.backpress.BackPressHandler
 import com.manoj.base.presentation.activity.main.navigation.NavigationListener
-import com.manoj.base.presentation.fragment.auth.LoginFragment
 import com.manoj.base.presentation.fragment.home.HomeFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -90,24 +84,13 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private fun initViews() {
         onBackPressedDispatcher.addCallback(BackPressHandler.getInstance(this))
-        supportFragmentManager.registerFragmentLifecycleCallbacks(object :
-            FragmentManager.FragmentLifecycleCallbacks() {
-            override fun onFragmentViewCreated(
-                fm: FragmentManager, f: Fragment, v: View, savedInstanceState: Bundle?
-            ) {
-                super.onFragmentViewCreated(fm, f, v, savedInstanceState)
-                binding.slidingpanelayout.lockMode =
-                    if (f is LoginFragment) SlidingPaneLayout.LOCK_MODE_LOCKED else SlidingPaneLayout.LOCK_MODE_UNLOCKED
-            }
-        }, true)
-
         binding.header.ivBack.setSingleClickListener { onBackPressedDispatcher.onBackPressed() }
         binding.header.ivLogout.setSingleClickListener { logoutSheet?.show() }
-
+        binding.header.ivProfile.setSingleClickListener { navigateToProfile() }
     }
 
     override suspend fun setObserver() {
-        viewModel.accessToken.collect { setupNavController(if (it != null) Ids.homeFragment else Ids.loginFragment) }
+        viewModel.accessToken.collect { setupNavController(if (it != null) Ids.homeFragment else Ids.starterFragment) }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -128,5 +111,8 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>() {
 
     private fun navigateToLogin() =
         navController.navigate(HomeFragmentDirections.toLoginFragment())
+
+    private fun navigateToProfile() =
+        navController.navigate(HomeFragmentDirections.toProfileFragmentScreen())
 
 }

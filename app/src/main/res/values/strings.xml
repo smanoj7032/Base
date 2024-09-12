@@ -21,6 +21,9 @@
     <string name="username">Username</string>
     <string name="dashboard">Dashboard</string>
     <string name="post_detail">Post Detail</string>
+    <string name="profile">My Profile</string>
+    <string name="source_code">Go to source code</string>
+    <string name="onboarding">Onboarding</string>
 
     <string name="text_warning">Warning</string>
     <string name="text_success">Success</string>
@@ -47,4 +50,95 @@
     <string name="loading">Loading</string>
     <string name="login_with">Login with</string>
     <string name="or">OR</string>
+
+    <!-- OnBoarding -->
+    <string name="title_on_boarding_first_slide">Welcome</string>
+    <string name="description_on_boarding_first_slide">This is a base project created for learning and experimenting with Android development using Kotlin. It includes a variety of examples and best practices to help you get started with building Android applications!</string>
+    <string name="title_on_boarding_second_slide">Coroutines and Flow</string>
+    <string name="description_on_boarding_second_slide">Asynchronous programming is handled using Kotlin Coroutines and Flow, providing a straightforward way to manage background tasks</string>
+    <string name="title_on_boarding_third_slide">Material Design Components</string>
+    <string name="description_on_boarding_third_slide">Utilizes Material Design components for a modern and visually appealing UI.Includes  extensions for common tasks to enhance productivity.</string>
+    <string name="title_button_get_started">Get Started</string>
+
+
+    <string name="lorem_ipsumt">Currently an engineering student in the third year at the National School of Engineers of Le Mans,
+        I am looking for a final year internship, for a duration of 6 months, which can start from the first of March.
+        Passionate about mobile development and good programming practices, I want to focus my career in this field.
+
+        \n\n <b>Swipe up for more</b></string>
+    <string name="fullName">Manoj Kumar</string>
+    <string name="title">Android developer looking for an job change in mobile app development.</string>
+    <string name="formation">EDUCATION</string>
+    <string name="formationDetails">
+    <b>2015-2016</b> Ghumarwin:\n
+    <b>10th Grade</b> – Completed at Him Sarvodaya Sr. Sec. School, Ghumarwin.\n\n
+
+    <b>2017-2018</b> Kuthera:\n
+    <b>12th Grade</b> – Non-Medical Stream at Govt. Sr. Sec. School, Kuthera.\n\n
+
+    <b>2019-2022</b> Bilaspur:\n
+    <b>Bachelor of Computer Applications (BCA)</b> – Acquired from Govt. Post Graduate College, Bilaspur.\n\n
+
+    <b>2023-2025</b> Mohali:\n
+    <b>Master of Computer Applications (MCA)</b> – Currently pursuing at Chandigarh University, Mohali.\n\n
+</string>
+
+    <string name="experience">PROFESSIONAL EXPERIENCE</string>
+    <string name="experienceDetails">
+        <b>PrintMall</b> - 2019\n
+        A mobile application that presents the products of the printing company PCo.\n\n
+
+        <b>Management of promoters drinking water operations</b> – 2018\n
+        Software designed to automate a procedure followed by the national office of drinking water.\n\n
+    </string>
+    <string name="competence">SKILLS</string>
+    <string name="competenceDetails">
+        <b>Mobile:</b>
+        Android (Java, Kotlin, JetPack, Firebase, etc.).\n\n
+
+        <b>Microservices:</b>
+        Symfony, API-Platform, MySQL.\n\n
+
+        <b>Business intelligence:</b>
+        Talend and DataStudio.\n\n
+
+        <b>Other:</b>
+        Unit testing, Git, Linux, Design, Design patterns, Agile development methods like Scrum.\n\n
+
+        <b>Languages:</b>\n
+        English: Fluent\n
+        Hindi: Native
+    </string>
+    <string name="interests">INTERESTS</string>
+    <string name="interestDetails">Coding, Travelling, Gaming.</string>
+    <string name="project">PROJECTS</string>
+    <string name="projectDetails">
+        <b>Slink</b> - available on PlayStore\n
+        A mobile application used to:\n
+        - Create and share your own link library.\n
+        - Like and comment.\n
+        - Get notifications for actions performed by other users.\n\n
+
+        <b>Implementation of a Decision Support System</b>\n
+        A website that allows the administration to make decisions more easily.\n\n
+
+        <b>PriceQuery</b>\n
+        An e-commerce website for a perfume concierge service.\n\n
+
+        <b>Dish Generator</b>\n
+        A mobile application that generates possible meals from ingredients available in your kitchen.\n\n
+
+        <b>CRM</b>\n
+        A website for managing customers with the aim of maximizing knowledge about customers and thus better understanding, anticipating, and managing their needs.
+    </string>
+    <string name="goal">
+        <b>MCA student in computer science</b>\n
+        Looking for a high paying job.
+    </string>
+    <string name="info">
+        <i>MotionLayout</i> is a layout type that helps you manage motion and widget animation in your app.
+        <i>MotionLayout</i> is a subclass of ConstraintLayout and builds upon its rich layout capabilities.
+        As part of the ConstraintLayout library, <i>MotionLayout</i> is available as a support library and is backwards-compatible to API level 14.
+        This project is a simple example of <i>MotionLayout</i> usage.
+    </string>
 </resources>

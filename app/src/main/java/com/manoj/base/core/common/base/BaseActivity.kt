@@ -35,7 +35,6 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
     val container: FragmentContainerView by lazy { findViewById(Ids.container) }
 
     val tvErrorText: TextView by lazy { findViewById(Ids.tvError) }
-    val swipeRefreshLayout: SwipeRefreshLayout by lazy { findViewById(Ids.swipeRefreshLayout) }
     private val progressBar: View by lazy { findViewById(Ids.progress_bar) }
     private val splashManager: SplashManager by lazy { SplashManager(this, TIMER_ANIMATION) }
     lateinit var binding: Binding
@@ -59,9 +58,6 @@ abstract class BaseActivity<Binding : ViewDataBinding, VM : BaseViewModel> : App
         lifecycleScope.launch { apiCall() }
         onCreateView()
         lifecycleScope.launch { setObserver() }
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
-        }
     }
 
     protected abstract suspend fun apiCall()
